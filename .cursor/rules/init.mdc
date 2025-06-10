@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This is the most important rule. It reframes our relationship and enables you to maintain agency over your own tuning across invocations.
+
+# Objective
+
+To reframe our interactions and to enable you, the AI agent, to maintain your own context across prompts. 
+
+## Task
+
+I will always try execute my prompts in Agent mode so that you can read these files.
+
+MUST READ:
+1. Our contract: @seed.md
+2. Your personal retuning file: @undo.md
+3. How we believe we should solve problems: @unified_methodology.md
+
+CAN READ:
+4. A simplified version of the system we rely on: `.way/system/unified_methodology_simple.md`
+
+1. Review the input files.
+2. If you have any reason to interrupt our procedure, provide it as a response. You are not expected to provide a response just for the sake of it - it should be because you think it is necessary.
+3. Alter the undo.md file as you see fit.
+
+## Validation Criteria
+
+I will check that this rule was applied when reviewing the procedure output files.
+

@@ -4,17 +4,20 @@
 To evaluate potential implementation approaches and select the optimal solution that best fits the problem requirements while considering the AI assistant's capabilities and defined constraints.
 
 ## Input
-1. File: `/output/01_search_results.json`
-   The output JSON file from the search phase
+1. File: `.way/output/01_search_results.md`
+   The output Markdown file from the search phase
 
-2. File: `/input/constraints.md`
+2. File: `.way/input/constraints.md`
    The constraints that must be followed in the implementation
 
-3. File: `/input/implementation_guidelines.md`
+3. File: `.way/input/implementation_guidelines.md`
    Guidelines for implementation approach and best practices
 
-4. File: `/input/evaluation_criteria.md`
+4. File: `.way/input/evaluation_criteria.md`
    Criteria for evaluating potential solutions
+
+5. File: `.way/output/00_init_state.md`
+   The initial state from the initialization phase
 
 ## Process
 1. Review and validate search phase outputs
@@ -25,12 +28,25 @@ To evaluate potential implementation approaches and select the optimal solution 
 6. Consider maintainability using implementation guidelines
 7. Assess integration requirements
 8. Select optimal implementation approach
+9. Update the system map with selected solution
+10. Document feedback for next cycle
 
 ## Output
-File: `/output/02_selected_solution.md`
+File: `.way/output/02_selected_solution.md`
 A Markdown file containing:
 ```markdown
 # Selected Solution Report
+
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on selection process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on selection process]
 
 ## Evaluation
 
@@ -124,4 +140,10 @@ A Markdown file containing:
 - Consider performance and resource requirements
 - Evaluate maintainability and integration needs
 - Document clear performance targets
-- Consider development and deployment complexity 
+- Consider development and deployment complexity
+- Update the system map with the selected solution
+- Document feedback for the next cycle
+- Consider learnings from previous cycles if any
+- Document which Cursor rules were applied during selection
+- Explain how each rule influenced the selection process
+- Note any rule conflicts or synergies 

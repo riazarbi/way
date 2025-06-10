@@ -4,24 +4,20 @@
 To validate the implemented solution through comprehensive testing, performance evaluation, and quality assessment, ensuring it effectively solves the original problem while meeting all constraints and following implementation guidelines.
 
 ## Input
-1. Directory: `/output/04_implementation_plan/`
-   The directory containing task files and execution results:
-   ```
-   04_implementation_plan/
-   ├── README.md
-   ├── todo/                           # Remaining tasks
-   ├── doing/                          # Tasks in progress
-   └── done/                           # Completed tasks with execution history
-   ```
+1. Directory: `.way/output/04_implementation_plan/`
+   The directory containing task files and execution results
 
-2. File: `/input/constraints.md`
+2. File: `.way/input/constraints.md`
    The constraints that must be followed in the implementation
 
-3. File: `/input/implementation_guidelines.md`
+3. File: `.way/input/implementation_guidelines.md`
    Guidelines for implementation approach and best practices
 
-4. File: `/input/evaluation_criteria.md`
+4. File: `.way/input/evaluation_criteria.md`
    Criteria for evaluating the implementation
+
+5. File: `.way/output/00_init_state.md`
+   The initial state from the initialization phase
 
 ## Process
 1. Review all completed tasks in the done/ directory
@@ -37,12 +33,26 @@ To validate the implemented solution through comprehensive testing, performance 
 11. Validate constraint compliance
 12. Assess guideline adherence
 13. Apply evaluation criteria
+14. Update the system map with validation results
+15. Document learnings for the next cycle
+16. Prepare feedback for the next cycle
 
 ## Output
-File: `/output/06_validation_results.md`
+File: `.way/output/06_validation_results.md`
 A Markdown file containing:
 ```markdown
 # Validation Results
+
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on validation process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on validation process]
 
 ## Task Validation
 ### Completed Tasks
@@ -52,114 +62,70 @@ A Markdown file containing:
   - Issues Found: [Any issues discovered]
   - Recommendations: [Improvement suggestions]
 
-- [Task 2]
-  - Status: [Passed/Failed]
-  - Validation Results: [Results from task execution]
-  - Issues Found: [Any issues discovered]
-  - Recommendations: [Improvement suggestions]
-
-### Task Dependencies
-- [List of task dependencies and their validation status]
-- [Any dependency-related issues]
-
-## Functional Validation
-### Test Results
-- [Test 1]
-  - Description: [Test description]
-  - Status: [Passed/Failed]
-  - Expected: [Expected result]
-  - Actual: [Actual result]
-
-- [Test 2]
-  - Description: [Test description]
-  - Status: [Passed/Failed]
-  - Expected: [Expected result]
-  - Actual: [Actual result]
-
-### Edge Cases
-- [Edge Case 1]
-  - Description: [Case description]
-  - Input: [Test input]
-  - Expected Output: [Expected result]
-  - Actual Output: [Actual result]
-  - Status: [Passed/Failed]
-
-## Code Quality
-### Metrics
-- [Metric 1]: [Value] ([Status])
-- [Metric 2]: [Value] ([Status])
-
-### Recommendations
-- [List of code quality improvements]
-
 ## System Validation
-### Performance
-- Response Time: [Results]
-- Throughput: [Results]
-- Resource Utilization: [Results]
+### Performance Metrics
+- [Metric 1]: [Value] - [Target]
+- [Metric 2]: [Value] - [Target]
 
-### Scalability
-- Horizontal Scaling: [Results]
-- Vertical Scaling: [Results]
+### Quality Assessment
+- [Quality Aspect 1]: [Assessment]
+- [Quality Aspect 2]: [Assessment]
 
-### Reliability
-- Uptime: [Results]
-- Error Rates: [Results]
-- Recovery Time: [Results]
+### Constraint Compliance
+- [Constraint 1]: [Compliance Status]
+- [Constraint 2]: [Compliance Status]
 
-## Constraint Compliance
-[Results of validation against constraints.md]
+## System Map Updates
+### New Components
+- [Component 1]
+- [Component 2]
 
-## Guideline Compliance
-[Results of validation against implementation_guidelines.md]
+### Modified Components
+- [Component 1]: [Changes]
+- [Component 2]: [Changes]
 
-## System Health
-### Health Metrics
-- [Metric 1]: [Value] ([Status])
-- [Metric 2]: [Value] ([Status])
+### Removed Components
+- [Component 1]
+- [Component 2]
 
-### Data Quality
-- [Metric 1]: [Value] ([Status])
-- [Metric 2]: [Value] ([Status])
+## Learnings
+### What Worked Well
+- [Learning 1]
+- [Learning 2]
 
-## Validation Summary
-### Overall Status
-[Pass/Fail/Partial]
+### What Could Be Improved
+- [Improvement 1]
+- [Improvement 2]
 
-### Key Findings
+### Unexpected Findings
 - [Finding 1]
 - [Finding 2]
 
-### Critical Issues
-- [Issue 1]
-  - Description: [Issue description]
-  - Impact: [Impact assessment]
-  - Recommendation: [Suggested fix]
-  - Constraint Impact: [Impact on constraints]
+## Next Cycle Preparation
+### Feedback for Search Phase
+- [Feedback 1]
+- [Feedback 2]
 
-### Improvement Opportunities
-- [Opportunity 1]
-  - Area: [Area for improvement]
-  - Current State: [Current state]
-  - Target State: [Desired state]
-  - Recommendation: [Suggested improvement]
-  - Guideline Relation: [Related guidelines]
+### System State
+- [State 1]
+- [State 2]
 
-### Next Steps
-- [Step 1]
-- [Step 2]
+### Recommendations
+- [Recommendation 1]
+- [Recommendation 2]
 ```
 
 ## Notes
-- Review all completed tasks in the done/ directory
-- Validate each task's execution history and results
-- Ensure comprehensive functional validation
-- Assess code quality thoroughly
-- Test against edge cases
-- Monitor system performance and health
-- Evaluate scalability and reliability
-- Document all findings and recommendations
-- Maintain quality standards throughout
-- Validate all constraints from constraints.md
-- Assess adherence to implementation_guidelines.md
-- Apply evaluation criteria from evaluation_criteria.md 
+- Document all validation results thoroughly
+- Update the system map with any changes
+- Document learnings for the next cycle
+- Prepare feedback for the next cycle
+- Consider the cyclical nature of the methodology
+- Ensure all constraints are met
+- Verify guideline compliance
+- Assess overall system health
+- Document any issues or concerns
+- Prepare for the next cycle
+- Document which Cursor rules were applied during validation
+- Explain how each rule influenced the validation process
+- Note any rule conflicts or synergies 

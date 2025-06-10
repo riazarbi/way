@@ -4,8 +4,8 @@
 To create a detailed plan for implementing the solution, including development, testing, deployment, and monitoring phases, while adhering to the defined constraints and following implementation guidelines.
 
 ## Input
-1. File: `/output/03_solution_specification.json`
-   The output JSON file from the define phase
+1. File: `/output/03_solution_specification.md`
+   The output Markdown file from the define phase
 
 2. File: `/input/constraints.md`
    The constraints that must be followed in the implementation
@@ -90,6 +90,17 @@ The README.md should contain:
 ```markdown
 # Implementation Plan
 
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on planning process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on planning process]
+
 ## Overview
 [High-level description of the implementation plan]
 
@@ -119,4 +130,7 @@ The README.md should contain:
 - Dependencies should be explicitly stated
 - The todo/ directory should contain all initial tasks
 - The doing/ and done/ directories should be empty initially
-- Task files should be ready to be modified by the execute phase 
+- Task files should be ready to be modified by the execute phase
+- Document which Cursor rules were applied during planning
+- Explain how each rule influenced the planning process
+- Note any rule conflicts or synergies 

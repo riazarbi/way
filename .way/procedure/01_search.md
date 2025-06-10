@@ -4,26 +4,11 @@
 To explore the solution space for a given problem through systematic observation and hypothesis formation, considering the system as a whole.
 
 ## Input
-File: `/input/problem.md`
-A Markdown file containing:
-```markdown
-# Problem Description
+1. File: `.way/input/problem.md`
+A Markdown file containing the problem description and context.
 
-## Overview
-[High-level description of the problem to be solved]
-
-## Context
-- System Boundaries: [Description of what's in and out of scope]
-- Constraints: [List of constraints that must be considered]
-- Stakeholders: [List of stakeholders affected by the solution]
-- Current State: [Description of the current state of the system]
-
-## Additional Data
-[Description of any additional data or resources available, or "None" if no additional data is provided]
-
-## Requirements
-[Detailed list of requirements that the solution must meet]
-```
+2. File: `.way/output/00_init_state.md`
+The initial state from the initialization phase.
 
 ## Process
 1. Analyze the problem description and context
@@ -33,12 +18,24 @@ A Markdown file containing:
 5. Explore potential solutions
 6. Document patterns and trends
 7. Consider system-wide implications
+8. Update the system map
 
 ## Output
-File: `/output/01_search_results.md`
+File: `.way/output/01_search_results.md`
 A Markdown file containing:
 ```markdown
 # Search Results
+
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on search process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on search process]
 
 ## Analysis
 ### Key Components
@@ -96,7 +93,12 @@ A Markdown file containing:
 - Generate multiple diverse hypotheses
 - Consider both direct and indirect system impacts
 - Document all assumptions and observations
-- Maintain traceability to input data 
+- Maintain traceability to input data
+- Update the system map with new findings
+- Consider feedback from previous cycles if any
+- Document which Cursor rules were applied during search
+- Explain how each rule influenced the search process
+- Note any rule conflicts or synergies
 
 ## AI Assistant Capabilities
 The AI assistant has the following capabilities for executing the implementation plan:

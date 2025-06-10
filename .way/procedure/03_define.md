@@ -4,8 +4,8 @@
 To create a detailed specification for the selected implementation, including architecture, components, and deployment specifications, while adhering to the defined constraints and following implementation guidelines.
 
 ## Input
-1. File: `/output/02_selected_solution.json`
-   The output JSON file from the select phase
+1. File: `/output/02_selected_solution.md`
+   The output Markdown file from the select phase
 
 2. File: `/input/constraints.md`
    The constraints that must be followed in the implementation
@@ -33,6 +33,17 @@ File: `/output/03_solution_specification.md`
 A Markdown file containing:
 ```markdown
 # Solution Specification
+
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on definition process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on definition process]
 
 ## System Architecture
 ### Type
@@ -173,4 +184,7 @@ A Markdown file containing:
 - Document all integration points
 - All components must comply with constraints.md
 - Implementation must follow guidelines in implementation_guidelines.md
-- Performance metrics must align with evaluation_criteria.md 
+- Performance metrics must align with evaluation_criteria.md
+- Document which Cursor rules were applied during definition
+- Explain how each rule influenced the definition process
+- Note any rule conflicts or synergies 

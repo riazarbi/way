@@ -146,4 +146,6 @@ A Markdown file containing:
 - Consider learnings from previous cycles if any
 - Document which Cursor rules were applied during selection
 - Explain how each rule influenced the selection process
-- Note any rule conflicts or synergies 
+- Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user 

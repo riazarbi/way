@@ -99,6 +99,8 @@ A Markdown file containing:
 - Document which Cursor rules were applied during search
 - Explain how each rule influenced the search process
 - Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 
 ## AI Assistant Capabilities
 The AI assistant has the following capabilities for executing the implementation plan:

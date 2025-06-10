@@ -187,4 +187,6 @@ A Markdown file containing:
 - Performance metrics must align with evaluation_criteria.md
 - Document which Cursor rules were applied during definition
 - Explain how each rule influenced the definition process
-- Note any rule conflicts or synergies 
+- Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user 

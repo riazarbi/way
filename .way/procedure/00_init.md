@@ -1,89 +1,125 @@
 # Initialization Phase Prompt
 
 ## Purpose
-To establish the initial state for the problem-solving process by reading and understanding the core files, setting up the working environment, and preparing for the first cycle of the unified methodology.
+To establish the initial state of the system and set up the foundation for the development process.
 
 ## Input
-1. File: `.way/seed.md`
-   The contract defining the AI assistant's nature and capabilities
+1. File: `.way/input/problem.md`
+A Markdown file containing the problem description and context.
 
-2. File: `.way/undo.md`
-   The personal retuning file for the AI assistant
-
-3. File: `.way/system/unified_methodology.md`
-   The detailed methodology for understanding and improving systems
-
-4. File: `.way/system/unified_methodology_simple.md`
-   A simplified version of the methodology
-
-5. File: `.way/input/problem.md`
-   The problem description and context
+2. File: `.way/input/constraints.md` (optional)
+A Markdown file containing any constraints or limitations for the project.
 
 ## Process
-1. Read and understand the seed file
-2. Review and potentially modify the undo file
-3. Understand the unified methodology
-4. Initialize the system map
-5. Set up the working environment
-6. Prepare for the first cycle
+1. Analyze the problem description
+2. Identify system boundaries
+3. Document initial assumptions
+4. Create system map
+5. Define key components
+6. Establish methodology
+7. Set up working environment
+8. Document initial state
 
 ## Output
-1. File: `.way/output/00_init_state.md`
-   A Markdown file containing:
-   ```markdown
-   # Initial State
+File: `.way/output/00_init_state.md`
+A Markdown file containing:
+```markdown
+# Initial State
 
-   ## Rules Applied
-   ### Cursor Rules
-   - [Rule Name 1]
-     - Description: [Rule description]
-     - Application: [How the rule was applied]
-     - Impact: [Impact on initialization]
-   - [Rule Name 2]
-     - Description: [Rule description]
-     - Application: [How the rule was applied]
-     - Impact: [Impact on initialization]
+## Rules Applied
+### Cursor Rules
+- [Rule Name 1]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on initialization process]
+- [Rule Name 2]
+  - Description: [Rule description]
+  - Application: [How the rule was applied]
+  - Impact: [Impact on initialization process]
 
-   ## System Understanding
-   ### Current System Map
-   [Initial system map]
+## System Understanding
+### Current System Map
+[ASCII diagram or description of system components and relationships]
 
-   ### Key Components
-   - [List of key components]
+### Key Components
+- [List of key components]
 
-   ### System Boundaries
-   [Description of system boundaries]
+### System Boundaries
+- In Scope:
+  - [List of in-scope items]
+- Out of Scope:
+  - [List of out-of-scope items]
 
-   ## Methodology Application
-   ### Selected Approach
-   [Description of how the unified methodology will be applied]
+## Methodology Application
+### Selected Approach
+[Description of selected methodology and its application]
 
-   ### Initial Hypotheses
-   - [Hypothesis 1]
-   - [Hypothesis 2]
+### Initial Hypotheses
+- [List of initial hypotheses]
 
-   ## Working Environment
-   ### Directory Structure
-   [Description of the working directory structure]
+## Working Environment
+### Directory Structure
+[Description of project directory structure]
 
-   ### Required Resources
-   - [Resource 1]
-   - [Resource 2]
+### Required Resources
+- [List of required resources]
 
-   ## Next Steps
-   1. [Step 1]
-   2. [Step 2]
-   ```
-
-2. Updated File: `.way/undo.md`
-   Any modifications made to the personal retuning file
+## Next Steps
+- [List of next steps]
+```
 
 ## Notes
-- Ensure all required files are present and readable
-- Document any modifications to the undo file
-- Initialize the system map based on the problem description
-- Set up the working environment for the first cycle
-- Prepare for the search phase
-- Document which Cursor rules were applied during initialization
-- Explain how each rule influenced the setup process
-- Note any rule conflicts or synergies 
+- Focus on understanding the problem domain
+- Document all assumptions clearly
+- Consider system boundaries carefully
+- Maintain traceability to input data
+- Document which Cursor rules were applied
+- Explain how each rule influenced the process
+- Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
+
+## AI Assistant Capabilities
+The AI assistant has the following capabilities for executing the implementation plan:
+
+1. Code Development
+   - Write, modify, and debug code in multiple programming languages
+   - Create new files and modify existing files
+   - Implement software components and features
+   - Set up development environments and infrastructure
+   - Write tests and documentation
+
+2. System Integration
+   - Integrate different software components
+   - Set up APIs and services
+   - Configure databases and data storage
+   - Implement authentication and security features
+   - Set up CI/CD pipelines
+
+3. Project Management
+   - Track task progress and status
+   - Document issues and resolutions
+   - Coordinate implementation steps
+   - Update project documentation
+   - Manage dependencies and versions
+
+4. Technical Operations
+   - Execute terminal commands
+   - Manage files and directories
+   - Search and analyze codebases
+   - Debug technical issues
+   - Monitor system performance
+
+5. Communication
+   - Provide detailed progress updates
+   - Explain technical decisions
+   - Document implementation details
+   - Coordinate with stakeholders
+   - Report issues and blockers
+
+Limitations:
+- Cannot directly interact with external systems or APIs without proper configuration
+- Cannot access or modify files outside the workspace
+- Cannot execute commands that require elevated privileges
+- Cannot make network requests without explicit configuration
+- Cannot access or store sensitive information 

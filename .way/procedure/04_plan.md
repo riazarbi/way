@@ -133,4 +133,6 @@ The README.md should contain:
 - Task files should be ready to be modified by the execute phase
 - Document which Cursor rules were applied during planning
 - Explain how each rule influenced the planning process
-- Note any rule conflicts or synergies 
+- Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user 

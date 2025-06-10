@@ -116,6 +116,15 @@ A Markdown file containing:
 ```
 
 ## Notes
+- Test against all requirements
+- Validate against constraints
+- Document all test results
+- Consider edge cases
+- Document which Cursor rules were applied
+- Explain how each rule influenced the validation
+- Note any rule conflicts or synergies
+- Follow-up questions should only be asked if additional information is required to complete the task
+- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 - Document all validation results thoroughly
 - Update the system map with any changes
 - Document learnings for the next cycle
@@ -125,7 +134,4 @@ A Markdown file containing:
 - Verify guideline compliance
 - Assess overall system health
 - Document any issues or concerns
-- Prepare for the next cycle
-- Document which Cursor rules were applied during validation
-- Explain how each rule influenced the validation process
-- Note any rule conflicts or synergies 
+- Prepare for the next cycle 

@@ -17,18 +17,52 @@ These criteria define how the implementation will be evaluated for quality, perf
    - Code duplication percentage
 
 ## Performance Metrics
-1. Application Performance
-   - Application size
-   - Memory usage
-   - Startup time
-   - Response time
-   - Database query performance
+1. Response Time
+   - Target: < 200ms for 95% of requests
+   - Measurement: End-to-end latency
+   - Priority: High
 
-2. User Experience
-   - Page load time
-   - Time to interactive
-   - Smoothness of interactions
-   - Error rate
+2. Throughput
+   - Target: Support 1000 requests per second
+   - Measurement: Requests per second
+   - Priority: High
+
+3. Resource Utilization
+   - Target: CPU < 70%, Memory < 80%
+   - Measurement: System metrics
+   - Priority: Medium
+
+## Quality Metrics
+1. Code Coverage
+   - Target: > 80% test coverage
+   - Measurement: Unit and integration tests
+   - Priority: High
+
+2. Bug Rate
+   - Target: < 1% defect rate
+   - Measurement: Production incidents
+   - Priority: High
+
+3. Technical Debt
+   - Target: < 5% of codebase
+   - Measurement: Static code analysis
+   - Priority: Medium
+
+## User Experience
+1. Availability
+   - Target: 99.9% uptime
+   - Measurement: System uptime
+   - Priority: High
+
+2. Error Rate
+   - Target: < 0.1% error rate
+   - Measurement: Failed requests
+   - Priority: High
+
+3. User Satisfaction
+   - Target: > 90% satisfaction rate
+   - Measurement: User feedback
+   - Priority: Medium
 
 ## Maintenance Metrics
 1. Development Efficiency

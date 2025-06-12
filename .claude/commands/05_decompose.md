@@ -51,21 +51,17 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 4. Check if there are any files in the current working directory. They represent the current as-is
 
 ### Step 3: Decompose
-1. Pick an epic folder to decompose
-2. Check if there are task files in the folder
-3. If there are task files in the folder, it has been decomposed. Move to the next epic. If there are no epics that have not been decomposed, exit the procedure. Otherwise proceed
+1. Pick the first epic folder that needs decomposition
+2. Check if there are task files in the folder (excluding README.md)
+3. If task files exist, the epic is already decomposed - select the next epic. If no undecomposed epics remain, exit
 4. Review epic overview and requirements
 5. Identify main components and features
 6. Break down into logical task groups
 7. Create individual task files
-8. Validate task completeness
-9. Ensure traceability
-10. Verify task sizing
-11. Check dependencies
-12. Validate against guidelines
-13. Document task breakdown
-14. Do not decompose another epic
-15. Exit the procedure
+8. Validate task completeness and traceability
+9. Verify task sizing and dependencies
+10. Validate against implementation guidelines
+11. Exit (decompose only one epic per execution)
 
 ---
 
@@ -73,10 +69,10 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 **Directory:** `.way/output/04_plan/todo/[epic]/`
 
-Create a directory containing task files for the selected epic. The AI assistant should:
+Create task files for the selected epic with the following requirements:
 
-1. Create a task file for each identified task
-2. Name files to indicate sequence (e.g., 01_task_name.md)
+1. Create one task file per identified task
+2. Name files sequentially (e.g., 01_task_name.md, 02_task_name.md)
 3. Ensure tasks are properly sized (typically 1 day of work)
 4. Include clear dependencies and prerequisites
 5. Maintain traceability to epic requirements

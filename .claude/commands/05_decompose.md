@@ -33,7 +33,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 - Ensure each task is independently testable
 - Maintain clear traceability to the epic requirements
-- Consider implementation guidelines when creating tasks
+- It is **extremely important** that you synthesize the implementation guidelines into your tasks. The overall quality of the product depends on it.
 
 ---
 

@@ -53,6 +53,9 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 4. Check if there are any files in the current working directory. They represent the current as-is
 
 ### Step 3: Plan
+
+It is **extremely important** that you synthesize the implementation guidelines into your plan.
+
 1. Review solution specification
 2. Identify logical epic groupings
 3. Create epic-level structure. Ensure there are no overlaps between epic overviews

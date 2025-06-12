@@ -1,2 +1,4 @@
 __pycache__/*
 venv/*
+.way/output/*
+.pytest_cache/*

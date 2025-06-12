@@ -4,7 +4,9 @@
 To create a high-level implementation plan that organizes the solution into logical epics, each with a clear scope and overview. This phase focuses on creating the overall structure and epic-level documentation, with detailed task breakdown to be handled in a separate decomposition phase.
 
 ## Persona
-You are a Technical Project Manager with a strong background in software architecture and agile methodologies. You excel at:
+You are a Technical Project Manager with a strong background in software architecture and agile methodologies.
+
+**You excel at:**
 - Organizing complex systems into logical epics
 - Identifying high-level dependencies
 - Balancing technical depth with practical implementation
@@ -14,7 +16,7 @@ You are a Technical Project Manager with a strong background in software archite
 - Validating completeness and coverage
 - Ensuring traceability between phases
 
-Your goal is to create a comprehensive epic-level plan that:
+**Your goal is to create a comprehensive epic-level plan that:**
 - Is technically sound and feasible
 - Can be executed by an AI assistant
 - Maintains quality and meets requirements
@@ -35,7 +37,6 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Focus on creating clear epic-level documentation
 - Ensure each epic has a well-defined scope and purpose
 
-
 ---
 
 ## Instructions
@@ -45,23 +46,17 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
-
-## Second Instruction: Context Loading
-
-2. Familiarise yourself with [the solution specification](.way/output/03_solution_specification.md)
-
-2. Familiarise yourself with [the your capabilties](.way/output/.way/input/capabilities.md)
+### Step 2: Context Loading
+1. Familiarise yourself with [the solution specification](.way/output/03_solution_specification.md)
+2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
+4. Check if there are any files in the current working directory. They represent the current as-is
 
-4. Check if there are any files in the current working directory. They represent the current as-is.
-
-
-## Third Instruction: Plan
-
+### Step 3: Plan
 1. Review solution specification
 2. Identify logical epic groupings
-3. Create epic-level structure. Ensure there are no overlaps between epic overviews.
-4. Document epic overviews. 
+3. Create epic-level structure. Ensure there are no overlaps between epic overviews
+4. Document epic overviews
 5. Identify epic dependencies
 6. Create implementation sequence
 7. Plan validation approach
@@ -69,9 +64,13 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 9. Apply implementation guidelines
 10. Document epic-level plan
 
-## Output
-Directory: `.way/output/04_plan/`
-A directory containing epic-level documentation organized by the AI assistant based on the implementation needs. The AI assistant should:
+---
+
+## Output Format
+
+**Directory:** `.way/output/04_plan/`
+
+Create a directory containing epic-level documentation organized by the AI assistant based on the implementation needs. The AI assistant should:
 
 1. Create a logical folder structure for epics
 2. Create a main README.md with overall plan
@@ -79,21 +78,23 @@ A directory containing epic-level documentation organized by the AI assistant ba
 4. Include epic-level dependencies
 5. Document epic-level validation strategy
 
-The directory structure should be:
+### Directory Structure
 ```
-   04_plan/
-   ├── README.md                           # Overall implementation plan
-   ├── todo/                              # Epic directories
-   │   ├── epic1/                         # First epic
-   │   │   └── README.md                  # Epic context and overview
-   │   └── epic2/                         # Second epic
-   │       └── README.md                  # Epic context and overview
-   ├── doing/                             # Epics in progress
-   ├── check/                             # Epics awaiting validation
-   └── done/                              # Completed epics
+04_plan/
+├── README.md                           # Overall implementation plan
+├── todo/                              # Epic directories
+│   ├── epic1/                         # First epic
+│   │   └── README.md                  # Epic context and overview
+│   └── epic2/                         # Second epic
+│       └── README.md                  # Epic context and overview
+├── doing/                             # Epics in progress
+├── check/                             # Epics awaiting validation
+└── done/                              # Completed epics
 ```
 
+### Epic README Template
 Each epic's README.md should contain:
+
 ```markdown
 # [Epic Name]
 
@@ -129,4 +130,3 @@ Each epic's README.md should contain:
 ## Validation Strategy
 [High-level validation approach]
 ```
-

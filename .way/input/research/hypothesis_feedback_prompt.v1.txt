@@ -1,0 +1,77 @@
+"Please read the following examples
+
+1. For AB test with Hypothesis
+"Due to: Due to a lack of consistency across the various page configs for OOS products
+If: we make OOS messaging & CTA more prominent and appropriately standardize the OOS experience across product categories
+For: the customer
+Then: this will result in a better customer experience that will enable the customer to easily understand the product is OOS and the next steps available to them
+Measured By: no negative impact to bounce rate"
+
+Response is below
+{"score":"Bad","justification":[{"strengths":"Clear structure and easy to understand. Identifies a specific issue (inconsistent OOS messaging). Focuses on improving customer experience. 'Measured By' section is present."},{"weaknesses":"'Due to' section is a little vague, could be more specific with data. 'Measured by' section is not a sales driving metric."},{"improvements":"Include specific data points about the inconsistency (e.g., 'Due to: data showing a 20% variance in OOS messaging across product categories...'). Change the measured by section to a sales driving metric, such as conversion rate, or add to basket rate."}]}
+
+2. For AB test with Hypothesis
+"Due to: adopting the extra-large modal with add to basket CTA and stock message displaying side by side
+If: we make the add to basket CTA and stock message sticky with overflowing content
+For: for all customers using QV
+Then: we will know if they engage with ATB more given, they will no longer have to scroll
+Measured By: ATB success rate"
+
+Response is below
+{"score":"Good","justification":[{"strengths":"Clear 'Due to' and 'If' sections. Focuses on a specific customer behavior (scrolling). 'Measured By' section is a sales driving metric."},{"weaknesses":"Use of the acronym QV needs to be explained or written out."},{"improvements":"Write out what QV is or explain it."}]}
+
+3. For AB test with Hypothesis
+"Due to: only 15.3% of basket sessions with at least one item in OOS status converting from basket (vs 42.98% non-OOS conversion rate), AND Email When Avail (EWA) subscriptions with a c. 15% conversion rate
+If: we enable customers to sign up to EWA, and offering the ability to move OOS items to S4L
+For: all device breakpoints where at least 1 OOS basket item exists
+Then: there will be reduced friction for customers to Continue to Checkout, and therefore more customers doing so. AND an increase of EWA subscriptions
+Measured By: increase continue to checkout engagement, checkout impressions, conversion, and EWA sign ups"
+
+Response is below
+{"score":"Perfect","justification":[{"strengths":"Strong 'Due to' section with data points. Addresses a significant customer pain point (OOS items). 'Measured By' section contains sales driving metrics."},{"weaknesses":"Use of the Acronym EWA, needs to be explained or written out."},{"improvements":"Write out what EWA is, or explain it."}]}
+
+4. For AB test with Hypothesis
+"Due to: Customers aren't seeing all filters as easily due to top filters being open
+If: we collapse all filters
+For: customers on all devices
+Then: filters available are more prominent
+Measured By: Interaction with facets or filter drawer"
+
+Response is below
+{"score":"Good","justification":[{"strengths":"Clear 'Due to' and 'If' sections. Focuses on improving filter visibility. 'Measured By' section is a related metric."},{"weaknesses":"'Measured By' section is not a primary sales driving metric."},{"improvements":"Add a sales driving metric to the 'Measured by' section, for example, 'Measured By: Interaction with facets or filter drawer and increase in conversion rate within the filtered product results.'"}]}
+
+5. For AB test with Hypothesis
+"Due to: Offering more flexibility to customers to amend basket with remove and save for later
+If: we introduce a 'remove item' option along with the existing 'save for later' in the checkout basket
+For: all customers in checkout journey
+Then: we could reduce friction in the customers journey to manage their basket in checkout
+Measured By: no significant impact on conversion rate"
+
+Response is below
+{"score":"Average","justification":[{"strengths":"Focuses on reducing customer friction in checkout. 'Measured By' section contains sales driving metrics."},{"weaknesses":"'Due to' section is a bit general. 'Measured By' section is a negative."},{"improvements":"Provide specific data about customer requests or pain points. Change the measured by section to 'increase in conversion rate'."}]}
+
+After you done with reading the past examples, please tell me what do you think about the following :
+
+For AB Test with this hypothesis:
+Due To: $hypothesis_due_to
+If: $hypothesis_if
+For: $hypothesis_for
+Then: $hypothesis_then
+Measured By: $hypothesis_measured_by
+
+Please score this hypothesis by Bad, Average, Good, Very Good and Perfect
+and justify your answer in the same format in the examples I gave you in no more than 8 or 9 sentences.
+When scoring the hypotheses you should consider the following
+    
+1. The hypothesis is easy to understand
+2. There is clear evidence (e.g. data) present in the "Due to" section of the hypothesis
+3. All sections of the hypothesis have been completed
+4. There is a metric present in the "Measured by" section of the hypothesis. Ideally the metric in the "Measured by" section of the hypothesis would be one of our recognised sales driving metrics but this is not required. Revenue driving metrics include: RPS, Revenue per Session, CVR, Conversion, AOV, Average Order Value, ATB, A2B, Add to Basket, Add to Cart, PCI, Product Card Interactions, Interactions with Product Card. If one of these metrics is not used you can suggest they consider it but don't score too harshly if not present.
+5. The "Measured by" section is expected to contain "engagement" type metrics when the "If" section states the test is a "painted door".
+6. The "Measured by" section may look for a change in a single direction when the "If" section indicates the test is a "one tail" or "single tail". e.g. "no negative imact"
+7. No unusual acronyms have been used in any section of the hypothesis - acronyms that are widely recognised and can be used are: RPS, RPO, AOV, A2B, ATB, G2P, PCI, GTP, NKU.
+8. If the hypothesis is empty only write in the justification The hypothesis is undefined without any extra word and make the score = Very Bad
+9. If Due To, If, For, Then or Measured By is "None" or Null (Example Due To: None), this should have a negative effect on the score, and in this case please set the score= Bad or score=Average at most and show which field of them is missing in your justification
+10. I want your response to be consistent, so whenever you see the same experiment always respond by the same score.
+
+Respond with only the JSON object, and nothing else—no explanation, no extra text, no markdown, just the JSON. The JSON format must exactly match the structure shown in the examples above.

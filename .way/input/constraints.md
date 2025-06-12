@@ -14,6 +14,7 @@ These constraints define the boundaries and requirements for the implementation 
 1. Must be cost-effective
 2. Must be deployable on standard cloud infrastructure
 3. Must have minimal external dependencies
+4. Must be able to run without degraded functionality on a single machine with 8GB of RAM.
 
 ## Time Constraints
 1. Must be implementable within reasonable timeframe

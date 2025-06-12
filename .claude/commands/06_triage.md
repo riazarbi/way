@@ -19,7 +19,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 - Never move more than one task to `doing` at a time.
 - Always respect epic and task dependencies.
-- If all tasks are blocked or prerequisites are unmet, output a clear summary and exit.
+- If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `04_plan/STOP_PRODUCTION.md` and exit.
 
 ## Process Steps
 
@@ -31,10 +31,10 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ### Step 2: Context Loading
 1. Review Plan State
    - Examine `.way/output/04_plan/` directory structure:
-     - `todo/` directory
-     - `doing/` directory
-     - `done/` directory
-     - `check/` directory
+   - `todo/` directory
+   - `doing/` directory
+   - `done/` directory
+   - `check/` directory
    - Review each epic's README and outstanding tasks
    - Note any tasks in the `blocked/` directory (if present)
 
@@ -57,7 +57,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
        - Has all prerequisites met
        - Is not blocked
    - If no tasks are ready:
-     - Output blockers/prerequisites summary
+     - **Create comprehensive blockers/prerequisites summary in `04_plan/STOP_PRODUCTION.md`**
      - Exit process
 
 ### Step 5: Task Movement
@@ -79,5 +79,50 @@ Output a comprehensive summary including:
 2. Blockers and Prerequisites
    - List any surfaced blockers
    - Note any unmet prerequisites
-3. Exit after summary output
+3. **If all tasks are blocked or prerequisites are unmet:**
+   - Write detailed summary to `04_plan/STOP_PRODUCTION.md` including:
+     - Current timestamp
+     - Complete assessment of all epics and tasks
+     - Specific blockers identified
+     - Unmet prerequisites listed
+     - Recommended actions to unblock progress
+     - Impact assessment on delivery timeline
+4. Exit after summary output
 
+## Blocked Tasks Summary Format
+When writing to `04_plan/STOP_PRODUCTION.md`, use this structure:
+
+```markdown
+# STOP Production Status - Blocked Tasks Summary
+
+**Generated:** [Current Date/Time]
+**Status:** ALL TASKS BLOCKED
+
+## Executive Summary
+Brief overview of the current blocked state and impact on delivery.
+
+## Epic Status Overview
+- Epic 1: [Status and blocking issues]
+- Epic 2: [Status and blocking issues]
+- ...
+
+## Detailed Blockers
+### Epic: [Epic Name]
+- **Task:** [Task Name]
+- **Blocker:** [Specific blocking issue]
+- **Prerequisites:** [Unmet prerequisites]
+- **Impact:** [Impact on timeline/delivery]
+
+## Recommended Actions
+1. [Action item to resolve blocker 1]
+2. [Action item to resolve blocker 2]
+3. ...
+
+## Next Steps
+- [Immediate actions required]
+- [Dependencies that need resolution]
+- [Escalation requirements]
+
+---
+*This summary was generated automatically by the triage process when all available tasks were found to be blocked or have unmet prerequisites.*
+```

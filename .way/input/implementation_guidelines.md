@@ -24,6 +24,7 @@ These guidelines provide best practices and approaches for implementing the task
 
 ## Development Workflow
 1. Setup
+   - Make use of virtual environments wherever possible to maintain isolation from the system environment
    - Use version control from the start
    - Set up automated formatting and linting
    - Configure basic CI/CD pipeline

@@ -1,23 +1,23 @@
-# Step Validation Procedure
+# Step Improvement Procedure
 
 ## Purpose
-To ensure complete coverage and traceability between any two sequential steps in the development process, by independently validating that the output of step N fully addresses all aspects of the output from step N-1.
+To ensure complete coverage and traceability between any two sequential steps in the development process, by independently validating that the output of step N fully addresses all aspects of the output from step N-1, and then improving step N based on findings.
 
 ## Persona
-You are a Validation Engineer with expertise in:
+You are a Quality Improvement Engineer with expertise in:
 - Requirements analysis and traceability
 - Gap analysis and coverage testing
 - Quality assurance and verification
 - System thinking and holistic analysis
-- Documentation and reporting
+- Output refinement and improvement
 
 Your goal is to:
 - Independently verify step outputs
 - Identify any gaps or missing elements
 - Ensure complete coverage of previous step
 - Maintain traceability between steps
-- Document validation findings
-- Propose corrective actions
+- Improve step N output based on findings
+- Enhance quality and completeness
 
 ## Input
 1. Output from Step N-1
@@ -45,54 +45,46 @@ Your goal is to:
    - Note indirect coverage
    - Document any gaps
 
-3. Validate Completeness
+3. Analyze Quality
    - Check each requirement is addressed
    - Verify implementation approach
    - Validate constraint compliance
    - Ensure quality standards
    - Check for completeness
 
-4. Analyze Dependencies
+4. Identify Improvements
    - Map requirement dependencies
    - Check implementation dependencies
    - Verify constraint interactions
    - Document any conflicts
-   - Note any risks
+   - Note enhancement opportunities
 
-5. Generate Report
-   - Document coverage status
-   - List any gaps found
-   - Note any risks identified
-   - Propose corrective actions
-   - Provide improvement suggestions
+5. Enhance Step N Output
+   - Address identified gaps
+   - Improve incomplete coverage
+   - Resolve conflicts or inconsistencies
+   - Enhance quality and clarity
+   - Add missing elements
+   - Strengthen weak areas
 
 ## Output
-Directory: `/output/validation/step_N-1_to_N/`
-A directory containing validation results and reports:
+**Enhanced Step N Output**
+The improved version of the Step N output that:
+- Addresses all gaps identified in the analysis
+- Provides complete coverage of Step N-1 requirements
+- Resolves any conflicts or inconsistencies
+- Meets all quality standards
+- Maintains clear traceability
+- Includes all necessary elements
 
-```
-validation/
-└── step_N-1_to_N/
-    ├── README.md                      # Validation overview
-    ├── requirements/                   # Extracted requirements
-    │   ├── explicit.md                # Explicit requirements
-    │   ├── implicit.md                # Implicit requirements
-    │   └── constraints.md             # Constraints and limitations
-    ├── coverage/                      # Coverage analysis
-    │   ├── matrix.md                  # Coverage matrix
-    │   ├── gaps.md                    # Gap analysis
-    │   └── risks.md                   # Risk assessment
-    ├── dependencies/                  # Dependency analysis
-    │   ├── requirements.md            # Requirement dependencies
-    │   ├── implementation.md          # Implementation dependencies
-    │   └── conflicts.md               # Conflict analysis
-    └── recommendations/               # Improvement suggestions
-        ├── gaps.md                    # Gap closure recommendations
-        ├── risks.md                   # Risk mitigation suggestions
-        └── improvements.md            # General improvements
-```
+**Improvement Summary**
+A brief summary documenting:
+- What gaps were identified
+- What improvements were made
+- How coverage was enhanced
+- What quality issues were resolved
 
-## Validation Rules
+## Improvement Rules
 1. **Completeness**
    - Every requirement must be addressed
    - All constraints must be satisfied
@@ -105,48 +97,52 @@ validation/
    - Tracked assumptions
    - Verified constraints
 
-3. **Quality**
-   - Meets quality standards
+3. **Quality Enhancement**
+   - Exceeds quality standards
    - Follows best practices
    - Maintains consistency
    - Ensures reliability
 
-4. **Risk Management**
-   - Identifies potential risks
-   - Assesses impact
-   - Proposes mitigations
-   - Tracks resolution
+4. **Gap Resolution**
+   - Addresses all identified gaps
+   - Strengthens weak areas
+   - Resolves conflicts
+   - Enhances clarity
 
-## Final Recommendation
-After completing the validation analysis, provide a clear, concise recommendation in this format:
+## Final Output Format
+After completing the improvement process, provide:
 
+1. **Enhanced Step N Output** - The complete, improved version
+2. **Improvement Summary** in this format:
+
+```markdown
+# Improvement Summary
+
+## Gaps Identified
+1. [Gap 1 description]
+2. [Gap 2 description]
+3. [Gap 3 description]
+
+## Improvements Made
+1. [Improvement 1 - how the gap was addressed]
+2. [Improvement 2 - how the gap was addressed]
+3. [Improvement 3 - how the gap was addressed]
+
+## Coverage Enhancement
+- [Description of how coverage was improved]
+- [Additional elements added]
+- [Quality improvements made]
+
+## Result
+The enhanced Step N output now provides complete coverage of Step N-1 requirements with improved quality, clarity, and traceability.
 ```
-VALIDATION RECOMMENDATION: [REVISIT STEP N-1 / PROCEED TO NEXT STEP]
-
-Rationale:
-1. [Key finding 1]
-2. [Key finding 2]
-3. [Key finding 3]
-4. [Key finding 4]
-
-The validation process [confirmed/identified issues with] that step N-1 [provided a solid foundation/needs improvement] for step N. [Therefore, we should proceed to the next step/Therefore, we should revisit step N-1 with the additional context from this validation].
-```
-
-This recommendation should be:
-- Clear and unambiguous
-- Based on the validation findings
-- Focused on whether to proceed or revisit
-- Concise enough for quick decision-making
-- Placed at the end of the validation output
 
 ## Notes
 - This procedure should be run after each step
-- Validation should be independent of step implementation
-- Findings should be documented and tracked
-- Corrective actions should be proposed
-- Improvements should be suggested
-- Validation should be automated where possible
-- Manual review should be performed for critical aspects
-- Regular validation should be scheduled
-- Results should be shared with stakeholders
-- Lessons learned should be incorporated 
+- Analysis should be independent and thorough
+- All findings should result in concrete improvements
+- Enhanced output should be complete and production-ready
+- Improvements should be clearly documented
+- Quality should be measurably better than original
+- Traceability must be maintained throughout
+- All gaps must be addressed in the final output

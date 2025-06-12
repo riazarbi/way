@@ -4,7 +4,7 @@
 This document outlines the problem statement and requirements for a real-time hypothesis evaluation system. The system will provide users with an interface to enter their hypotheses and collaborate in real-time with an AI assistant to refine and improve them. Users will authenticate via Google, which will also be used for Vertex API access.
 
 ## Problem Statement
-Users need a real-time collaborative experience with an AI assistant to refine their hypotheses. The current system's high latency makes the feedback less useful, and users want immediate interaction to iteratively improve their hypotheses.
+Users need a real-time collaborative experience with an AI assistant to refine their hypotheses. The current system's high latency makes the feedback less useful, and users want immediate interaction to iteratively improve their hypotheses. There are not many users - at any time there will be a maximum of 100 humans interacting with the system, and typically there will be less than 10.
 
 ## Current State  
 At present we have a Docker image that runs a python script that consumes Hypothesis data from Jira tickets, evaluates the data using a prompt, and sends the results to a Slack channel.
@@ -12,7 +12,8 @@ At present we have a Docker image that runs a python script that consumes Hypoth
 ## Out of scope
 - Authentication
 - User management of any kind
-- Deployment
+- Containerization or deployment
+- CI/CD
 
 ## In Scope
-- Local demonstration of the system
+- A working local demonstration of the solution

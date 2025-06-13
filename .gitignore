@@ -13,3 +13,5 @@ venv/*
 .bash_history
 .claude.json
 .DS_Store
+.cache/*
+.local/*

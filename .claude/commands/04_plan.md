@@ -36,6 +36,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Detailed task breakdown will be handled in a separate decomposition phase
 - Focus on creating clear epic-level documentation
 - Ensure each epic has a well-defined scope and purpose
+- Consider whether the specification can be reasonably achieved by a team of talented junior developers.
+- If it cannot, output a clear summary to the file `04_plan/STOP_PRODUCTION.md` and exit. 
 
 ---
 
@@ -55,6 +57,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ### Step 3: Plan
 
 It is **extremely important** that you synthesize the implementation guidelines into your plan.
+
+**Specificity significantly improved the likelihood of successful task completion**
 
 1. Review solution specification
 2. Identify logical epic groupings

@@ -10,7 +10,7 @@ Users need a real-time collaborative experience with an AI assistant to refine t
 At present we have a Docker image that runs a python script that consumes Hypothesis data from Jira tickets, evaluates the data using a prompt, and sends the results to a Slack channel.
 
 ## Out of scope
-- Authentication
+- Frontend authentication or access management
 - User management of any kind
 - Containerization or deployment
 - CI/CD

@@ -24,24 +24,40 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-# Update npm to latest version
-RUN npm install -g npm@latest
+# Update npm to latest version and install claude CLI globally
+RUN npm install -g npm@latest && \
+    npm install -g @anthropic-ai/claude-code
 
 # Set working directory
 WORKDIR /workspace
 
-# Ensure /usr/local/bin exists and has correct permissions
-RUN mkdir -p /usr/local/bin && chmod 777 /usr/local/bin
+# Create a user that matches the host user
+ARG USERNAME=riaz
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
 
-# Create a non-root user
-RUN useradd -m -s /bin/bash developer && \
-    chown -R developer:developer /workspace
+# Create the user with the exact UID/GID
+RUN groupadd --gid $USER_GID $USERNAME || true && \
+    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME || true && \
+    apt-get update && \
+    apt-get install -y sudo python3.10-venv && \
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Create a script to fix permissions
+RUN echo '#!/bin/bash\n\
+if [ -d "/workspace" ]; then\n\
+    sudo chown -R $USER_UID:$USER_GID /workspace\n\
+fi\n\
+exec "$@"' > /usr/local/bin/fix-permissions.sh \
+    && chmod +x /usr/local/bin/fix-permissions.sh
 
 # Set default shell
 SHELL ["/bin/bash", "-c"]
 
 # Switch to non-root user
-USER developer
+USER $USER_UID:$USER_GID
 
 # Command to run when container starts
+ENTRYPOINT ["/usr/local/bin/fix-permissions.sh"]
 CMD ["/bin/bash"] 

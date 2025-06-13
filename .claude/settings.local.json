@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)",
+      "Read(*)",
+      "Search(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Bash(./.way/deliver.sh:*)"
+    ],
+    "deny": []
+  }
+}

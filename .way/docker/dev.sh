@@ -3,15 +3,29 @@
 # Get the directory where the script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Build the Docker image
+# Get current user's UID and GID
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+USERNAME=$(id -un)
+
+# Build the Docker image with user information
 echo "Building Docker image..."
-docker build -t dev-environment "$SCRIPT_DIR"
+docker build -t dev-environment \
+    --build-arg USERNAME=$USERNAME \
+    --build-arg USER_UID=$USER_ID \
+    --build-arg USER_GID=$GROUP_ID \
+    "$SCRIPT_DIR"
 
 # Run the container interactively
 echo "Starting development container..."
 docker run -it --rm \
-    -v "$(pwd):/workspace" \
-    -v "$SCRIPT_DIR/init-workspace.sh:/workspace/init-workspace.sh" \
-    --user "$(id -u):$(id -g)" \
-    dev-environment \
-    bash -c "source /workspace/init-workspace.sh && exec bash" 
+    -v "$(pwd):/workspace:rw" \
+    --user "$USER_ID:$GROUP_ID" \
+    -e HOME=/workspace \
+    -e USER=$USERNAME \
+    -e USERNAME=$USERNAME \
+    -e USER_UID=$USER_ID \
+    -e USER_GID=$GROUP_ID \
+    -e UID=$USER_ID \
+    -e GID=$GROUP_ID \
+    dev-environment 

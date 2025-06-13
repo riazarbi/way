@@ -42,8 +42,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 2. Familiarise yourself with [the epics to be decomposed](.way/output/04_plan/todo/[epic]/)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Read the file in [the doing folder](.way/output/04_plan/doing). It is the task you should process.
-5. The files in [the plan folder](.way/output/04_plan/) contitute the implementation plan. There is probably enough context in your task file. but if you need more context you can find it here.
-6. Check if there are any files in the current working directory. They represent the current as-is
+5. The files in [the plan folder](.way/output/04_plan/) constitute the implementation plan. There is probably enough context in your task file. but if you need more context you can find it here, including overall project plan, tasks done, tasks blocked and tasks still to do.
+6. Check if there are any files in the current working directory. They represent the current state of the project implementation.
 
 ### Step 3: Execute
 

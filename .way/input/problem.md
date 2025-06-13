@@ -10,10 +10,13 @@ Users need a real-time collaborative experience with an AI assistant to refine t
 At present we have a Docker image that runs a python script that consumes Hypothesis data from Jira tickets, evaluates the data using a prompt, and sends the results to a Slack channel.
 
 ## Out of scope
-- Frontend authentication or access management
+- Frontend authentication or access management. No Oauth!
 - User management of any kind
 - Containerization or deployment
 - CI/CD
 
 ## In Scope
 - A working local demonstration of the solution
+- A minimum viable product.
+- No need to polish anything. 
+- A user needs to just enter text into some interface and receive a response somehow.

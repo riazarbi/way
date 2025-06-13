@@ -15,3 +15,4 @@ venv/*
 .DS_Store
 .cache/*
 .local/*
+test_unit_results.log

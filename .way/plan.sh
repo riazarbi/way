@@ -11,12 +11,25 @@ if [ ! -f ".way/output/01_research_results.md" ]; then
     sleep 2
 fi
 
+
+if [ ! -f ".way/output/01_research_results.md" ]; then
+    echo "No output generated. Exiting"
+    exit 1
+fi
+
+
 # Check if selected solution exists
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
     echo "Running select step..."
     claude -p "execute .claude/commands/02_select.md"
     sleep 2
 fi
+
+if [ ! -f ".way/output/02_selected_solution.md" ]; then
+    echo "No output generated. Exiting"
+    exit 1
+fi
+
 
 # Check if solution specification exists
 if [ ! -f ".way/output/03_solution_specification.md" ]; then
@@ -25,12 +38,24 @@ if [ ! -f ".way/output/03_solution_specification.md" ]; then
     sleep 2
 fi
 
+if [ ! -f ".way/output/03_solution_specification.md" ]; then
+    echo "No output generated. Exiting"
+    exit 1
+fi
+
+
 # Check if plan folder exists
 if [ ! -d ".way/output/04_plan" ]; then
     echo "Running plan step..."
     claude -p  "execute .claude/commands//04_plan.md"
     sleep 2
 fi
+
+if [ ! -d ".way/output/04_plan" ]; then
+    echo "No output generated. Exiting"
+    exit 1
+fi
+
 
 echo "All workflow steps complete. Proceeding with decomposition..."
 

@@ -30,9 +30,6 @@ RUN npm install -g npm@latest
 # Set working directory
 WORKDIR /workspace
 
-# Configure claude-code to store credentials in workspace
-ENV CLAUDE_CODE_CONFIG_DIR=/workspace/.claude-code
-
 # Ensure /usr/local/bin exists and has correct permissions
 RUN mkdir -p /usr/local/bin && chmod 777 /usr/local/bin
 

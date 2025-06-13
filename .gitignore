@@ -2,11 +2,13 @@ __pycache__/*
 venv/*
 .way/output/*
 .pytest_cache/*
-node_modules/*
+.claude/node_modules/*
 .claude/.credentials.json
 .claude/projects/*
 .claude/statsig/*
 .claude/todos/*
+.claude/package-lock.json
+.claude/package.json
 .npm/*
 .bash_history
 .claude.json

@@ -9,7 +9,13 @@ cd "$CLAUDE_DIR"
 # Initialize npm project if package.json doesn't exist
 if [ ! -f "package.json" ]; then
     echo "Initializing npm project in $CLAUDE_DIR..."
-    npm init -y
+    # Create package.json with a valid name
+    echo '{
+  "name": "claude-dev",
+  "version": "1.0.0",
+  "description": "Claude development environment",
+  "private": true
+}' > package.json
 fi
 
 # Install claude-code locally if not already installed
@@ -23,14 +29,14 @@ echo "Checking npm installation..."
 npm list @anthropic-ai/claude-code
 
 # Find the claude binary
-CLAUDE_BIN=$(find node_modules/.bin -name claude 2>/dev/null)
+CLAUDE_BIN=$(find "$(pwd)/node_modules/.bin" -name claude 2>/dev/null)
 if [ -n "$CLAUDE_BIN" ]; then
     echo "Found claude binary at: $CLAUDE_BIN"
     
     # Create a symlink to make the claude command available
     if [ ! -f "/usr/local/bin/claude" ]; then
         echo "Creating symlink for claude command..."
-        ln -sf "$(pwd)/$CLAUDE_BIN" /usr/local/bin/claude
+        ln -sf "$CLAUDE_BIN" /usr/local/bin/claude
         chmod +x /usr/local/bin/claude
     fi
     
@@ -43,15 +49,4 @@ else
 fi
 
 # Return to workspace root
-cd /workspace
-
-# Ensure .claude-code directory exists and has correct permissions
-echo "Setting up .claude-code directory..."
-mkdir -p .claude-code
-chmod 777 .claude-code
-
-# If there are any existing files in .claude-code, ensure they have correct permissions
-if [ -d ".claude-code" ]; then
-    chmod -R 777 .claude-code
-    echo "Updated permissions for existing .claude-code directory"
-fi 
+cd /workspace 

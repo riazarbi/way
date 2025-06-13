@@ -7,28 +7,28 @@ echo "Checking workflow steps..."
 # Check if research results exist
 if [ ! -f ".way/output/01_research_results.md" ]; then
     echo "Running search step..."
-    claude -p --dangerously-skip-permissions "execute /01_search"
+    claude -p "execute .claude/commands/01_search.md"
     sleep 2
 fi
 
 # Check if selected solution exists
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
     echo "Running select step..."
-    claude -p --dangerously-skip-permissions "execute /02_select"
+    claude -p "execute .claude/commands/02_select.md"
     sleep 2
 fi
 
 # Check if solution specification exists
 if [ ! -f ".way/output/03_solution_specification.md" ]; then
     echo "Running define step..."
-    claude -p --dangerously-skip-permissions "execute /03_define"
+    claude -p "execute .claude/commands/03_define.md"
     sleep 2
 fi
 
 # Check if plan folder exists
 if [ ! -d ".way/output/04_plan" ]; then
     echo "Running plan step..."
-    claude -p --dangerously-skip-permissions "execute /04_plan"
+    claude -p  "execute .claude/commands//04_plan.md"
     sleep 2
 fi
 
@@ -74,7 +74,7 @@ while true; do
 
     # Run the decomposition command
     echo "Running decomposition prompt..."
-    claude  -p --dangerously-skip-permissions "execute /05_decompose"
+    claude  -p "execute .claude/commands/05_decompose.md"
     
 
     # Check if the command succeeded

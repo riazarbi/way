@@ -33,10 +33,10 @@ while has_non_readme_files; do
     echo "Files found in .way/output/04_plan folder. Running task management..."
 
     echo "Triaging in noninteractive mode..."
-    claude -p --dangerously-skip-permissions "execute /06_triage"
+    claude -p  "execute .claude/commands/06_triage.md"
 
     echo "Executing task in interactive mode. You'll have to exit the prompt when I'm done to release me to start the next task."    
-    claude --dangerously-skip-permissions "execute /06_execute_focused"
+    claude -p --dangerously-skip-permissions "execute .claude/commands/06_execute_focused.md"
 
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping

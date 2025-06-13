@@ -2,3 +2,12 @@ __pycache__/*
 venv/*
 .way/output/*
 .pytest_cache/*
+node_modules/*
+.claude/.credentials.json
+.claude/projects/*
+.claude/statsig/*
+.claude/todos/*
+.npm/*
+.bash_history
+.claude.json
+.DS_Store

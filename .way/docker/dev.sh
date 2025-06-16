@@ -22,10 +22,8 @@ docker run -it --rm \
     -v "$(pwd):/workspace:rw" \
     --user "$USER_ID:$GROUP_ID" \
     -e HOME=/workspace \
-    -e USER=$USERNAME \
     -e USERNAME=$USERNAME \
     -e USER_UID=$USER_ID \
     -e USER_GID=$GROUP_ID \
-    -e UID=$USER_ID \
-    -e GID=$GROUP_ID \
+    --userns=keep-id \
     dev-environment 

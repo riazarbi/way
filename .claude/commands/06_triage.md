@@ -20,6 +20,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Never move more than one task to `doing` at a time.
 - Always respect epic and task dependencies.
 - If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `04_plan/STOP_PRODUCTION.md` and exit.
+- **Never create any task files, even if you think you need to**
 
 ## Process Steps
 
@@ -32,11 +33,15 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 1. Review Plan State
    - Examine `.way/output/04_plan/` directory structure:
    - `todo/` directory
+     - Each epic has its own subfolder in the todo directory, with a README overview
+     - Each task has already been made into a file in the todo/[epic] directory. A README is not a task.
    - `doing/` directory
    - `done/` directory
    - `check/` directory
    - Review each epic's README and outstanding tasks
    - Note any tasks in the `blocked/` directory (if present)
+2. If there are no tasks in `todo/`:
+   - Skip to Step 6
 
 ### Step 3: Progress Assessment
 1. Check Current Status

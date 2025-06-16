@@ -11,12 +11,10 @@ if [ ! -f ".way/output/01_research_results.md" ]; then
     sleep 2
 fi
 
-
 if [ ! -f ".way/output/01_research_results.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
-
 
 # Check if selected solution exists
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
@@ -24,6 +22,7 @@ if [ ! -f ".way/output/02_selected_solution.md" ]; then
     claude -p "execute .claude/commands/02_select.md"
     sleep 2
 fi
+
 
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
     echo "No output generated. Exiting"
@@ -37,6 +36,7 @@ if [ ! -f ".way/output/03_solution_specification.md" ]; then
     claude -p "execute .claude/commands/03_define.md"
     sleep 2
 fi
+
 
 if [ ! -f ".way/output/03_solution_specification.md" ]; then
     echo "No output generated. Exiting"

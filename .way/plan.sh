@@ -1,5 +1,59 @@
 #!/bin/bash
 
+# Maximum number of retries
+MAX_RETRIES=3
+RETRY_COUNT=0
+# Add 10 minutes (600 seconds) buffer to retry time
+RETRY_BUFFER=600
+
+# Function to check for Claude AI usage limit error and extract retry time
+get_retry_time() {
+    local output="$1"
+    
+    # Check if output contains rate limit message
+    if echo "$output" | grep -q "Claude AI usage limit reached"; then
+        # Extract timestamp using grep and cut
+        local timestamp=$(echo "$output" | grep -o "[0-9]*$")
+        if [ ! -z "$timestamp" ]; then
+            echo "$timestamp"
+            return
+        fi
+    fi
+    
+    echo ""
+}
+
+# Function to run claude command and handle rate limits
+run_claude_command() {
+    local cmd="$1"
+    local output
+    local retry_time
+    
+    # Use tee to both capture and display output
+    output=$(eval "$cmd" 2>&1 | tee /dev/tty)
+    local exit_code=$?
+    
+    retry_time=$(get_retry_time "$output")
+    if [ ! -z "$retry_time" ]; then
+        current_time=$(date +%s)
+        # Add buffer to retry time
+        retry_time=$((retry_time + RETRY_BUFFER))
+        wait_time=$((retry_time - current_time))
+        
+        if [ $wait_time -gt 0 ]; then
+            echo "Claude AI usage limit reached. Waiting until $(date -d @$retry_time) (added 10 min buffer) before retrying..."
+            sleep $wait_time
+            return 1
+        fi
+    fi
+    
+    if [ $exit_code -ne 0 ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
 # Check workflow steps and run if needed
 
 echo "Checking workflow steps..."
@@ -7,7 +61,10 @@ echo "Checking workflow steps..."
 # Check if research results exist
 if [ ! -f ".way/output/01_research_results.md" ]; then
     echo "Running search step..."
-    claude -p "execute .claude/commands/01_search.md"
+    if ! run_claude_command "claude -p \"execute .claude/commands/01_search.md\""; then
+        echo "Search step failed. Exiting."
+        exit 1
+    fi
     sleep 2
 fi
 
@@ -19,35 +76,40 @@ fi
 # Check if selected solution exists
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
     echo "Running select step..."
-    claude -p "execute .claude/commands/02_select.md"
+    if ! run_claude_command "claude -p \"execute .claude/commands/02_select.md\""; then
+        echo "Select step failed. Exiting."
+        exit 1
+    fi
     sleep 2
 fi
-
 
 if [ ! -f ".way/output/02_selected_solution.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
-
 # Check if solution specification exists
 if [ ! -f ".way/output/03_solution_specification.md" ]; then
     echo "Running define step..."
-    claude -p "execute .claude/commands/03_define.md"
+    if ! run_claude_command "claude -p \"execute .claude/commands/03_define.md\""; then
+        echo "Define step failed. Exiting."
+        exit 1
+    fi
     sleep 2
 fi
-
 
 if [ ! -f ".way/output/03_solution_specification.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
-
 
 # Check if plan folder exists
 if [ ! -d ".way/output/04_plan" ]; then
     echo "Running plan step..."
-    claude -p  "execute .claude/commands//04_plan.md"
+    if ! run_claude_command "claude -p \"execute .claude/commands/04_plan.md\""; then
+        echo "Plan step failed. Exiting."
+        exit 1
+    fi
     sleep 2
 fi
 
@@ -55,7 +117,6 @@ if [ ! -d ".way/output/04_plan" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
-
 
 echo "All workflow steps complete. Proceeding with decomposition..."
 
@@ -99,16 +160,10 @@ while true; do
 
     # Run the decomposition command
     echo "Running decomposition prompt..."
-    claude  -p "execute .claude/commands/05_decompose.md"
-    
-
-    # Check if the command succeeded
-    if [ $? -ne 0 ]; then
-        echo "Error: 05_decompose command failed. Exiting."
+    if ! run_claude_command "claude -p \"execute .claude/commands/05_decompose.md\""; then
+        echo "Decomposition step failed. Exiting."
         exit 1
     fi
-
-    
     
     # Add delay to prevent rapid looping
     sleep 2

@@ -56,6 +56,10 @@ def create_app(config_name=None):
     from app.message_queue import message_queue
     message_queue.start()
     
+    # Initialize background processor
+    from app.background_processor import background_processor
+    background_processor.start()
+    
     # Store socketio instance on app for access in other modules
     app.socketio = socketio
     

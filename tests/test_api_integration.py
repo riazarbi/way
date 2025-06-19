@@ -37,12 +37,12 @@ class TestAPIEndpoints:
         response = client.post('/api/hypothesis',
                              data=json.dumps(hypothesis_data),
                              content_type='application/json')
-        assert response.status_code == 200
+        assert response.status_code == 202  # Changed to 202 for async processing
         
         data = json.loads(response.data)
-        assert data['status'] == 'analyzed'
+        assert data['status'] == 'processing'  # Now returns processing initially
         assert 'request_id' in data
-        assert 'analysis' in data
+        assert 'task_id' in data or 'analysis' in data  # May have task_id or fallback analysis
     
     def test_invalid_requests(self, client):
         """Test invalid request handling."""

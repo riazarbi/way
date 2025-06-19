@@ -191,44 +191,65 @@ def submit_hypothesis():
                 logger.warning(f"Invalid session ID for request {request_id}: {session_id}")
                 # Continue processing but won't send WebSocket notification
         
-        # Analyze hypothesis with LLM
-        ollama_client = OllamaClient()
-        analysis = ollama_client.analyze_hypothesis(data['hypothesis'])
+        # Queue LLM analysis for async processing to maintain API response times
+        from .background_processor import background_processor
         
-        # Prepare response data
+        # Prepare initial response data without analysis
         response_data = {
-            'message': 'Hypothesis analyzed successfully',
+            'message': 'Hypothesis submitted for analysis',
             'request_id': request_id,
-            'status': 'analyzed',
+            'status': 'processing',
             'timestamp': datetime.datetime.utcnow().isoformat(),
             'data': {
                 'hypothesis': data['hypothesis'],
                 'context': data['context'],
                 'metric': data['metric']
-            },
-            'analysis': analysis
+            }
         }
         
-        # Send real-time feedback via WebSocket if session is linked
+        # Queue async LLM processing
+        processing_data = {
+            'request_id': request_id,
+            'session_id': session_id,
+            'hypothesis': data['hypothesis'],
+            'context': data['context'],
+            'metric': data['metric']
+        }
+        
+        try:
+            task_id = background_processor.queue_hypothesis_analysis(processing_data)
+            response_data['task_id'] = task_id
+            logger.info(f"Hypothesis analysis queued: {request_id} (task: {task_id})")
+        except Exception as e:
+            logger.error(f"Failed to queue hypothesis analysis: {str(e)}")
+            # Fallback to synchronous processing for reliability
+            ollama_client = OllamaClient()
+            analysis = ollama_client.analyze_hypothesis(data['hypothesis'])
+            response_data['status'] = 'analyzed'
+            response_data['analysis'] = analysis
+        
+        # Send processing notification via WebSocket if session is linked  
         if session_id:
             try:
-                # Queue message for reliable delivery
                 message_id = message_queue.queue_message(
                     session_id=session_id,
-                    event='hypothesis_feedback',
-                    data=response_data,
+                    event='hypothesis_processing',
+                    data={
+                        'request_id': request_id,
+                        'status': 'processing',
+                        'message': 'Your hypothesis is being analyzed...'
+                    },
                     priority=Priority.HIGH
                 )
-                logger.info(f"Real-time feedback queued for session {session_id} (message: {message_id})")
-                response_data['message_id'] = message_id
+                logger.info(f"Processing notification queued for session {session_id} (message: {message_id})")
             except Exception as e:
-                logger.error(f"Failed to queue WebSocket feedback: {str(e)}")
+                logger.error(f"Failed to queue processing notification: {str(e)}")
         
         # Log successful submission
         logger.info(f"Hypothesis submitted successfully: {request_id}")
         
-        # Return success response with AI analysis
-        return jsonify(response_data), 200
+        # Return fast response indicating processing has started
+        return jsonify(response_data), 202
         
     except Exception as e:
         logger.error(f"Error processing hypothesis submission: {str(e)}")
@@ -273,6 +294,52 @@ def message_queue_status():
         return jsonify({
             'error': 'Internal server error',
             'message': 'An error occurred while getting message queue status'
+        }), 500
+
+@api_bp.route('/tasks/status', methods=['GET'])
+@log_request_response
+def background_tasks_status():
+    """Get background task processor status and statistics."""
+    try:
+        from .background_processor import background_processor
+        stats = background_processor.get_stats()
+        
+        return jsonify({
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'background_processor': stats
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting background tasks status: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'An error occurred while getting background tasks status'
+        }), 500
+
+@api_bp.route('/tasks/<task_id>', methods=['GET'])
+@log_request_response
+def get_task_status(task_id):
+    """Get the status of a specific background task."""
+    try:
+        from .background_processor import background_processor
+        task_status = background_processor.get_task_status(task_id)
+        
+        if not task_status:
+            return jsonify({
+                'error': 'Task not found',
+                'message': f'No task found with ID: {task_id}'
+            }), 404
+        
+        return jsonify({
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'task': task_status
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting task status: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'An error occurred while getting task status'
         }), 500
 
 @api_bp.errorhandler(404)

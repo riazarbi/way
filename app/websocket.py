@@ -139,9 +139,150 @@ def create_socketio(app):
         else:
             logger.warning("Message delivery confirmation without message_id")
     
+    @socketio.on('feedback_request')
+    def handle_feedback_request(data):
+        """Handle hypothesis feedback requests."""
+        connection = connection_manager.get_connection(request.sid)
+        if not connection:
+            emit('error', {
+                'message': 'No active connection found',
+                'code': 'NO_CONNECTION',
+                'category': 'connection'
+            })
+            return
+        
+        session_id = connection.client_info.get('session_id')
+        hypothesis = data.get('hypothesis', '').strip()
+        
+        if not hypothesis:
+            emit('feedback_error', {
+                'message': 'Hypothesis text is required',
+                'code': 'MISSING_HYPOTHESIS',
+                'category': 'validation',
+                'session_id': session_id
+            })
+            return
+        
+        try:
+            # Queue feedback processing
+            message_queue.queue_message(session_id, 'feedback_processing', {
+                'status': 'processing',
+                'hypothesis': hypothesis,
+                'session_id': session_id
+            })
+            
+            logger.info(f"Feedback request queued for session {session_id}")
+            
+        except Exception as e:
+            logger.error(f"Failed to queue feedback request: {e}")
+            emit('feedback_error', {
+                'message': 'Failed to process feedback request',
+                'code': 'PROCESSING_FAILED',
+                'category': 'system',
+                'session_id': session_id
+            })
+    
+    @socketio.on('connection_status')
+    def handle_connection_status():
+        """Handle connection status requests."""
+        connection = connection_manager.get_connection(request.sid)
+        if connection:
+            session_id = connection.client_info.get('session_id')
+            emit('connection_status_response', {
+                'status': 'connected',
+                'session_id': session_id,
+                'connected_at': connection.connected_at.isoformat(),
+                'last_ping': connection.last_ping.isoformat() if connection.last_ping else None,
+                'queue_stats': message_queue.get_stats()
+            })
+        else:
+            emit('connection_status_response', {
+                'status': 'unknown',
+                'error': 'Connection not found in registry'
+            })
+    
+    @socketio.on_error_default
+    def default_error_handler(e):
+        """Handle unexpected WebSocket errors."""
+        connection = connection_manager.get_connection(request.sid)
+        session_id = connection.client_info.get('session_id') if connection else 'unknown'
+        
+        logger.error(f"WebSocket error for session {session_id}: {str(e)}")
+        
+        emit('error', {
+            'message': 'An unexpected error occurred',
+            'code': 'WEBSOCKET_ERROR',
+            'category': 'system',
+            'session_id': session_id
+        })
+    
     return socketio
 
 
 def get_active_connections():
     """Get current active connections count and details."""
     return connection_manager.get_active_connections()
+
+
+def emit_feedback_delivery(session_id: str, feedback_data: dict, message_id: str = None):
+    """Emit feedback to a specific session."""
+    try:
+        # Get WebSocket connection for session
+        websocket_sid = session_manager.get_websocket_for_session(session_id)
+        if not websocket_sid:
+            logger.warning(f"No WebSocket connection for session {session_id}")
+            return False
+        
+        # Add message tracking
+        if message_id:
+            feedback_data['_message_id'] = message_id
+        
+        # Use current app context to emit
+        from flask import current_app
+        socketio = current_app.extensions.get('socketio')
+        if socketio:
+            socketio.emit('feedback_response', feedback_data, room=websocket_sid)
+            logger.info(f"Feedback delivered to session {session_id}")
+            return True
+        else:
+            logger.error("SocketIO not found in app extensions")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Failed to emit feedback to session {session_id}: {e}")
+        return False
+
+
+def emit_error_notification(session_id: str, error_code: str, message: str, 
+                          category: str = 'system', details: dict = None):
+    """Emit categorized error notification to a specific session."""
+    try:
+        websocket_sid = session_manager.get_websocket_for_session(session_id)
+        if not websocket_sid:
+            logger.warning(f"No WebSocket connection for session {session_id}")
+            return False
+        
+        error_data = {
+            'message': message,
+            'code': error_code,
+            'category': category,
+            'session_id': session_id,
+            'timestamp': datetime.utcnow().isoformat()
+        }
+        
+        if details:
+            error_data['details'] = details
+        
+        from flask import current_app
+        socketio = current_app.extensions.get('socketio')
+        if socketio:
+            socketio.emit('error_notification', error_data, room=websocket_sid)
+            logger.info(f"Error notification sent to session {session_id}: {error_code}")
+            return True
+        else:
+            logger.error("SocketIO not found in app extensions")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Failed to emit error notification to session {session_id}: {e}")
+        return False

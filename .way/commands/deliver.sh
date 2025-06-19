@@ -168,7 +168,7 @@ while has_non_readme_files; do
     fi
 
     # Check lines of code added in last commit
-    local lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
+    lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
     if [ ! -z "$lines_added" ]; then
         echo "Lines of code added in last commit: $lines_added"
         if [ $lines_added -gt $MAX_LINES_PER_COMMIT ]; then
@@ -178,9 +178,9 @@ while has_non_readme_files; do
     fi
 
     # Check lines of code added in last N commits
-    local total_lines_added=0
+    total_lines_added=0
     for i in $(seq 0 $((COMMITS_TO_CHECK - 1))); do
-        local commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
+        commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
         if [ ! -z "$commit_lines" ]; then
             total_lines_added=$((total_lines_added + commit_lines))
         fi

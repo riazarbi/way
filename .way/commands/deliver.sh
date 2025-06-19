@@ -9,6 +9,25 @@ fi
 
 USER_STORY="$1"
 
+# Check if delivery folder exists, create it if it doesn't
+if [ ! -d "docs/stories/$USER_STORY/delivery" ]; then
+    echo "Delivery folder does not exist. Creating delivery structure..."
+    mkdir -p "docs/stories/$USER_STORY/delivery/todo"
+    mkdir -p "docs/stories/$USER_STORY/delivery/doing"
+    mkdir -p "docs/stories/$USER_STORY/delivery/done"
+    mkdir -p "docs/stories/$USER_STORY/delivery/check"
+    mkdir -p "docs/stories/$USER_STORY/delivery/blocked"
+    
+    # Copy plan contents to todo
+    if [ -d "docs/stories/$USER_STORY/plan" ]; then
+        echo "Copying plan contents to delivery/todo..."
+        cp -r "docs/stories/$USER_STORY/plan"/* "docs/stories/$USER_STORY/delivery/todo/"
+    else
+        echo "Warning: Plan directory does not exist. Todo folder is empty."
+        exit 1
+    fi
+fi
+
 # Maximum number of retries
 MAX_RETRIES=3
 RETRY_COUNT=0
@@ -17,24 +36,41 @@ RETRY_BUFFER=600
 
 # Function to check for STOP_PRODUCTION.md file
 has_stop_file() {
-    local plan_dir="docs/stories/$USER_STORY/plan"
-    [[ -f "$plan_dir/STOP_PRODUCTION.md" ]]
+    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    [[ -f "$delivery_dir/STOP_PRODUCTION.md" ]]
 }
 
-# Function to check if there are non-README files in the plan folder
+# Function to check if there are non-README files in the delivery folder
 has_non_readme_files() {
-    local plan_dir="docs/stories/$USER_STORY/plan"
+    local delivery_dir="docs/stories/$USER_STORY/delivery"
     
     # Check if directory exists
-    if [[ ! -d "$plan_dir" ]]; then
+    if [[ ! -d "$delivery_dir" ]]; then
         return 1  # Directory doesn't exist, so no files
     fi
     
     # Count non-README files (case-insensitive)
-    local file_count=$(find "$plan_dir" -type f ! -iname "readme*" | wc -l)
+    local file_count=$(find "$delivery_dir" -type f ! -iname "readme*" | wc -l)
     
     # Return 0 (true) if there are files, 1 (false) if no files
     [[ $file_count -gt 0 ]]
+}
+
+# Function to check if both doing and check folders are empty
+are_doing_and_check_empty() {
+    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    
+    # Check if directories exist
+    if [[ ! -d "$delivery_dir/doing" ]] || [[ ! -d "$delivery_dir/check" ]]; then
+        return 0  # Consider empty if directories don't exist
+    fi
+    
+    # Count files in doing and check (excluding README files)
+    local doing_count=$(find "$delivery_dir/doing" -type f ! -iname "readme*" 2>/dev/null | wc -l)
+    local check_count=$(find "$delivery_dir/check" -type f ! -iname "readme*" 2>/dev/null | wc -l)
+    
+    # Return 0 (true) if both are empty, 1 (false) if either has files
+    [[ $doing_count -eq 0 && $check_count -eq 0 ]]
 }
 
 # Function to check for Claude AI usage limit error and extract retry time
@@ -89,25 +125,30 @@ run_claude_command() {
 while has_non_readme_files; do
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/plan folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/delivery folder. Exiting immediately."
         exit 1
     fi
     
-    echo "Files found in docs/stories/$USER_STORY/plan folder. Running task management..."
-
-    echo "Triaging in noninteractive mode..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY\""; then
-        RETRY_COUNT=$((RETRY_COUNT + 1))
-        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-            echo "Maximum retry attempts reached. Please try again later."
-            exit 1
+    # Check if both doing and check folders are empty
+    if are_doing_and_check_empty; then
+        echo "Both doing and check folders are empty. Invoking triage to select next task..."
+        
+        echo "Triaging in noninteractive mode..."
+        if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY\""; then
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+                echo "Maximum retry attempts reached. Please try again later."
+                exit 1
+            fi
+            continue
         fi
-        continue
+    else
+        echo "Doing or check folders have tasks. Skipping triage and executing focused task..."
     fi
 
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/plan folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/delivery folder. Exiting immediately."
         exit 1
     fi
 
@@ -126,4 +167,4 @@ while has_non_readme_files; do
     RETRY_COUNT=0  # Reset retry count on successful execution
 done
 
-echo "No more files in docs/stories/$USER_STORY/plan folder. Task management complete."
+echo "No more files in docs/stories/$USER_STORY/delivery folder. Task management complete."

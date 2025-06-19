@@ -145,7 +145,7 @@ fi
 echo "All workflow steps complete. Proceeding with decomposition..."
 
 # Path to the epics directory
-EPICS_DIR="docs/stories/$USER_STORY/plan/todo"
+EPICS_DIR="docs/stories/$USER_STORY/plan"
 
 # Function to check if an epic has been decomposed
 is_decomposed() {

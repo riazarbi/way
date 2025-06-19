@@ -19,7 +19,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 - Never move more than one task to `doing` at a time.
 - Always respect epic and task dependencies.
-- If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `04_plan/STOP_PRODUCTION.md` and exit.
+- If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `docs/stories/[user-story]/plan/STOP_PRODUCTION.md` and exit.
 - **Never create any task files, even if you think you need to**
 
 ## Process Steps
@@ -31,7 +31,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ### Step 2: Context Loading
 1. Review Plan State
-   - Examine `.way/output/04_plan/` directory structure:
+   - Examine `docs/stories/[user-story]/plan/` directory structure:
    - `todo/` directory
      - Each epic has its own subfolder in the todo directory, with a README overview
      - Each task has already been made into a file in the todo/[epic] directory. A README is not a task.
@@ -62,7 +62,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
        - Has all prerequisites met
        - Is not blocked
    - If no tasks are ready:
-     - **Create comprehensive blockers/prerequisites summary in `04_plan/STOP_PRODUCTION.md`**
+     - **Create comprehensive blockers/prerequisites summary in `docs/stories/[user-story]/plan/STOP_PRODUCTION.md`**
      - Exit process
 
 ### Step 5: Task Movement
@@ -85,7 +85,7 @@ Output a comprehensive summary including:
    - List any surfaced blockers
    - Note any unmet prerequisites
 3. **If all tasks are blocked or prerequisites are unmet:**
-   - Write detailed summary to `04_plan/STOP_PRODUCTION.md` including:
+   - Write detailed summary to `docs/stories/[user-story]/plan/STOP_PRODUCTION.md` including:
      - Current timestamp
      - Complete assessment of all epics and tasks
      - Specific blockers identified
@@ -95,7 +95,7 @@ Output a comprehensive summary including:
 4. Exit after summary output
 
 ## Blocked Tasks Summary Format
-When writing to `04_plan/STOP_PRODUCTION.md`, use this structure:
+When writing to `docs/stories/[user-story]/plan/STOP_PRODUCTION.md`, use this structure:
 
 ```markdown
 # STOP Production Status - Blocked Tasks Summary

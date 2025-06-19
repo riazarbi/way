@@ -37,7 +37,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Read [the user story](.way/output/[story-name]/user-story.md)
+1. Read [the user story](docs/stories/[story-name]/user-story.md)
 2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
 
@@ -53,7 +53,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ### Step 4: Search
 1. Analyze the user story content and the current product as is
 2. Formulate several candidate approaches to address the user story expectations
-3. Record the candidate approaches in the file `.way/output/[story-name]/solution-space.md`
+3. Record the candidate approaches in the file `docs/stories/[story-name]/solution-space.md`
 
 **Requirements for candidate approaches:**
 - Generate non-overlapping, complete, diverse approaches
@@ -63,7 +63,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**File:** `.way/output/[story-name]/solution-space.md`
+**File:** `docs/stories/[story-name]/solution-space.md`
 
 Create a Markdown file with the following structure:
 

@@ -37,8 +37,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with the original [user story](.way/output/[user-story]/user-story.md)
-2. Read the output from the [select phase](.way/output/[user-story]/target-solution.md)
+1. Familiarise yourself with the original [user story](docs/stories/[user-story]/user-story.md)
+2. Read the output from the [select phase](docs/stories/[user-story]/target-solution.md)
 3. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 4. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 5. Familiarise yourself with [the evaluation criteria](.way/input/evaluation_criteria.md)
@@ -60,7 +60,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**File:** `.way/output/[user-story]/solution-specification.md`
+**File:** `docs/stories/[user-story]/solution-specification.md`
 
 Create a Markdown file with the following structure:
 

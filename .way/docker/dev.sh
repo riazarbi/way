@@ -10,7 +10,7 @@ USERNAME=$(id -un)
 
 # Build the Docker image with user information
 echo "Building Docker image..."
-docker build -t dev-environment \
+podman build -t dev-environment \
     --build-arg USERNAME=$USERNAME \
     --build-arg USER_UID=$USER_ID \
     --build-arg USER_GID=$GROUP_ID \
@@ -18,7 +18,7 @@ docker build -t dev-environment \
 
 # Run the container interactively
 echo "Starting development container..."
-docker run -it --rm \
+podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
     --user "$USER_ID:$GROUP_ID" \
     -e HOME=/workspace \

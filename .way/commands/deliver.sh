@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Check if user story name is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <user-story-name>"
+    echo "Example: $0 hypothesis-feedback-tool"
+    exit 1
+fi
+
+USER_STORY="$1"
+
 # Maximum number of retries
 MAX_RETRIES=3
 RETRY_COUNT=0
@@ -8,13 +17,13 @@ RETRY_BUFFER=600
 
 # Function to check for STOP_PRODUCTION.md file
 has_stop_file() {
-    local plan_dir=".way/output/04_plan"
+    local plan_dir="docs/stories/$USER_STORY/plan"
     [[ -f "$plan_dir/STOP_PRODUCTION.md" ]]
 }
 
 # Function to check if there are non-README files in the plan folder
 has_non_readme_files() {
-    local plan_dir=".way/output/04_plan"
+    local plan_dir="docs/stories/$USER_STORY/plan"
     
     # Check if directory exists
     if [[ ! -d "$plan_dir" ]]; then
@@ -80,14 +89,14 @@ run_claude_command() {
 while has_non_readme_files; do
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in .way/output/04_plan folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/plan folder. Exiting immediately."
         exit 1
     fi
     
-    echo "Files found in .way/output/04_plan folder. Running task management..."
+    echo "Files found in docs/stories/$USER_STORY/plan folder. Running task management..."
 
     echo "Triaging in noninteractive mode..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md\""; then
+    if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY\""; then
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
             echo "Maximum retry attempts reached. Please try again later."
@@ -98,12 +107,12 @@ while has_non_readme_files; do
 
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in .way/output/04_plan folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/plan folder. Exiting immediately."
         exit 1
     fi
 
     echo "Executing task in noninteractive mode..."    
-    if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md\""; then
+    if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY\""; then
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
             echo "Maximum retry attempts reached. Please try again later."
@@ -117,4 +126,4 @@ while has_non_readme_files; do
     RETRY_COUNT=0  # Reset retry count on successful execution
 done
 
-echo "No more files in .way/output/04_plan folder. Task management complete."
+echo "No more files in docs/stories/$USER_STORY/plan folder. Task management complete."

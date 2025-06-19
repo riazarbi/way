@@ -59,5 +59,5 @@ SHELL ["/bin/bash", "-c"]
 USER $USER_UID:$USER_GID
 
 # Command to run when container starts
-ENTRYPOINT ["/usr/local/bin/fix-permissions.sh"]
+#ENTRYPOINT ["/usr/local/bin/fix-permissions.sh"]
 CMD ["/bin/bash"] 

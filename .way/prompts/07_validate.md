@@ -40,7 +40,7 @@ Tell me, in 30 words or less, what the files are about.
 
 ## Second Instruction: Context Loading
 
-1. Directory: `.way/output/04_implementation_plan/`
+1. Directory: `docs/stories/[user-story]/plan/`
    The directory containing task files and execution results
 
 2. File: `.way/input/constraints.md`
@@ -116,7 +116,7 @@ Tell me, in 30 words or less, what the files are about.
 9. Prepare feedback for next cycle
 
 ## Output
-1. File: `.way/output/06_validation_results.md`
+1. File: `docs/stories/[user-story]/validation_results.md`
    A Markdown file containing:
    ```markdown
    # Validation Results

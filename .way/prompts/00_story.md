@@ -45,4 +45,4 @@ The goal is for you to identify what type of story the user is asking for, and t
 - Maintain traceability to input data
 
 ### Step 5: Record
-1. Save the user story to the directory `.way/output/[story-name]/user-story.md`
+1. Save the user story to the directory `docs/stories/[story-name]/user-story.md`

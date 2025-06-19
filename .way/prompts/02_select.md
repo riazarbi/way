@@ -37,7 +37,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the solution space](.way/output/[user-story]/solution-space.md)
+1. Familiarise yourself with [the solution space](docs/stories/[user-story]/solution-space.md)
 2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Familiarise yourself with [the constraints](.way/input/constraints.md)
@@ -53,13 +53,13 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 6. Consider maintainability using implementation guidelines
 7. Assess integration requirements
 8. Select optimal solution approach from one of the approaches in the solution space.
-10. Document the selected solution in the file `.way/output/[user-story]/target-solution.md`
+10. Document the selected solution in the file `docs/stories/[user-story]/target-solution.md`
 
 ---
 
 ## Output Format
 
-**File:** `.way/output/[user-story]/target-solution.md`
+**File:** `docs/stories/[user-story]/target-solution.md`
 
 Create a Markdown file with the following structure:
 

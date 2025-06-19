@@ -49,7 +49,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the solution specification](.way/output/[user-story]/solution-specification.md)
+1. Familiarise yourself with [the solution specification](docs/stories/[user-story]/solution-specification.md)
 2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
@@ -75,7 +75,7 @@ It is **extremely important** that you synthesize the implementation guidelines 
 
 ## Output Format
 
-**Directory:** `.way/output/[user-story]/plan/`
+**Directory:** `docs/stories/[user-story]/plan/`
 
 Create a directory containing story-level documentation organized by the AI assistant based on the implementation needs. The AI assistant should:
 
@@ -132,4 +132,3 @@ Each story's README.md should contain:
 
 ## Validation Strategy
 [High-level validation approach]
-```

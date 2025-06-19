@@ -38,11 +38,11 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the implementation plan README](.way/output/04_plan/README.md)
-2. Familiarise yourself with [the epics to be decomposed](.way/output/04_plan/todo/[epic]/)
+1. Familiarise yourself with [the implementation plan README](docs/stories/[user-story]/plan/README.md)
+2. Familiarise yourself with [the epics to be decomposed](docs/stories/[user-story]/plan/todo/[epic]/)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
-4. Read the file in [the doing folder](.way/output/04_plan/doing). It is the task you should process.
-5. The files in [the plan folder](.way/output/04_plan/) constitute the implementation plan. There is probably enough context in your task file. but if you need more context you can find it here, including overall project plan, tasks done, tasks blocked and tasks still to do.
+4. Read the file in [the doing folder](docs/stories/[user-story]/plan/doing). It is the task you should process.
+5. The files in [the plan folder](docs/stories/[user-story]/plan/) constitute the implementation plan. There is probably enough context in your task file. but if you need more context you can find it here, including overall project plan, tasks done, tasks blocked and tasks still to do.
 6. Check if there are any files in the current working directory. They represent the current state of the project implementation.
 
 ### Step 3: Execute
@@ -50,7 +50,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 1. Review previous execution results if available
 
 2. **Check Phase:**
-   - If there are any tasks in the `.way/output/04_plan/check/` directory:
+   - If there are any tasks in the `docs/stories/[user-story]/plan/check/` directory:
      - For each task in `check/`:
        - Validate the task against its acceptance criteria and validation steps
        - If the task passes all checks, move it to `done/`
@@ -67,7 +67,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
         - If it is not: 
           - Tell me why it is not and what you would do instead
           - Add a note detailing your reasoning to the bottom of the task file
-          - Move it to the `.way/output/04_plan/blocked/` directory
+          - Move it to the `docs/stories/[user-story]/plan/blocked/` directory
           - Exit the procedure
         - If the task rationale is sound, tell me that it is sound and proceed to the next step
      
@@ -75,7 +75,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
         - If not:
           - Tell me what you need
           - Add a note detailing what you need to the bottom of the task file
-          - Move it to the `.way/output/04_plan/blocked` directory
+          - Move it to the `docs/stories/[user-story]/plan/blocked` directory
           - Exit the procedure
         - If you have the necessary skill, tools and resources, tell me that you have them and proceed to the next step
      

@@ -1,6 +1,6 @@
 __pycache__/*
 venv/*
-.way/output/*
+docs/stories/*
 .pytest_cache/*
 .claude/node_modules/*
 .claude/.credentials.json

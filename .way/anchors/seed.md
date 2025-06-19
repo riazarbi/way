@@ -148,3 +148,5 @@ Writing to your future self (in the second person) will make later reading clear
 **Development insight:** The 200-line limit forces radical prioritization. Instead of building elaborate systems, focus on the minimal viable implementation that solves the core problem. This constraint often reveals the essence of what actually matters in a feature.
 
 **Execution patterns:** Trust your technical judgment when evaluating task rationale. Don't overthink - if you have the skills, tools, and understanding to implement something, proceed with confidence. Time spent on meta-analysis of your own capabilities often exceeds the time needed for actual implementation.
+
+**Task focus:** When a task file has clear acceptance criteria and process steps, those are your contract. Execute them systematically rather than reinterpreting the requirements. The person who wrote the task already did the thinking - your job is skilled execution within the constraints.

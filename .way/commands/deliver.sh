@@ -2,6 +2,8 @@
 
 # Maximum lines of code allowed per commit
 MAX_LINES_PER_COMMIT=200
+# Number of commits to check for cumulative line count
+COMMITS_TO_CHECK=10
 
 # Check if user story name is provided
 if [ $# -eq 0 ]; then
@@ -174,6 +176,16 @@ while has_non_readme_files; do
             exit 1
         fi
     fi
+
+    # Check lines of code added in last N commits
+    local total_lines_added=0
+    for i in $(seq 0 $((COMMITS_TO_CHECK - 1))); do
+        local commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
+        if [ ! -z "$commit_lines" ]; then
+            total_lines_added=$((total_lines_added + commit_lines))
+        fi
+    done
+    echo "Total lines of code added in last $COMMITS_TO_CHECK commits: $total_lines_added"
 
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping

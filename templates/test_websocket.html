@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>WebSocket Connection Test</h1>
+    <div id="status">Disconnected</div>
+    <div id="session-id"></div>
+    <div>
+        <input type="text" id="message-input" placeholder="Enter test message">
+        <button onclick="sendEcho()">Send Echo</button>
+    </div>
+    <div id="messages"></div>
+
+    <script>
+        const socket = io();
+        
+        socket.on('connect', function() {
+            document.getElementById('status').textContent = 'Connected';
+            document.getElementById('status').style.color = 'green';
+        });
+        
+        socket.on('connected', function(data) {
+            document.getElementById('session-id').textContent = 'Session ID: ' + data.session_id;
+            addMessage('Connected with session: ' + data.session_id);
+        });
+        
+        socket.on('disconnect', function() {
+            document.getElementById('status').textContent = 'Disconnected';
+            document.getElementById('status').style.color = 'red';
+        });
+        
+        socket.on('echo_response', function(data) {
+            addMessage('Echo response: ' + data.original_message + ' (session: ' + data.session_id + ')');
+        });
+        
+        socket.on('heartbeat_ack', function(data) {
+            addMessage('Heartbeat acknowledged at: ' + data.timestamp);
+        });
+        
+        function sendEcho() {
+            const message = document.getElementById('message-input').value;
+            if (message) {
+                socket.emit('echo', message);
+                document.getElementById('message-input').value = '';
+            }
+        }
+        
+        function addMessage(message) {
+            const div = document.createElement('div');
+            div.textContent = new Date().toISOString() + ': ' + message;
+            document.getElementById('messages').appendChild(div);
+        }
+        
+        // Send heartbeat every 30 seconds
+        setInterval(() => {
+            socket.emit('heartbeat');
+        }, 30000);
+    </script>
+</body>
+</html>

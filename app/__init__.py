@@ -43,4 +43,11 @@ def create_app(config_name=None):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
     
+    # Initialize WebSocket support
+    from app.websocket import create_socketio
+    socketio = create_socketio(app)
+    
+    # Store socketio instance on app for access in other modules
+    app.socketio = socketio
+    
     return app

@@ -35,7 +35,7 @@ def validate_hypothesis_data(data):
     if not data:
         return False, "No data provided"
     
-    required_fields = ['hypothesis', 'control_group', 'test_group', 'success_metric']
+    required_fields = ['hypothesis', 'context', 'metric']
     
     for field in required_fields:
         if field not in data:
@@ -48,27 +48,63 @@ def validate_hypothesis_data(data):
     if len(data['hypothesis']) > 1000:
         return False, "Hypothesis text too long (max 1000 characters)"
     
-    if len(data['control_group']) > 500:
-        return False, "Control group description too long (max 500 characters)"
+    if len(data['context']) > 500:
+        return False, "Context description too long (max 500 characters)"
     
-    if len(data['test_group']) > 500:
-        return False, "Test group description too long (max 500 characters)"
-    
-    if len(data['success_metric']) > 200:
-        return False, "Success metric description too long (max 200 characters)"
+    if len(data['metric']) > 200:
+        return False, "Metric description too long (max 200 characters)"
     
     return True, None
 
-@api_bp.route('/health', methods=['GET'])
+@api_bp.route('/connections', methods=['GET'])
+@log_request_response
+def connections_status():
+    """Get current WebSocket connections status."""
+    from flask import current_app
+    
+    # Get connection details from connection manager
+    if hasattr(current_app, 'connection_manager'):
+        cm = current_app.connection_manager
+        connection_count = cm.get_connection_count()
+        max_connections = getattr(cm, 'max_connections', 100)
+        connections = []
+        
+        # Get basic connection info (avoiding sensitive data)
+        for conn_id, conn_info in cm.connections.items():
+            connections.append({
+                'id': conn_id,
+                'connected_at': conn_info.get('connected_at', '').isoformat() if conn_info.get('connected_at') else '',
+                'last_ping': conn_info.get('last_ping', '').isoformat() if conn_info.get('last_ping') else ''
+            })
+    else:
+        connection_count = 0
+        max_connections = 100
+        connections = []
+    
+    return jsonify({
+        'count': connection_count,
+        'max_connections': max_connections,
+        'connections': connections
+    }), 200
+
+@api_bp.route('/health', methods=['GET'])  
 @log_request_response
 def health_check():
     """Health check endpoint for application monitoring."""
+    from flask import current_app
+    
+    # Get connection count from connection manager
+    connection_count = 0
+    if hasattr(current_app, 'connection_manager'):
+        connection_count = current_app.connection_manager.get_connection_count()
+    
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.datetime.utcnow().isoformat(),
         'service': 'hypothesis-feedback-tool',
         'version': '1.0.0',
-        'uptime': 'active'
+        'uptime': 'active',
+        'connections': connection_count
     }), 200
 
 @api_bp.route('/hypothesis', methods=['POST'])
@@ -94,24 +130,23 @@ def submit_hypothesis():
             }), 400
         
         # Process hypothesis submission
-        hypothesis_id = f"hyp_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        request_id = f"req_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
         
         # Log successful submission
-        logger.info(f"Hypothesis submitted successfully: {hypothesis_id}")
+        logger.info(f"Hypothesis submitted successfully: {request_id}")
         
         # Return success response
         return jsonify({
-            'message': 'Hypothesis submitted successfully',
-            'hypothesis_id': hypothesis_id,
-            'status': 'accepted',
+            'message': 'Hypothesis received successfully',
+            'request_id': request_id,
+            'status': 'received',
             'timestamp': datetime.datetime.utcnow().isoformat(),
             'data': {
                 'hypothesis': data['hypothesis'],
-                'control_group': data['control_group'],
-                'test_group': data['test_group'],
-                'success_metric': data['success_metric']
+                'context': data['context'],
+                'metric': data['metric']
             }
-        }), 201
+        }), 200
         
     except Exception as e:
         logger.error(f"Error processing hypothesis submission: {str(e)}")

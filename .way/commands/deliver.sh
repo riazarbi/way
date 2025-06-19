@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Maximum lines of code allowed per commit
+MAX_LINES_PER_COMMIT=200
+
 # Check if user story name is provided
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <user-story-name>"
@@ -160,6 +163,16 @@ while has_non_readme_files; do
             exit 1
         fi
         continue
+    fi
+
+    # Check lines of code added in last commit
+    local lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
+    if [ ! -z "$lines_added" ]; then
+        echo "Lines of code added in last commit: $lines_added"
+        if [ $lines_added -gt $MAX_LINES_PER_COMMIT ]; then
+            echo "Error: Last commit added $lines_added lines, which exceeds the limit of $MAX_LINES_PER_COMMIT lines per commit."
+            exit 1
+        fi
     fi
 
     echo "Current task cycle complete. Checking for remaining files..."

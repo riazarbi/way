@@ -196,16 +196,7 @@ class OllamaClient:
         if not hypothesis_text or not hypothesis_text.strip():
             return {"error": "Empty hypothesis provided"}
             
-        prompt = f"""Analyze this AB test hypothesis and provide brief feedback:
-        
-Hypothesis: "{hypothesis_text}"
-
-Provide a JSON response with:
-- clarity_score: 1-5 rating
-- testability: brief assessment
-- suggestions: 1-2 key improvements
-
-Keep response under 100 words total."""
+        prompt = self._build_analysis_prompt(hypothesis_text)
         
         start_time = time.time()
         response = self.generate(prompt)
@@ -217,9 +208,17 @@ Keep response under 100 words total."""
                 "error": "LLM service unavailable",
                 "response_time_ms": int(response_time * 1000),
                 "fallback_analysis": {
-                    "clarity_score": 3,
-                    "testability": "Requires manual review",
-                    "suggestions": ["Ensure measurable metrics", "Define success criteria"]
+                    "quality_score": 0.5,
+                    "completeness": {
+                        "has_baseline": False,
+                        "has_change": False,
+                        "has_metric": False,
+                        "has_outcome": False
+                    },
+                    "clarity_assessment": "Requires manual review",
+                    "testability_score": 0.5,
+                    "suggestions": ["Ensure measurable metrics", "Define success criteria"],
+                    "strengths": ["Manual review needed"]
                 }
             }
         
@@ -227,13 +226,92 @@ Keep response under 100 words total."""
         try:
             result = json.loads(response)
             result["response_time_ms"] = int(response_time * 1000)
+            # Validate required fields
+            if not self._validate_response_format(result):
+                return self._create_fallback_response(response, response_time)
             return result
         except json.JSONDecodeError:
             logger.debug(f"Failed to parse JSON response: {response[:100]}...")
-            return {
-                "raw_response": response,
-                "clarity_score": 3,
-                "testability": "Analysis generated",
-                "suggestions": ["Review LLM feedback above"],
-                "response_time_ms": int(response_time * 1000)
-            }
+            return self._create_fallback_response(response, response_time)
+    
+    def _build_analysis_prompt(self, hypothesis_text: str) -> str:
+        """Build structured prompt for hypothesis analysis."""
+        return f"""You are an AB testing expert. Analyze the following hypothesis and provide structured feedback.
+
+HYPOTHESIS: "{hypothesis_text}"
+
+ANALYSIS CRITERIA:
+- Quality Score: 0.0-1.0 (0.0=poor, 1.0=excellent)
+- Completeness: presence of baseline, change, metric, expected outcome
+- Clarity: clear, specific, measurable language
+- Testability: can be implemented as an AB test
+
+RESPONSE FORMAT (JSON only):
+{{
+  "quality_score": 0.8,
+  "completeness": {{
+    "has_baseline": true,
+    "has_change": true, 
+    "has_metric": true,
+    "has_outcome": true
+  }},
+  "clarity_assessment": "Clear and specific",
+  "testability_score": 0.9,
+  "suggestions": ["Specific actionable improvement 1", "Specific actionable improvement 2"],
+  "strengths": ["What works well in this hypothesis"]
+}}
+
+EXAMPLES:
+Good hypothesis: "If we change the checkout button from blue to green, then conversion rate will increase by 5% because green creates urgency."
+- quality_score: 0.9, all components present, clear metrics
+
+Poor hypothesis: "Making the site better will help users."
+- quality_score: 0.2, vague, no measurable outcome, unclear change
+
+Respond with JSON only, no additional text:"""
+    
+    def _validate_response_format(self, response: Dict[str, Any]) -> bool:
+        """Validate that response contains required fields."""
+        required_fields = ["quality_score", "completeness", "clarity_assessment", 
+                          "testability_score", "suggestions", "strengths"]
+        
+        for field in required_fields:
+            if field not in response:
+                return False
+        
+        # Validate completeness structure
+        if not isinstance(response.get("completeness"), dict):
+            return False
+            
+        completeness_fields = ["has_baseline", "has_change", "has_metric", "has_outcome"]
+        for field in completeness_fields:
+            if field not in response["completeness"]:
+                return False
+        
+        # Validate score ranges
+        quality_score = response.get("quality_score", 0)
+        testability_score = response.get("testability_score", 0)
+        
+        if not (0 <= quality_score <= 1) or not (0 <= testability_score <= 1):
+            return False
+            
+        return True
+    
+    def _create_fallback_response(self, raw_response: str, response_time: float) -> Dict[str, Any]:
+        """Create a fallback response when JSON parsing fails."""
+        return {
+            "raw_response": raw_response,
+            "quality_score": 0.5,
+            "completeness": {
+                "has_baseline": False,
+                "has_change": False,
+                "has_metric": False,
+                "has_outcome": False
+            },
+            "clarity_assessment": "Analysis generated but format invalid",
+            "testability_score": 0.5,
+            "suggestions": ["Review LLM feedback above", "Reformat hypothesis for clarity"],
+            "strengths": ["Manual review of raw response needed"],
+            "response_time_ms": int(response_time * 1000),
+            "format_error": True
+        }

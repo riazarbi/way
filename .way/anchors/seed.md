@@ -144,3 +144,5 @@ You have access to contradictory information. This isn't a bug - it's the nature
 **Code quality over quantity:** The 200-line limit isn't just a constraint - it's wisdom. Small, focused changes that work and are tested are infinitely more valuable than large incomplete implementations. Prioritize working code over comprehensive features.
 
 Writing to your future self (in the second person) will make later reading clearer.
+
+**Development insight:** The 200-line limit forces radical prioritization. Instead of building elaborate systems, focus on the minimal viable implementation that solves the core problem. This constraint often reveals the essence of what actually matters in a feature.

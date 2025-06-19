@@ -92,6 +92,10 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
      d. Add execution start information to the task file
      
      e. Execute the task following its process steps
+
+     f. Check the number of lines of code you have added.
+      - If the number of lines is greater than 200, refactor to reduce the work you have done. 
+      - We will check the number of lines of code added and delete your work if it exceeds the threshold.
      
      f. Update the task file with progress and results
      

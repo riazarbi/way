@@ -160,18 +160,28 @@ class TestOllamaClient:
         assert "error" in result
     
     def test_analyze_hypothesis_success(self):
-        """Test successful hypothesis analysis."""
+        """Test successful hypothesis analysis with new format."""
         mock_response = json.dumps({
-            "clarity_score": 4,
-            "testability": "Good",
-            "suggestions": ["Add metrics", "Define timeline"]
+            "quality_score": 0.8,
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "Clear and specific",
+            "testability_score": 0.9,
+            "suggestions": ["Add statistical significance testing", "Consider sample size"],
+            "strengths": ["Clear hypothesis structure", "Measurable outcome"]
         })
         
         with patch.object(self.client, 'generate', return_value=mock_response):
-            result = self.client.analyze_hypothesis("Test hypothesis")
+            result = self.client.analyze_hypothesis("If we change button color from blue to green, conversion rate will increase by 5%")
             
-            assert result["clarity_score"] == 4
-            assert result["testability"] == "Good"
+            assert result["quality_score"] == 0.8
+            assert result["testability_score"] == 0.9
+            assert "completeness" in result
+            assert result["completeness"]["has_baseline"] is True
             assert "response_time_ms" in result
             assert isinstance(result["response_time_ms"], int)
     
@@ -182,7 +192,8 @@ class TestOllamaClient:
             
             assert "error" in result
             assert "fallback_analysis" in result
-            assert result["fallback_analysis"]["clarity_score"] == 3
+            assert result["fallback_analysis"]["quality_score"] == 0.5
+            assert "completeness" in result["fallback_analysis"]
     
     def test_analyze_hypothesis_invalid_json(self):
         """Test hypothesis analysis with invalid JSON response."""
@@ -191,7 +202,71 @@ class TestOllamaClient:
             
             assert "raw_response" in result
             assert result["raw_response"] == "Invalid JSON response"
-            assert result["clarity_score"] == 3
+            assert result["quality_score"] == 0.5
+            assert "format_error" in result
+            assert result["format_error"] is True
+    
+    def test_validate_response_format_valid(self):
+        """Test response format validation with valid response."""
+        valid_response = {
+            "quality_score": 0.8,
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "Clear",
+            "testability_score": 0.9,
+            "suggestions": ["Test suggestion"],
+            "strengths": ["Test strength"]
+        }
+        
+        assert self.client._validate_response_format(valid_response) is True
+    
+    def test_validate_response_format_invalid_score(self):
+        """Test response format validation with invalid score ranges."""
+        invalid_response = {
+            "quality_score": 1.5,  # Invalid: > 1.0
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "Clear",
+            "testability_score": 0.9,
+            "suggestions": ["Test suggestion"],
+            "strengths": ["Test strength"]
+        }
+        
+        assert self.client._validate_response_format(invalid_response) is False
+    
+    def test_validate_response_format_missing_fields(self):
+        """Test response format validation with missing required fields."""
+        invalid_response = {
+            "quality_score": 0.8,
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            }
+            # Missing other required fields
+        }
+        
+        assert self.client._validate_response_format(invalid_response) is False
+    
+    def test_build_analysis_prompt(self):
+        """Test prompt building for hypothesis analysis."""
+        hypothesis = "If we change button color, conversion will increase"
+        prompt = self.client._build_analysis_prompt(hypothesis)
+        
+        assert "AB testing expert" in prompt
+        assert hypothesis in prompt
+        assert "quality_score" in prompt
+        assert "JSON only" in prompt
+        assert "0.0-1.0" in prompt
     
     @patch('requests.post')
     def test_pull_model_success(self, mock_post):

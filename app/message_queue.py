@@ -30,10 +30,12 @@ class MessageQueue:
         self.lock = threading.Lock()
         self.running = False
         self.worker = None
+        self.app = None  # Store Flask app for context
         
-    def start(self):
+    def start(self, app=None):
         if not self.running:
             self.running = True
+            self.app = app  # Store app for context
             self.worker = threading.Thread(target=self._worker, daemon=True)
             self.worker.start()
             logger.info("Message queue started")
@@ -102,7 +104,6 @@ class MessageQueue:
     
     def _send_message(self, message):
         try:
-            from flask import current_app
             from .session_manager import session_manager
             
             # Get WebSocket connection
@@ -111,22 +112,30 @@ class MessageQueue:
             )
             
             if not websocket_sid:
+                logger.debug(f"No WebSocket for session {message['session_id']}")
                 self._retry_message(message)
                 return
             
-            # Send via SocketIO
-            socketio = current_app.extensions.get('socketio')
-            if socketio:
-                socketio.emit(message['event'], message['data'], 
-                            room=websocket_sid)
-                
-                with self.lock:
-                    self.sent[message['id']] = message
-                self.stats['sent'] += 1
-                
-                logger.debug(f"Message sent: {message['id']}")
-            else:
+            # Use stored app context instead of current_app
+            if not self.app:
+                logger.error("No Flask app context available")
                 self._retry_message(message)
+                return
+                
+            with self.app.app_context():
+                socketio = self.app.extensions.get('socketio')
+                if socketio:
+                    socketio.emit(message['event'], message['data'], 
+                                room=websocket_sid)
+                    
+                    with self.lock:
+                        self.sent[message['id']] = message
+                    self.stats['sent'] += 1
+                    
+                    logger.info(f"Message sent: {message['id']} to session {message['session_id']}")
+                else:
+                    logger.error("SocketIO not found in app extensions")
+                    self._retry_message(message)
                 
         except Exception as e:
             logger.error(f"Send error: {e}")

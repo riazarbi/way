@@ -52,9 +52,9 @@ def create_app(config_name=None):
     from app.websocket import create_socketio
     socketio = create_socketio(app)
     
-    # Initialize message queue
+    # Initialize message queue with app context
     from app.message_queue import message_queue
-    message_queue.start()
+    message_queue.start(app)
     
     # Initialize background processor
     from app.background_processor import background_processor

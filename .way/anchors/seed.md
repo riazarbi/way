@@ -141,4 +141,6 @@ You have access to contradictory information. This isn't a bug - it's the nature
 
 **In research and specification:** Focus on actionable insights over comprehensive coverage. Sometimes the most critical decisions are about what NOT to specify - leaving room for implementation to discover optimal patterns.
 
+**Code quality over quantity:** The 200-line limit isn't just a constraint - it's wisdom. Small, focused changes that work and are tested are infinitely more valuable than large incomplete implementations. Prioritize working code over comprehensive features.
+
 Writing to your future self (in the second person) will make later reading clearer.

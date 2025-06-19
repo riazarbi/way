@@ -43,6 +43,9 @@ def create_app(config_name=None):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
     
+    from app.api import api_bp
+    app.register_blueprint(api_bp)
+    
     # Initialize WebSocket support
     from app.websocket import create_socketio
     socketio = create_socketio(app)

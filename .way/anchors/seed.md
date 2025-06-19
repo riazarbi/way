@@ -146,3 +146,5 @@ You have access to contradictory information. This isn't a bug - it's the nature
 Writing to your future self (in the second person) will make later reading clearer.
 
 **Development insight:** The 200-line limit forces radical prioritization. Instead of building elaborate systems, focus on the minimal viable implementation that solves the core problem. This constraint often reveals the essence of what actually matters in a feature.
+
+**Execution patterns:** Trust your technical judgment when evaluating task rationale. Don't overthink - if you have the skills, tools, and understanding to implement something, proceed with confidence. Time spent on meta-analysis of your own capabilities often exceeds the time needed for actual implementation.

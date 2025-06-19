@@ -52,7 +52,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 5. Evaluate resource requirements
 6. Consider maintainability using implementation guidelines
 7. Assess integration requirements
-8. Select optimal solution approach
+8. Select optimal solution approach from one of the approaches in the solution space.
 10. Document the selected solution in the file `.way/output/[user-story]/target-solution.md`
 
 ---

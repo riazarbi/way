@@ -168,20 +168,22 @@ while has_non_readme_files; do
     fi
 
     # Check lines of code added in last commit
-    lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
-    if [ ! -z "$lines_added" ]; then
+    lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/' | head -1)
+    if [ ! -z "$lines_added" ] && [ "$lines_added" -eq "$lines_added" ] 2>/dev/null; then
         echo "Lines of code added in last commit: $lines_added"
         if [ $lines_added -gt $MAX_LINES_PER_COMMIT ]; then
             echo "Error: Last commit added $lines_added lines, which exceeds the limit of $MAX_LINES_PER_COMMIT lines per commit."
             exit 1
         fi
+    else
+        echo "No lines added in last commit or unable to parse git output"
     fi
 
     # Check lines of code added in last N commits
     total_lines_added=0
     for i in $(seq 0 $((COMMITS_TO_CHECK - 1))); do
-        commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/')
-        if [ ! -z "$commit_lines" ]; then
+        commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/' | head -1)
+        if [ ! -z "$commit_lines" ] && [ "$commit_lines" -eq "$commit_lines" ] 2>/dev/null; then
             total_lines_added=$((total_lines_added + commit_lines))
         fi
     done

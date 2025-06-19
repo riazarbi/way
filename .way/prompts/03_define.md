@@ -32,16 +32,17 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/prompts/seed.md)
+1. Read the [following file](.way/anchors/seed.md)
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Read the output from the [select phase](.way/output/02_selected_solution.md)
-2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
-3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
-4. Familiarise yourself with [the evaluation criteria](.way/input/evaluation_criteria.md)
-5. Check if there are any files in the current working directory. They represent the current as-is.
+1. Familiarise yourself with the original [user story](.way/output/[user-story]/user-story.md)
+2. Read the output from the [select phase](.way/output/[user-story]/target-solution.md)
+3. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
+4. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
+5. Familiarise yourself with [the evaluation criteria](.way/input/evaluation_criteria.md)
+6. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Define
 1. Review selected solution details
@@ -59,15 +60,15 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**File:** `.way/output/03_solution_specification.md`
+**File:** `.way/output/[user-story]/solution-specification.md`
 
 Create a Markdown file with the following structure:
 
 ```markdown
 # Solution Specification
 
-## Problem Description
-[Description of the problem]
+## Story Summary
+[Short summary of the user story]
 
 ## System Architecture
 

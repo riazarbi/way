@@ -59,7 +59,7 @@ run_claude_command() {
 echo "Checking workflow steps..."
 
 # Check if research results exist
-if [ ! -f ".way/output/01_research_results.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/solution-space.md" ]; then
     echo "Running search step..."
     if ! run_claude_command "claude -p \"execute .way/prompts/01_search.md\""; then
         echo "Search step failed. Exiting."
@@ -68,13 +68,13 @@ if [ ! -f ".way/output/01_research_results.md" ]; then
     sleep 2
 fi
 
-if [ ! -f ".way/output/01_research_results.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/solution-space.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if selected solution exists
-if [ ! -f ".way/output/02_selected_solution.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/target-solution.md" ]; then
     echo "Running select step..."
     if ! run_claude_command "claude -p \"execute .way/prompts/02_select.md\""; then
         echo "Select step failed. Exiting."
@@ -83,13 +83,13 @@ if [ ! -f ".way/output/02_selected_solution.md" ]; then
     sleep 2
 fi
 
-if [ ! -f ".way/output/02_selected_solution.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/target-solution.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if solution specification exists
-if [ ! -f ".way/output/03_solution_specification.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/solution-specification.md" ]; then
     echo "Running define step..."
     if ! run_claude_command "claude -p \"execute .way/prompts/03_define.md\""; then
         echo "Define step failed. Exiting."
@@ -98,13 +98,13 @@ if [ ! -f ".way/output/03_solution_specification.md" ]; then
     sleep 2
 fi
 
-if [ ! -f ".way/output/03_solution_specification.md" ]; then
+if [ ! -f ".way/output/hypothesis-feedback-tool/solution-specification.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if plan folder exists
-if [ ! -d ".way/output/04_plan" ]; then
+if [ ! -d ".way/output/hypothesis-feedback-tool/plan" ]; then
     echo "Running plan step..."
     if ! run_claude_command "claude -p \"execute .way/prompts/04_plan.md\""; then
         echo "Plan step failed. Exiting."
@@ -113,7 +113,7 @@ if [ ! -d ".way/output/04_plan" ]; then
     sleep 2
 fi
 
-if [ ! -d ".way/output/04_plan" ]; then
+if [ ! -d ".way/output/hypothesis-feedback-tool/plan" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
@@ -121,7 +121,7 @@ fi
 echo "All workflow steps complete. Proceeding with decomposition..."
 
 # Path to the epics directory
-EPICS_DIR=".way/output/04_plan/todo"
+EPICS_DIR=".way/output/hypothesis-feedback-tool/plan/todo"
 
 # Function to check if an epic has been decomposed
 is_decomposed() {

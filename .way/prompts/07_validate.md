@@ -30,7 +30,7 @@ Your goal is to validate that the solution:
 
 Read the following files. Give me noninteractive confirmation as you read each of them.
 
-1. File: `.way/prompts/seed.md`
+1. File: `.way/anchors/seed.md`
 Team culture and values.
 
 2. File: `.way/undo.md`

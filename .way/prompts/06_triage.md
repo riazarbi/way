@@ -25,7 +25,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Process Steps
 
 ### Step 1: Retuning
-1. Read the [following file](.way/prompts/seed.md)
+1. Read the [following file](.way/anchors/seed.md)
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 

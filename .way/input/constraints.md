@@ -40,7 +40,4 @@ These constraints define the boundaries and requirements for the implementation 
    - Dependencies must be widely used and stable
 
 ## Programming Language
-   - Use only one programming language throughout the entire stack
-   - No mixing of languages for different components
-   - Language must be well-suited for both frontend and backend
-   - Language must have strong community support 
+   - Must use either Python, SQL, JavaScript or TypeScript

@@ -32,12 +32,12 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/prompts/seed.md)
+1. Read the [following file](.way/anchors/seed.md)
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Read [the research results](.way/output/01_research_results.md)
+1. Familiarise yourself with [the solution space](.way/output/[user-story]/solution-space.md)
 2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Familiarise yourself with [the constraints](.way/input/constraints.md)
@@ -45,30 +45,29 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 6. Check if there are any files in the current working directory. They represent the current as-is
 
 ### Step 3: Select
-1. Review and validate search phase outputs
+1. Review and validate solution space. **Do not consider any other possible solutions**
 2. Evaluate implementation approaches against constraints
 3. Assess implementation complexity and feasibility
 4. Compare performance characteristics using evaluation criteria
 5. Evaluate resource requirements
 6. Consider maintainability using implementation guidelines
 7. Assess integration requirements
-8. Select optimal implementation approach
-9. Update the system map with selected solution
-10. Document feedback for next cycle
+8. Select optimal solution approach
+10. Document the selected solution in the file `.way/output/[user-story]/target-solution.md`
 
 ---
 
 ## Output Format
 
-**File:** `.way/output/02_selected_solution.md`
+**File:** `.way/output/[user-story]/target-solution.md`
 
 Create a Markdown file with the following structure:
 
 ```markdown
 # Selected Solution Report
 
-## Problem Description
-[Description of the problem]
+## Story Summary
+[Short summary of the user story]
 
 ## Selected Solution
 - **ID**: [Solution identifier]

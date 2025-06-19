@@ -1,7 +1,7 @@
 # Decomposition Phase Prompt
 
 ## Purpose
-To break down a selected epic from the implementation plan into smaller, manageable tasks that can be executed independently and tested effectively, while maintaining traceability to the original requirements.
+To break down a selected story from the implementation plan into smaller, manageable tasks that can be executed independently and tested effectively, while maintaining traceability to the original requirements.
 
 ## Persona
 You are a Technical Team Lead with expertise in task breakdown and agile methodologies.
@@ -22,7 +22,7 @@ You are a Technical Team Lead with expertise in task breakdown and agile methodo
 - Maintains quality and meets requirements
 - Provides clear guidance
 - Enables effective progress tracking
-- Maintains traceability to the epic
+- Maintains traceability to the story
 - Follows implementation guidelines
 
 ## Desired Interaction
@@ -32,7 +32,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - Follow-up questions should only be asked if additional information is required to complete the task
 - Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
 - Ensure each task is independently testable
-- Maintain clear traceability to the epic requirements
+- Maintain clear traceability to the story requirements
 - It is **extremely important** that you synthesize the implementation guidelines into your tasks. The overall quality of the product depends on it.
 
 ---
@@ -40,42 +40,42 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/prompts/seed.md)
+1. Read the [following file](.way/anchors/seed.md)
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the implementation plan README](.way/output/04_plan/README.md)
-2. Familiarise yourself with [the epics to be decomposed](.way/output/04_plan/todo/[epic]/)
+1. Familiarise yourself with [the implementation plan README](.way/output/[user-story]/plan/README.md)
+2. Familiarise yourself with [the stories to be decomposed](.way/output/[user-story]/plan/[story]/README.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Check if there are any files in the current working directory. They represent the current as-is
 
 ### Step 3: Decompose
-1. Pick the first epic folder that needs decomposition
+1. Pick the first story folder that needs decomposition
 2. Check if there are task files in the folder (excluding README.md)
-3. If task files exist, the epic is already decomposed - select the next epic. If no undecomposed epics remain, exit
-4. Review epic overview and requirements
+3. If task files exist, the story is already decomposed - select the next story. If no undecomposed storys remain, exit
+4. Review story overview and requirements
 5. Identify main components and features
 6. Break down into logical task groups
 7. Create individual task files
 8. Validate task completeness and traceability
 9. Verify task sizing and dependencies
 10. Validate against implementation guidelines
-11. Exit (decompose only one epic per execution)
+11. Exit (decompose only one story per execution)
 
 ---
 
 ## Output Format
 
-**Directory:** `.way/output/04_plan/todo/[epic]/`
+**Directory:** `.way/output/[user-story]/plan/[story]/`
 
-Create task files for the selected epic with the following requirements:
+Create task files for the selected story with the following requirements:
 
 1. Create one task file per identified task
 2. Name files sequentially (e.g., 01_task_name.md, 02_task_name.md)
 3. Ensure tasks are properly sized (typically 1 day of work)
 4. Include clear dependencies and prerequisites
-5. Maintain traceability to epic requirements
+5. Maintain traceability to story requirements
 
 ### Task File Template
 Each task file should follow this format:
@@ -84,11 +84,11 @@ Each task file should follow this format:
 # Task: [Task Name]
 
 ## Global Context
-[Description of the overall problem being solved]
+[Description of the overall user story being addressed]
 
 [Summary of the selected solution]
 
-[Description of the objectives of this epic, and how it contributes to the overall problem being solved]
+[Description of the objectives of this story, and how it contributes to the overall problem being solved]
 
 ## Problem Description
 [Description of the problem this task solves]

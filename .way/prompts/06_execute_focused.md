@@ -137,4 +137,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 6. Prepare feedback for the next invocation
 
-7. Commit your code, with a message declaring what you did and how many lines of code you added.
+7. Commit your code
+   - With a message declaring what you did and how many lines of code you added. 
+   - Do not push your code.
+   

@@ -16,3 +16,5 @@ docs/stories/*
 .cache/*
 .local/*
 test_unit_results.log
+.viminfo
+*.log

@@ -14,21 +14,35 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 logger = logging.getLogger(__name__)
 
 def log_request_response(f):
-    """Decorator to log API requests and responses."""
+    """Decorator to log API requests and responses with performance monitoring."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        from .performance_monitor import record_timing, record_counter
+        
         # Log request
         logger.info(f"API Request: {request.method} {request.path} - IP: {request.remote_addr}")
         if request.method == 'POST' and request.is_json:
             logger.info(f"Request data: {request.json}")
         
-        # Execute function
+        # Record API call counter
+        record_counter(f'api_{request.method.lower()}_{request.endpoint or "unknown"}')
+        
+        # Execute function with timing
         start_time = datetime.datetime.utcnow()
         response = f(*args, **kwargs)
         end_time = datetime.datetime.utcnow()
         
-        # Log response
+        # Calculate response time and record performance
         response_time = (end_time - start_time).total_seconds() * 1000
+        endpoint_name = f"api_{request.method.lower()}_{request.path.replace('/', '_').strip('_')}"
+        
+        record_timing(endpoint_name, response_time, {
+            'method': request.method,
+            'path': request.path,
+            'status': response[1] if isinstance(response, tuple) else 200
+        })
+        
+        # Log response
         logger.info(f"API Response: {request.path} - Status: {response[1] if isinstance(response, tuple) else 200} - Time: {response_time:.2f}ms")
         
         return response

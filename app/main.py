@@ -33,3 +33,18 @@ def connection_status():
 def test_websocket():
     """Serve WebSocket test page."""
     return render_template('test_websocket.html')
+
+
+@bp.route('/performance', methods=['GET'])
+def performance_dashboard():
+    """Performance monitoring dashboard."""
+    from app.performance_monitor import get_performance_summary
+    
+    try:
+        performance_data = get_performance_summary()
+        return jsonify(performance_data)
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'timestamp': datetime.datetime.utcnow().isoformat()
+        }), 500

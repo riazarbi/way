@@ -257,6 +257,8 @@ class OllamaClient:
     
     def analyze_hypothesis(self, hypothesis_text: str) -> Dict[str, Any]:
         """Analyze hypothesis and return structured feedback with caching support."""
+        from .performance_monitor import record_timing, record_counter
+        
         if not hypothesis_text or not hypothesis_text.strip():
             return {"error": "Empty hypothesis provided"}
         
@@ -265,13 +267,21 @@ class OllamaClient:
             cached_result = self._hypothesis_cache.get(hypothesis_text)
             if cached_result:
                 logger.debug(f"Cache hit for hypothesis: {hypothesis_text[:50]}...")
+                record_counter('llm_cache_hit')
                 return cached_result
         
+        record_counter('llm_cache_miss')
         prompt = self._build_analysis_prompt(hypothesis_text)
         
         start_time = time.time()
         response = self.generate(prompt)
         response_time = time.time() - start_time
+        
+        # Record LLM performance
+        record_timing('llm_analysis', response_time * 1000, {
+            'hypothesis_length': len(hypothesis_text),
+            'model': self.model_name
+        })
         
         if not response:
             logger.warning(f"Analysis failed for hypothesis: {hypothesis_text[:50]}...")

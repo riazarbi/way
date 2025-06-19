@@ -23,7 +23,7 @@ class TestOllamaClient:
         client = OllamaClient("http://localhost:11434")
         assert client.host == "http://localhost:11434"
         assert client.model_name == "llama3.2:1b"
-        assert client._retry_attempts == 3
+        assert client._retry_attempts == 2  # Optimized from 3 to 2
         assert client._connection_timeout == 5
     
     def test_init_host_cleanup(self):
@@ -285,6 +285,41 @@ class TestOllamaClient:
         with patch('app.ollama_client.OLLAMA_AVAILABLE', False):
             result = self.client.pull_model("test-model")
             assert result is False
+    
+    def test_performance_parameters(self):
+        """Test performance optimization parameters."""
+        params = self.client._performance_params
+        
+        # Verify optimization parameters
+        assert params["temperature"] == 0.1  # Low for speed
+        assert params["top_p"] == 0.9  # Focused sampling
+        assert params["top_k"] == 40  # Limited vocabulary
+        assert params["num_predict"] == 150  # Limited response
+        assert params["num_ctx"] == 1024  # Reduced context
+        assert params["repeat_penalty"] == 1.1
+    
+    def test_performance_metrics_empty(self):
+        """Test performance metrics with no data."""
+        metrics = self.client.get_performance_metrics()
+        
+        assert metrics["avg_response_time_ms"] == 0
+        assert metrics["requests_count"] == 0
+        assert metrics["sub_200ms_percentage"] == 0
+    
+    def test_performance_metrics_with_data(self):
+        """Test performance metrics with recorded data."""
+        # Record some response times
+        self.client._record_response_time(0.1)  # 100ms
+        self.client._record_response_time(0.15)  # 150ms
+        self.client._record_response_time(0.25)  # 250ms
+        
+        metrics = self.client.get_performance_metrics()
+        
+        assert metrics["requests_count"] == 3
+        assert metrics["avg_response_time_ms"] == 166.67
+        assert metrics["min_response_time_ms"] == 100
+        assert metrics["max_response_time_ms"] == 250
+        assert metrics["sub_200ms_percentage"] == 66.67  # 2 out of 3
 
 
 @pytest.mark.skipif(not OLLAMA_AVAILABLE, reason="Ollama package not available")

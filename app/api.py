@@ -118,6 +118,21 @@ def health_check():
         }
     }), 200
 
+@api_bp.route('/performance', methods=['GET'])
+@log_request_response
+def performance_metrics():
+    """Performance metrics endpoint."""
+    from flask import current_app
+    
+    # Get performance metrics from ollama client
+    ollama_client = OllamaClient()
+    performance_metrics = ollama_client.get_performance_metrics()
+    
+    return jsonify({
+        'timestamp': datetime.datetime.utcnow().isoformat(),
+        'performance': performance_metrics
+    }), 200
+
 @api_bp.route('/hypothesis', methods=['POST'])
 @log_request_response
 def submit_hypothesis():

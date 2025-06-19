@@ -19,19 +19,34 @@ logger = logging.getLogger(__name__)
 
 
 class OllamaClient:
-    """Client for interacting with Ollama API with robust connection management."""
+    """Client for interacting with Ollama API with robust connection management and performance optimization."""
     
     def __init__(self, host: str = "http://127.0.0.1:11434"):
         self.host = host.rstrip('/')
-        self.model_name = "llama3.2:1b"  # Default model
+        self.model_name = "llama3.2:1b"  # Default model optimized for speed
         self._health_lock = Lock()
         self._last_health_check = 0
         self._health_cache_duration = 30  # Cache health status for 30 seconds
         self._is_healthy = False
         self._connection_timeout = 5
-        self._request_timeout = 30
-        self._retry_attempts = 3
-        self._retry_delay = 1
+        self._request_timeout = 15  # Reduced from 30s for faster timeouts
+        self._retry_attempts = 2  # Reduced from 3 for faster failures
+        self._retry_delay = 0.5  # Reduced from 1s for faster retries
+        
+        # Performance optimization parameters
+        self._performance_params = {
+            "temperature": 0.1,  # Lower temperature for faster inference
+            "top_p": 0.9,        # Focused sampling for speed
+            "top_k": 40,         # Limited vocabulary for speed
+            "num_predict": 150,  # Limit response length for speed
+            "repeat_penalty": 1.1,
+            "num_ctx": 1024      # Reduced context window for memory efficiency
+        }
+        
+        # Performance monitoring
+        self._response_times = []
+        self._max_response_history = 100
+        self._warm_up_done = False
         
     def is_available(self) -> bool:
         """Check if Ollama service is available with caching."""
@@ -117,7 +132,7 @@ class OllamaClient:
             return False
     
     def generate(self, prompt: str, model: str = None) -> Optional[str]:
-        """Generate response from model with robust error handling and retries."""
+        """Generate response from model with performance optimization and monitoring."""
         if not self.is_available():
             logger.warning("Ollama service not available for generation")
             return None
@@ -132,6 +147,13 @@ class OllamaClient:
             logger.warning("No models available for generation")
             return None
             
+        # Warm up on first request
+        if not self._warm_up_done:
+            self._warm_up_done = True
+            logger.debug("Performing model warm-up")
+            
+        start_time = time.time()
+        
         for attempt in range(self._retry_attempts):
             try:
                 if OLLAMA_AVAILABLE:
@@ -139,17 +161,21 @@ class OllamaClient:
                         response = ollama.generate(
                             model=model_to_use,
                             prompt=prompt,
-                            stream=False
+                            stream=False,
+                            options=self._performance_params
                         )
-                        return response.get('response', '')
+                        result = response.get('response', '')
+                        self._record_response_time(time.time() - start_time)
+                        return result
                     except Exception as e:
                         logger.debug(f"Native client generate failed: {e}")
                 
-                # Fallback to requests
+                # Fallback to requests with performance parameters
                 data = {
                     "model": model_to_use,
                     "prompt": prompt,
-                    "stream": False
+                    "stream": False,
+                    "options": self._performance_params
                 }
                 
                 response = requests.post(
@@ -160,7 +186,9 @@ class OllamaClient:
                 
                 if response.status_code == 200:
                     result = response.json()
-                    return result.get('response', '')
+                    response_text = result.get('response', '')
+                    self._record_response_time(time.time() - start_time)
+                    return response_text
                 else:
                     logger.warning(f"Generation failed with status {response.status_code}")
                     
@@ -179,6 +207,37 @@ class OllamaClient:
         except Exception as e:
             logger.debug(f"Warm-up failed: {e}")
             return False
+    
+    def _record_response_time(self, response_time: float) -> None:
+        """Record response time for performance monitoring."""
+        self._response_times.append(response_time)
+        if len(self._response_times) > self._max_response_history:
+            self._response_times.pop(0)
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get performance metrics for monitoring."""
+        if not self._response_times:
+            return {
+                "avg_response_time_ms": 0,
+                "min_response_time_ms": 0,
+                "max_response_time_ms": 0,
+                "p95_response_time_ms": 0,
+                "requests_count": 0,
+                "sub_200ms_percentage": 0
+            }
+        
+        times_ms = [t * 1000 for t in self._response_times]
+        sub_200ms_count = sum(1 for t in times_ms if t < 200)
+        
+        return {
+            "avg_response_time_ms": round(sum(times_ms) / len(times_ms), 2),
+            "min_response_time_ms": round(min(times_ms), 2),
+            "max_response_time_ms": round(max(times_ms), 2),
+            "p95_response_time_ms": round(sorted(times_ms)[int(len(times_ms) * 0.95)], 2),
+            "requests_count": len(times_ms),
+            "sub_200ms_percentage": round((sub_200ms_count / len(times_ms)) * 100, 2),
+            "performance_params": self._performance_params
+        }
     
     def get_health_status(self) -> Dict[str, Any]:
         """Get detailed health status information."""

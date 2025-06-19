@@ -5,6 +5,7 @@ from functools import wraps
 from flask_socketio import emit
 from .ollama_client import OllamaClient
 from .session_manager import session_manager
+from .message_queue import message_queue, Priority
 
 # Create API blueprint
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -210,16 +211,18 @@ def submit_hypothesis():
         
         # Send real-time feedback via WebSocket if session is linked
         if session_id:
-            websocket_sid = session_manager.get_websocket_for_session(session_id)
-            if websocket_sid:
-                try:
-                    from flask import current_app
-                    socketio = current_app.extensions.get('socketio')
-                    if socketio:
-                        socketio.emit('hypothesis_feedback', response_data, room=websocket_sid)
-                        logger.info(f"Real-time feedback sent to session {session_id} via WebSocket {websocket_sid}")
-                except Exception as e:
-                    logger.error(f"Failed to send WebSocket feedback: {str(e)}")
+            try:
+                # Queue message for reliable delivery
+                message_id = message_queue.queue_message(
+                    session_id=session_id,
+                    event='hypothesis_feedback',
+                    data=response_data,
+                    priority=Priority.HIGH
+                )
+                logger.info(f"Real-time feedback queued for session {session_id} (message: {message_id})")
+                response_data['message_id'] = message_id
+            except Exception as e:
+                logger.error(f"Failed to queue WebSocket feedback: {str(e)}")
         
         # Log successful submission
         logger.info(f"Hypothesis submitted successfully: {request_id}")
@@ -251,6 +254,25 @@ def sessions_status():
         return jsonify({
             'error': 'Internal server error',
             'message': 'An error occurred while getting sessions status'
+        }), 500
+
+@api_bp.route('/messages/status', methods=['GET'])
+@log_request_response
+def message_queue_status():
+    """Get message queue status and statistics."""
+    try:
+        stats = message_queue.get_stats()
+        
+        return jsonify({
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'message_queue': stats
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting message queue status: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'An error occurred while getting message queue status'
         }), 500
 
 @api_bp.errorhandler(404)

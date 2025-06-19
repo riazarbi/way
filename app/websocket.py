@@ -6,6 +6,7 @@ from flask_socketio import SocketIO, emit, disconnect
 from flask import request
 from app.connection_manager import connection_manager
 from app.session_manager import session_manager
+from app.message_queue import message_queue
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +125,19 @@ def create_socketio(app):
         else:
             logger.warning(f"Echo from unknown session: {request.sid}")
             disconnect()
+    
+    @socketio.on('message_delivered')
+    def handle_message_delivered(data):
+        """Handle message delivery confirmation from client."""
+        message_id = data.get('message_id')
+        if message_id:
+            success = message_queue.confirm_delivery(message_id)
+            if success:
+                logger.debug(f"Message delivery confirmed: {message_id}")
+            else:
+                logger.warning(f"Failed to confirm delivery: {message_id}")
+        else:
+            logger.warning("Message delivery confirmation without message_id")
     
     return socketio
 

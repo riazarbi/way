@@ -52,7 +52,17 @@ def create_app(config_name=None):
     from app.websocket import create_socketio
     socketio = create_socketio(app)
     
+    # Initialize message queue
+    from app.message_queue import message_queue
+    message_queue.start()
+    
     # Store socketio instance on app for access in other modules
     app.socketio = socketio
+    
+    # Store cleanup function for shutdown
+    @app.teardown_appcontext
+    def cleanup_message_router(error):
+        if error:
+            app.logger.error(f"Application context error: {error}")
     
     return app

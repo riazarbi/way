@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, current_app
 import datetime
 import logging
 from functools import wraps
+from .ollama_client import OllamaClient
 
 # Create API blueprint
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -98,13 +99,23 @@ def health_check():
     if hasattr(current_app, 'connection_manager'):
         connection_count = current_app.connection_manager.get_connection_count()
     
+    # Check Ollama service status
+    ollama_client = OllamaClient()
+    ollama_status = ollama_client.is_available()
+    ollama_models = ollama_client.list_models()
+    
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.datetime.utcnow().isoformat(),
         'service': 'hypothesis-feedback-tool',
         'version': '1.0.0',
         'uptime': 'active',
-        'connections': connection_count
+        'connections': connection_count,
+        'ollama': {
+            'available': ollama_status,
+            'models': len(ollama_models),
+            'model_names': [m.get('name', '') for m in ollama_models]
+        }
     }), 200
 
 @api_bp.route('/hypothesis', methods=['POST'])
@@ -132,20 +143,25 @@ def submit_hypothesis():
         # Process hypothesis submission
         request_id = f"req_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
         
+        # Analyze hypothesis with LLM
+        ollama_client = OllamaClient()
+        analysis = ollama_client.analyze_hypothesis(data['hypothesis'])
+        
         # Log successful submission
         logger.info(f"Hypothesis submitted successfully: {request_id}")
         
-        # Return success response
+        # Return success response with AI analysis
         return jsonify({
-            'message': 'Hypothesis received successfully',
+            'message': 'Hypothesis analyzed successfully',
             'request_id': request_id,
-            'status': 'received',
+            'status': 'analyzed',
             'timestamp': datetime.datetime.utcnow().isoformat(),
             'data': {
                 'hypothesis': data['hypothesis'],
                 'context': data['context'],
                 'metric': data['metric']
-            }
+            },
+            'analysis': analysis
         }), 200
         
     except Exception as e:

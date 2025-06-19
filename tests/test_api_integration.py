@@ -40,8 +40,9 @@ class TestAPIEndpoints:
         assert response.status_code == 200
         
         data = json.loads(response.data)
-        assert data['status'] == 'received'
+        assert data['status'] == 'analyzed'
         assert 'request_id' in data
+        assert 'analysis' in data
     
     def test_invalid_requests(self, client):
         """Test invalid request handling."""

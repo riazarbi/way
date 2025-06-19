@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_socketio import SocketIO, emit, disconnect
 from flask import request
 from app.connection_manager import connection_manager
+from app.session_manager import session_manager
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +18,31 @@ def create_socketio(app):
     # Start connection manager heartbeat monitoring
     connection_manager.start_heartbeat_monitor()
     
+    # Start session manager cleanup monitoring
+    session_manager.start_cleanup_monitor()
+    
     @socketio.on('connect')
     def handle_connect():
         """Handle new WebSocket connections."""
-        session_id = str(uuid.uuid4())
         client_ip = request.environ.get('REMOTE_ADDR', 'unknown')
+        
+        # Check for existing session ID from query parameters
+        session_id = request.args.get('session_id')
+        
+        if session_id:
+            # Validate existing session
+            session = session_manager.get_session(session_id)
+            if not session:
+                logger.warning(f"Invalid session ID provided: {session_id}")
+                emit('error', {
+                    'message': 'Invalid or expired session ID',
+                    'code': 'INVALID_SESSION'
+                })
+                disconnect()
+                return
+        else:
+            # Create new session
+            session_id = session_manager.create_session()
         
         # Add connection to manager
         client_info = {
@@ -31,14 +52,24 @@ def create_socketio(app):
         }
         
         if connection_manager.add_connection(request.sid, client_info=client_info):
-            logger.info(f"Client connected: {request.sid} (session: {session_id}, IP: {client_ip})")
-            
-            # Send connection confirmation with session ID
-            emit('connected', {
-                'session_id': session_id,
-                'status': 'connected',
-                'timestamp': datetime.utcnow().isoformat()
-            })
+            # Link WebSocket to session
+            if session_manager.link_websocket(session_id, request.sid):
+                logger.info(f"Client connected: {request.sid} (session: {session_id}, IP: {client_ip})")
+                
+                # Send connection confirmation with session ID
+                emit('connected', {
+                    'session_id': session_id,
+                    'status': 'connected',
+                    'timestamp': datetime.utcnow().isoformat()
+                })
+            else:
+                logger.error(f"Failed to link WebSocket to session: {session_id}")
+                connection_manager.remove_connection(request.sid)
+                emit('error', {
+                    'message': 'Session linking failed',
+                    'code': 'LINK_FAILED'
+                })
+                disconnect()
         else:
             logger.warning(f"Connection rejected (pool full): {request.sid}")
             emit('error', {
@@ -50,6 +81,11 @@ def create_socketio(app):
     @socketio.on('disconnect')
     def handle_disconnect():
         """Handle WebSocket disconnections."""
+        # Unlink WebSocket from session
+        session_id = session_manager.unlink_websocket(request.sid)
+        if session_id:
+            logger.info(f"WebSocket {request.sid} disconnected from session {session_id}")
+        
         connection_manager.remove_connection(request.sid)
     
     @socketio.on('ping')

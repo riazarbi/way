@@ -2,7 +2,9 @@ from flask import Blueprint, request, jsonify, current_app
 import datetime
 import logging
 from functools import wraps
+from flask_socketio import emit
 from .ollama_client import OllamaClient
+from .session_manager import session_manager
 
 # Create API blueprint
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -133,6 +135,27 @@ def performance_metrics():
         'performance': performance_metrics
     }), 200
 
+@api_bp.route('/session', methods=['POST'])
+@log_request_response
+def create_session():
+    """Create a new session for HTTP-WebSocket linking."""
+    try:
+        session_id = session_manager.create_session()
+        
+        return jsonify({
+            'session_id': session_id,
+            'status': 'created',
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'expires_in': session_manager.session_timeout
+        }), 201
+        
+    except Exception as e:
+        logger.error(f"Error creating session: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'An error occurred while creating session'
+        }), 500
+
 @api_bp.route('/hypothesis', methods=['POST'])
 @log_request_response
 def submit_hypothesis():
@@ -155,18 +178,24 @@ def submit_hypothesis():
                 'message': error_message
             }), 400
         
+        # Get session ID from request
+        session_id = data.get('session_id') or request.headers.get('X-Session-ID')
+        
         # Process hypothesis submission
         request_id = f"req_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        
+        # Add request to session if session ID provided
+        if session_id:
+            if not session_manager.add_http_request(session_id, request_id):
+                logger.warning(f"Invalid session ID for request {request_id}: {session_id}")
+                # Continue processing but won't send WebSocket notification
         
         # Analyze hypothesis with LLM
         ollama_client = OllamaClient()
         analysis = ollama_client.analyze_hypothesis(data['hypothesis'])
         
-        # Log successful submission
-        logger.info(f"Hypothesis submitted successfully: {request_id}")
-        
-        # Return success response with AI analysis
-        return jsonify({
+        # Prepare response data
+        response_data = {
             'message': 'Hypothesis analyzed successfully',
             'request_id': request_id,
             'status': 'analyzed',
@@ -177,13 +206,51 @@ def submit_hypothesis():
                 'metric': data['metric']
             },
             'analysis': analysis
-        }), 200
+        }
+        
+        # Send real-time feedback via WebSocket if session is linked
+        if session_id:
+            websocket_sid = session_manager.get_websocket_for_session(session_id)
+            if websocket_sid:
+                try:
+                    from flask import current_app
+                    socketio = current_app.extensions.get('socketio')
+                    if socketio:
+                        socketio.emit('hypothesis_feedback', response_data, room=websocket_sid)
+                        logger.info(f"Real-time feedback sent to session {session_id} via WebSocket {websocket_sid}")
+                except Exception as e:
+                    logger.error(f"Failed to send WebSocket feedback: {str(e)}")
+        
+        # Log successful submission
+        logger.info(f"Hypothesis submitted successfully: {request_id}")
+        
+        # Return success response with AI analysis
+        return jsonify(response_data), 200
         
     except Exception as e:
         logger.error(f"Error processing hypothesis submission: {str(e)}")
         return jsonify({
             'error': 'Internal server error',
             'message': 'An error occurred while processing your request'
+        }), 500
+
+@api_bp.route('/sessions', methods=['GET'])
+@log_request_response
+def sessions_status():
+    """Get current sessions status."""
+    try:
+        sessions_info = session_manager.get_active_sessions()
+        
+        return jsonify({
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'sessions': sessions_info
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting sessions status: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'An error occurred while getting sessions status'
         }), 500
 
 @api_bp.errorhandler(404)

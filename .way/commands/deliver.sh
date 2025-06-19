@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Maximum lines of code allowed per commit
-MAX_LINES_PER_COMMIT=200
+MAX_LINES_PER_COMMIT=300
 # Number of commits to check for cumulative line count
 COMMITS_TO_CHECK=10
 

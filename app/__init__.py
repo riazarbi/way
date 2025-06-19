@@ -15,6 +15,8 @@ def create_app(config_name=None):
         app.config.from_object('app.config.DevelopmentConfig')
     elif config_name == 'production':
         app.config.from_object('app.config.ProductionConfig')
+    elif config_name == 'testing':
+        app.config.from_object('app.config.TestingConfig')
     else:
         app.config.from_object('app.config.DevelopmentConfig')
     

@@ -26,3 +26,12 @@ class ProductionConfig(Config):
     def __init__(self):
         if not self.SECRET_KEY:
             raise ValueError("SECRET_KEY must be set in production environment")
+
+
+class TestingConfig(Config):
+    """Testing configuration."""
+    TESTING = True
+    DEBUG = True
+    ENV = 'testing'
+    WTF_CSRF_ENABLED = False
+    SECRET_KEY = 'test-secret-key'

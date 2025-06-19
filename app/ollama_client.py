@@ -40,12 +40,14 @@ class OllamaClient:
         
         # Performance optimization parameters
         self._performance_params = {
-            "temperature": 0.1,  # Lower temperature for faster inference
-            "top_p": 0.9,        # Focused sampling for speed
-            "top_k": 40,         # Limited vocabulary for speed
-            "num_predict": 150,  # Limit response length for speed
-            "repeat_penalty": 1.1,
-            "num_ctx": 1024      # Reduced context window for memory efficiency
+            "temperature": 0.05,  # Very low temperature for deterministic, fast inference
+            "top_p": 0.8,         # More focused sampling for speed
+            "top_k": 20,          # More limited vocabulary for speed
+            "num_predict": 120,   # Further reduced response length for speed
+            "repeat_penalty": 1.05,
+            "num_ctx": 512,       # Further reduced context window for speed
+            "num_batch": 1,       # Single batch for fastest processing
+            "num_thread": 4       # Optimize CPU threads for inference
         }
         
         # Performance monitoring

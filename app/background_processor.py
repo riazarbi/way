@@ -16,14 +16,18 @@ logger = logging.getLogger(__name__)
 class BackgroundProcessor:
     """Handles asynchronous processing of hypothesis analysis tasks."""
     
-    def __init__(self, max_workers: int = 2):
+    def __init__(self, max_workers: int = 4):  # Increased workers for concurrency
         self.max_workers = max_workers
-        self.task_queue = queue.Queue()
+        self.task_queue = queue.PriorityQueue()  # Priority queue for urgent tasks
         self.active_tasks = {}
-        self.stats = {'queued': 0, 'processed': 0, 'failed': 0}
+        self.stats = {'queued': 0, 'processed': 0, 'failed': 0, 'cache_hits': 0}
         self.running = False
         self.workers = []
         self.lock = threading.Lock()
+        
+        # Performance optimizations
+        self._ollama_clients = {}  # Worker-specific clients to avoid contention
+        self._processing_timeout = 15  # Max processing time per task
         
     def start(self):
         """Start the background processing workers."""
@@ -43,8 +47,8 @@ class BackgroundProcessor:
         self.workers.clear()
         logger.info("Background processor stopped")
     
-    def queue_hypothesis_analysis(self, processing_data: Dict[str, Any]) -> str:
-        """Queue a hypothesis analysis task for background processing."""
+    def queue_hypothesis_analysis(self, processing_data: Dict[str, Any], priority: int = 1) -> str:
+        """Queue a hypothesis analysis task for background processing with priority."""
         task_id = str(uuid.uuid4())
         
         task = {
@@ -52,15 +56,17 @@ class BackgroundProcessor:
             'type': 'hypothesis_analysis',
             'data': processing_data,
             'created_at': datetime.utcnow(),
-            'retries': 0
+            'retries': 0,
+            'priority': priority
         }
         
         with self.lock:
             self.active_tasks[task_id] = task
             self.stats['queued'] += 1
             
-        self.task_queue.put(task)
-        logger.debug(f"Task queued for analysis: {task_id}")
+        # Use priority queue with tuple (priority, timestamp, task)
+        self.task_queue.put((priority, time.time(), task))
+        logger.debug(f"Task queued for analysis: {task_id} (priority: {priority})")
         return task_id
     
     def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
@@ -81,31 +87,41 @@ class BackgroundProcessor:
     
     def _worker(self):
         """Background worker thread for processing tasks."""
+        worker_id = threading.current_thread().name
+        
+        # Create worker-specific Ollama client to avoid contention
+        self._ollama_clients[worker_id] = OllamaClient()
+        
         while self.running:
             try:
                 # Get task with timeout to allow graceful shutdown
-                task = self.task_queue.get(timeout=1.0)
-                self._process_task(task)
+                priority, timestamp, task = self.task_queue.get(timeout=1.0)
+                self._process_task(task, worker_id)
             except queue.Empty:
                 continue
             except Exception as e:
-                logger.error(f"Worker error: {e}")
-                time.sleep(1)
+                logger.error(f"Worker {worker_id} error: {e}")
+                time.sleep(0.5)  # Shorter sleep for faster recovery
     
-    def _process_task(self, task: Dict[str, Any]):
-        """Process a single background task."""
+    def _process_task(self, task: Dict[str, Any], worker_id: str):
+        """Process a single background task with timeout and worker-specific client."""
         task_id = task['id']
         task_type = task['type']
         
+        start_time = time.time()
+        
         try:
-            logger.info(f"Processing task {task_id} of type {task_type}")
+            logger.debug(f"Worker {worker_id} processing task {task_id} of type {task_type}")
             
             if task_type == 'hypothesis_analysis':
-                self._process_hypothesis_analysis(task)
+                self._process_hypothesis_analysis(task, worker_id)
             else:
                 logger.error(f"Unknown task type: {task_type}")
                 self._mark_task_failed(task_id, f"Unknown task type: {task_type}")
                 return
+                
+            processing_time = time.time() - start_time
+            logger.debug(f"Task {task_id} processed in {processing_time:.3f}s by {worker_id}")
                 
             with self.lock:
                 self.stats['processed'] += 1
@@ -113,19 +129,33 @@ class BackgroundProcessor:
                     del self.active_tasks[task_id]
                     
         except Exception as e:
-            logger.error(f"Task processing failed {task_id}: {e}")
+            processing_time = time.time() - start_time
+            logger.error(f"Task processing failed {task_id} after {processing_time:.3f}s: {e}")
             self._handle_task_failure(task, str(e))
     
-    def _process_hypothesis_analysis(self, task: Dict[str, Any]):
-        """Process hypothesis analysis task."""
+    def _process_hypothesis_analysis(self, task: Dict[str, Any], worker_id: str):
+        """Process hypothesis analysis task with worker-specific client."""
         data = task['data']
         request_id = data['request_id']
         session_id = data['session_id']
         
         try:
-            # Perform LLM analysis
-            ollama_client = OllamaClient()
+            # Use worker-specific Ollama client to avoid contention
+            ollama_client = self._ollama_clients.get(worker_id)
+            if not ollama_client:
+                logger.error(f"No Ollama client for worker {worker_id}")
+                raise Exception(f"No Ollama client available for worker {worker_id}")
+            
+            # Perform LLM analysis with timing
+            analysis_start = time.time()
             analysis = ollama_client.analyze_hypothesis(data['hypothesis'])
+            analysis_time = time.time() - analysis_start
+            
+            # Track cache performance
+            if analysis and 'response_time_ms' in analysis:
+                if analysis['response_time_ms'] < 50:  # Likely a cache hit
+                    with self.lock:
+                        self.stats['cache_hits'] += 1
             
             # Prepare feedback data for WebSocket delivery
             feedback_data = {
@@ -133,10 +163,12 @@ class BackgroundProcessor:
                 'request_id': request_id,
                 'status': 'analyzed',
                 'timestamp': datetime.utcnow().isoformat(),
+                'processing_time_ms': int(analysis_time * 1000),
+                'worker_id': worker_id,
                 'data': {
                     'hypothesis': data['hypothesis'],
-                    'context': data['context'],
-                    'metric': data['metric']
+                    'context': data.get('context', ''),
+                    'metric': data.get('metric', '')
                 },
                 'analysis': analysis
             }

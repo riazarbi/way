@@ -141,7 +141,7 @@ def create_socketio(app):
     
     @socketio.on('feedback_request')
     def handle_feedback_request(data):
-        """Handle hypothesis feedback requests."""
+        """Handle hypothesis feedback requests with fast processing."""
         connection = connection_manager.get_connection(request.sid)
         if not connection:
             emit('error', {
@@ -163,18 +163,34 @@ def create_socketio(app):
             })
             return
         
+        # Immediate acknowledgment for fast user feedback
+        emit('feedback_received', {
+            'message': 'Hypothesis received, analyzing...',
+            'session_id': session_id,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+        
         try:
-            # Queue feedback processing
-            message_queue.queue_message(session_id, 'feedback_processing', {
-                'status': 'processing',
-                'hypothesis': hypothesis,
-                'session_id': session_id
-            })
+            # Queue high-priority background processing
+            from .background_processor import background_processor
             
-            logger.info(f"Feedback request queued for session {session_id}")
+            request_id = f"ws_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
+            
+            processing_data = {
+                'request_id': request_id,
+                'session_id': session_id,
+                'hypothesis': hypothesis,
+                'context': data.get('context', ''),
+                'metric': data.get('metric', '')
+            }
+            
+            # Use high priority for WebSocket requests
+            task_id = background_processor.queue_hypothesis_analysis(processing_data, priority=0)
+            
+            logger.info(f"WebSocket feedback request queued with high priority: {session_id} (task: {task_id})")
             
         except Exception as e:
-            logger.error(f"Failed to queue feedback request: {e}")
+            logger.error(f"Failed to queue WebSocket feedback request: {e}")
             emit('feedback_error', {
                 'message': 'Failed to process feedback request',
                 'code': 'PROCESSING_FAILED',

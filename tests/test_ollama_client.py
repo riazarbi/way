@@ -290,13 +290,13 @@ class TestOllamaClient:
         """Test performance optimization parameters."""
         params = self.client._performance_params
         
-        # Verify optimization parameters
-        assert params["temperature"] == 0.1  # Low for speed
-        assert params["top_p"] == 0.9  # Focused sampling
-        assert params["top_k"] == 40  # Limited vocabulary
-        assert params["num_predict"] == 150  # Limited response
-        assert params["num_ctx"] == 1024  # Reduced context
-        assert params["repeat_penalty"] == 1.1
+        # Verify optimization parameters (updated for pipeline optimization)
+        assert params["temperature"] == 0.05  # Very low for deterministic, fast inference
+        assert params["top_p"] == 0.8  # More focused sampling for speed
+        assert params["top_k"] == 20  # More limited vocabulary for speed
+        assert params["num_predict"] == 120  # Further reduced response length
+        assert params["num_ctx"] == 512  # Further reduced context window
+        assert params["repeat_penalty"] == 1.05
     
     def test_performance_metrics_empty(self):
         """Test performance metrics with no data."""

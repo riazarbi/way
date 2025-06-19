@@ -317,3 +317,101 @@ class TestOllamaNativeClient:
             result = self.client.generate("Test prompt")
             assert result == "Native response"
             mock_generate.assert_called_once()
+
+
+class TestResponseProcessing:
+    """Test suite for enhanced response processing functionality."""
+    
+    def setup_method(self):
+        """Set up test fixtures."""
+        self.client = OllamaClient()
+    
+    def test_sanitize_and_normalize_response_valid(self):
+        """Test response sanitization with valid data."""
+        response = {
+            "quality_score": 0.875,
+            "testability_score": 0.923,
+            "clarity_assessment": "  Clear and well-defined  ",
+            "suggestions": ["Suggestion 1", "Suggestion 2", ""],
+            "strengths": ["Strength 1", "Strength 2"]
+        }
+        
+        result = self.client._sanitize_and_normalize_response(response)
+        
+        assert result["quality_score"] == 0.88  # Rounded to 2 decimal places
+        assert result["testability_score"] == 0.92
+        assert result["clarity_assessment"] == "Clear and well-defined"
+        assert len(result["suggestions"]) == 2  # Empty suggestion removed
+    
+    def test_enhanced_validation_detailed_logging(self):
+        """Test enhanced validation with detailed error logging."""
+        invalid_response = {
+            "quality_score": 0.8,
+            "completeness": {
+                "has_baseline": "true",  # String instead of boolean
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "Clear",
+            "testability_score": 0.9,
+            "suggestions": ["Test"],
+            "strengths": ["Test"]
+        }
+        
+        result = self.client._validate_response_format(invalid_response)
+        assert result is False
+    
+    def test_enhanced_validation_list_fields(self):
+        """Test enhanced validation of list fields."""
+        invalid_response = {
+            "quality_score": 0.8,
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "Clear",
+            "testability_score": 0.9,
+            "suggestions": "Not a list",  # Should be list
+            "strengths": ["Test"]
+        }
+        
+        result = self.client._validate_response_format(invalid_response)
+        assert result is False
+    
+    def test_create_fallback_response_partial_parsing(self):
+        """Test enhanced fallback response with partial parsing."""
+        raw_response = "The quality of this hypothesis is good and needs improvement"
+        response_time = 0.5
+        
+        result = self.client._create_fallback_response(raw_response, response_time)
+        
+        assert result["format_error"] is True
+        assert result["response_time_ms"] == 500
+        assert "Quality assessment was attempted" in result["suggestions"]
+    
+    def test_analyze_hypothesis_with_enhanced_processing(self):
+        """Test complete hypothesis analysis with enhanced processing."""
+        mock_response = json.dumps({
+            "quality_score": 0.875,
+            "completeness": {
+                "has_baseline": True,
+                "has_change": True,
+                "has_metric": True,
+                "has_outcome": True
+            },
+            "clarity_assessment": "  Clear and specific  ",
+            "testability_score": 0.923,
+            "suggestions": ["Suggestion 1", "Suggestion 2", ""],
+            "strengths": ["Strength 1"]
+        })
+        
+        with patch.object(self.client, 'generate', return_value=mock_response):
+            result = self.client.analyze_hypothesis("Test hypothesis")
+            
+            assert result["quality_score"] == 0.88  # Rounded
+            assert result["testability_score"] == 0.92  # Rounded
+            assert result["clarity_assessment"] == "Clear and specific"  # Trimmed
+            assert len(result["suggestions"]) == 2  # Empty removed

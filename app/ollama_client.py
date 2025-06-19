@@ -222,16 +222,27 @@ class OllamaClient:
                 }
             }
         
-        # Try to parse JSON response, fallback to basic structure
+        # Enhanced JSON response processing with validation and sanitization
         try:
             result = json.loads(response)
             result["response_time_ms"] = int(response_time * 1000)
+            
             # Validate required fields
             if not self._validate_response_format(result):
+                logger.warning(f"Response validation failed for hypothesis: {hypothesis_text[:50]}...")
                 return self._create_fallback_response(response, response_time)
+            
+            # Sanitize and normalize the response
+            result = self._sanitize_and_normalize_response(result)
+            
+            logger.debug(f"Successfully processed hypothesis analysis in {response_time:.3f}s")
             return result
-        except json.JSONDecodeError:
-            logger.debug(f"Failed to parse JSON response: {response[:100]}...")
+            
+        except json.JSONDecodeError as e:
+            logger.warning(f"JSON parsing failed: {e}. Response: {response[:100]}...")
+            return self._create_fallback_response(response, response_time)
+        except Exception as e:
+            logger.error(f"Unexpected error in response processing: {e}")
             return self._create_fallback_response(response, response_time)
     
     def _build_analysis_prompt(self, hypothesis_text: str) -> str:
@@ -271,36 +282,65 @@ Poor hypothesis: "Making the site better will help users."
 Respond with JSON only, no additional text:"""
     
     def _validate_response_format(self, response: Dict[str, Any]) -> bool:
-        """Validate that response contains required fields."""
+        """Enhanced validation with comprehensive schema checking."""
         required_fields = ["quality_score", "completeness", "clarity_assessment", 
                           "testability_score", "suggestions", "strengths"]
         
         for field in required_fields:
             if field not in response:
+                logger.debug(f"Missing required field: {field}")
                 return False
         
         # Validate completeness structure
-        if not isinstance(response.get("completeness"), dict):
+        completeness = response.get("completeness")
+        if not isinstance(completeness, dict):
+            logger.debug("Completeness is not a dict")
             return False
             
         completeness_fields = ["has_baseline", "has_change", "has_metric", "has_outcome"]
         for field in completeness_fields:
-            if field not in response["completeness"]:
+            if field not in completeness:
+                logger.debug(f"Missing completeness field: {field}")
+                return False
+            if not isinstance(completeness[field], bool):
+                logger.debug(f"Completeness field {field} is not boolean")
                 return False
         
-        # Validate score ranges
-        quality_score = response.get("quality_score", 0)
-        testability_score = response.get("testability_score", 0)
+        # Enhanced score validation
+        quality_score = response.get("quality_score")
+        testability_score = response.get("testability_score")
         
-        if not (0 <= quality_score <= 1) or not (0 <= testability_score <= 1):
+        if not isinstance(quality_score, (int, float)) or not (0 <= quality_score <= 1):
+            logger.debug(f"Invalid quality_score: {quality_score}")
+            return False
+            
+        if not isinstance(testability_score, (int, float)) or not (0 <= testability_score <= 1):
+            logger.debug(f"Invalid testability_score: {testability_score}")
+            return False
+        
+        # Validate list fields
+        suggestions = response.get("suggestions")
+        strengths = response.get("strengths")
+        
+        if not isinstance(suggestions, list) or not all(isinstance(s, str) for s in suggestions):
+            logger.debug("Suggestions is not a list of strings")
+            return False
+            
+        if not isinstance(strengths, list) or not all(isinstance(s, str) for s in strengths):
+            logger.debug("Strengths is not a list of strings")
+            return False
+        
+        # Validate clarity assessment
+        if not isinstance(response.get("clarity_assessment"), str):
+            logger.debug("Clarity assessment is not a string")
             return False
             
         return True
     
     def _create_fallback_response(self, raw_response: str, response_time: float) -> Dict[str, Any]:
-        """Create a fallback response when JSON parsing fails."""
-        return {
-            "raw_response": raw_response,
+        """Enhanced fallback response with partial parsing attempts."""
+        fallback = {
+            "raw_response": raw_response[:500],  # Limit raw response size
             "quality_score": 0.5,
             "completeness": {
                 "has_baseline": False,
@@ -315,3 +355,44 @@ Respond with JSON only, no additional text:"""
             "response_time_ms": int(response_time * 1000),
             "format_error": True
         }
+        
+        # Attempt partial parsing for better user experience
+        try:
+            if raw_response:
+                # Try to extract partial information from raw response
+                if "quality" in raw_response.lower():
+                    fallback["suggestions"].append("Quality assessment was attempted")
+                if "score" in raw_response.lower():
+                    fallback["suggestions"].append("Scoring was attempted")
+                if "improve" in raw_response.lower():
+                    fallback["suggestions"].append("Improvement suggestions were provided")
+        except Exception as e:
+            logger.debug(f"Partial parsing failed: {e}")
+            
+        return fallback
+    
+    def _sanitize_and_normalize_response(self, response: Dict[str, Any]) -> Dict[str, Any]:
+        """Sanitize and normalize response data for consistency."""
+        try:
+            # Normalize score values
+            if isinstance(response.get("quality_score"), (int, float)):
+                response["quality_score"] = round(float(response["quality_score"]), 2)
+            if isinstance(response.get("testability_score"), (int, float)):
+                response["testability_score"] = round(float(response["testability_score"]), 2)
+            
+            # Sanitize string fields
+            if isinstance(response.get("clarity_assessment"), str):
+                response["clarity_assessment"] = response["clarity_assessment"].strip()[:200]
+            
+            # Sanitize lists and limit length
+            if isinstance(response.get("suggestions"), list):
+                response["suggestions"] = [s.strip()[:100] for s in response["suggestions"][:5] if s and s.strip()]
+            
+            if isinstance(response.get("strengths"), list):
+                response["strengths"] = [s.strip()[:100] for s in response["strengths"][:5] if s and s.strip()]
+            
+            return response
+            
+        except Exception as e:
+            logger.error(f"Response sanitization failed: {e}")
+            return response

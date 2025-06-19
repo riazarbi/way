@@ -8,6 +8,7 @@ load_dotenv()
 class Config:
     """Base configuration."""
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max request size
     
 
 class DevelopmentConfig(Config):

@@ -34,6 +34,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 **Compulsory Rules**
 - The number of files you create, edit, delete or move is not limited
 - **You can add a maximum of 200 lines of code to the codebase before exiting your task**. This will be checked, and if it is exceeded the code will be deleted.
+- **There is no penalty for removing code**
 - **You cannot abandon your code midway. All code must run**
 - **If you hit your lines of code limit but your code does not work, you need to refactor**
 

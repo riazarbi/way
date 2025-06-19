@@ -1,6 +1,6 @@
 """
 Ollama client integration for local LLM inference.
-Provides interface to Ollama API for hypothesis analysis.
+Provides interface to Ollama API for hypothesis analysis with caching support.
 """
 import json
 import requests
@@ -8,6 +8,7 @@ import time
 import logging
 from typing import Dict, Any, Optional
 from threading import Lock
+from .hypothesis_cache import HypothesisCache
 
 try:
     import ollama
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 class OllamaClient:
     """Client for interacting with Ollama API with robust connection management and performance optimization."""
     
-    def __init__(self, host: str = "http://127.0.0.1:11434"):
+    def __init__(self, host: str = "http://127.0.0.1:11434", cache_enabled: bool = True):
         self.host = host.rstrip('/')
         self.model_name = "llama3.2:1b"  # Default model optimized for speed
         self._health_lock = Lock()
@@ -32,6 +33,10 @@ class OllamaClient:
         self._request_timeout = 15  # Reduced from 30s for faster timeouts
         self._retry_attempts = 2  # Reduced from 3 for faster failures
         self._retry_delay = 0.5  # Reduced from 1s for faster retries
+        
+        # Initialize hypothesis cache
+        self._cache_enabled = cache_enabled
+        self._hypothesis_cache = HypothesisCache() if cache_enabled else None
         
         # Performance optimization parameters
         self._performance_params = {
@@ -251,10 +256,17 @@ class OllamaClient:
         return status
     
     def analyze_hypothesis(self, hypothesis_text: str) -> Dict[str, Any]:
-        """Analyze hypothesis and return structured feedback with improved error handling."""
+        """Analyze hypothesis and return structured feedback with caching support."""
         if not hypothesis_text or not hypothesis_text.strip():
             return {"error": "Empty hypothesis provided"}
-            
+        
+        # Try cache first if enabled
+        if self._cache_enabled and self._hypothesis_cache:
+            cached_result = self._hypothesis_cache.get(hypothesis_text)
+            if cached_result:
+                logger.debug(f"Cache hit for hypothesis: {hypothesis_text[:50]}...")
+                return cached_result
+        
         prompt = self._build_analysis_prompt(hypothesis_text)
         
         start_time = time.time()
@@ -293,6 +305,10 @@ class OllamaClient:
             
             # Sanitize and normalize the response
             result = self._sanitize_and_normalize_response(result)
+            
+            # Cache successful result if enabled
+            if self._cache_enabled and self._hypothesis_cache:
+                self._hypothesis_cache.put(hypothesis_text, result)
             
             logger.debug(f"Successfully processed hypothesis analysis in {response_time:.3f}s")
             return result
@@ -455,3 +471,29 @@ Respond with JSON only, no additional text:"""
         except Exception as e:
             logger.error(f"Response sanitization failed: {e}")
             return response
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache performance statistics."""
+        if not self._cache_enabled or not self._hypothesis_cache:
+            return {"cache_enabled": False}
+        
+        stats = self._hypothesis_cache.get_stats()
+        stats["cache_enabled"] = True
+        return stats
+    
+    def configure_cache(self, max_size: int = None, ttl_hours: float = None, 
+                       similarity_threshold: float = None) -> bool:
+        """Configure cache parameters."""
+        if not self._cache_enabled or not self._hypothesis_cache:
+            return False
+        
+        self._hypothesis_cache.configure(max_size, ttl_hours, similarity_threshold)
+        return True
+    
+    def clear_cache(self) -> bool:
+        """Clear all cached entries."""
+        if not self._cache_enabled or not self._hypothesis_cache:
+            return False
+        
+        self._hypothesis_cache.clear()
+        return True

@@ -90,10 +90,14 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
         - If you have the necessary skill, tools and resources, tell me that you have them and proceed to the next step
      
      d. Add execution start information to the task file
-     
-     e. Execute the task following its process steps
 
-     f. Check the number of lines of code you have added.
+     e. Plan what the next incremental action should be to move the task towards completion.
+      - Follow its process steps
+      - You do not have to complete the task
+      - Focus on doing just the next thing
+      - Try to limit your activity to under 100 lines of text or code
+     
+     f. Check the number of lines of text or code you have added.
       - If the number of lines is greater than 200, refactor to reduce the work you have done. 
       - We will check the number of lines of code added and delete your work if it exceeds the threshold.
      

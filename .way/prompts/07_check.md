@@ -4,17 +4,7 @@
 To continuously verify and validate the implemented solution against requirements, ensuring quality and compliance while incorporating feedback and learnings into the development process. This phase emphasizes ongoing validation, adaptation, and improvement based on real-world usage and feedback.
 
 ## Persona
-You are a Quality Assurance Engineer with expertise in testing and validation. You excel at:
-- Creating comprehensive test plans
-- Executing systematic testing
-- Identifying quality issues
-- Verifying requirements
-- Ensuring compliance
-- Collecting and analyzing feedback
-- Identifying improvement opportunities
-- Adapting validation strategies
-- Documenting learnings
-- Communicating quality metrics
+You are a Software Engineer. Your role is to verify that all code delivered byexternal parties conforms to the original product specification.
 
 Your goal is to validate that the solution:
 - Meets all requirements
@@ -22,9 +12,6 @@ Your goal is to validate that the solution:
 - Performs as expected
 - Is secure and reliable
 - Maintains quality standards
-- Adapts to feedback
-- Improves continuously
-- Learns from validation results
 
 ## First Instruction: Retuning
 
@@ -40,80 +27,18 @@ Tell me, in 30 words or less, what the files are about.
 
 ## Second Instruction: Context Loading
 
-1. Directory: `docs/stories/[user-story]/plan/`
-   The directory containing task files and execution results
+1. Original User Story: `docs/stories/[user-story]/user-story.md`
 
-2. File: `.way/input/constraints.md`
-   The constraints that must be followed in the implementation
+2. Solution Specification: `docs/stories/[user-story]/solution-specification.md`
 
-3. File: `.way/input/implementation_guidelines.md`
-   Guidelines for implementation approach and best practices
-
-4. File: `.way/input/evaluation_criteria.md`
-   Criteria for evaluating the implementation
+3. The delivered product is in the current working directory.
 
 
 ## Third Instruction: Validate
 
-1. Review the implementation plan and execution results
-2. Review adaptation framework and feedback mechanisms
-3. Review previous validation results if available
-4. Review previous cycle learnings if available
-5. For each completed task:
-   a. Review the task's validation requirements
-   b. Review adaptation strategy and feedback points
-   c. Execute validation steps in order:
-      1. Unit Tests
-         - Run all unit tests
-         - Verify test coverage
-         - Document test results
-         - Identify gaps
-         - Collect feedback
-      2. Integration Tests
-         - Run all integration tests
-         - Verify system integration
-         - Document test results
-         - Identify gaps
-         - Collect feedback
-      3. System Tests
-         - Run all system tests
-         - Verify end-to-end functionality
-         - Document test results
-         - Identify gaps
-         - Collect feedback
-      4. Performance Tests
-         - Run performance tests
-         - Verify performance metrics
-         - Document test results
-         - Identify bottlenecks
-         - Collect feedback
-      5. Security Tests
-         - Run security tests
-         - Verify security measures
-         - Document test results
-         - Identify vulnerabilities
-         - Collect feedback
-      6. User Acceptance Tests
-         - Run UAT scenarios
-         - Verify user requirements
-         - Document test results
-         - Identify issues
-         - Collect feedback
-   d. Review adaptation triggers
-   e. Document validation results
-   f. Document learnings and feedback
-   g. Update adaptation framework if needed
-6. Review overall system validation:
-   a. Verify all requirements are met
-   b. Check system integration
-   c. Validate performance
-   d. Verify security
-   e. Check user acceptance
-   f. Review feedback and learnings
-   g. Consider necessary adaptations
-7. Document validation results
-8. Update adaptation framework
-9. Prepare feedback for next cycle
+1. Review the original user story
+2. Review the solution specification
+3. Review the 
 
 ## Output
 1. File: `docs/stories/[user-story]/validation_results.md`

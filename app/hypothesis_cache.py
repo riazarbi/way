@@ -20,6 +20,7 @@ class HypothesisCache:
         self.max_size = max_size
         self.ttl_seconds = ttl_hours * 3600
         self.similarity_threshold = similarity_threshold
+        self._degradation_mode = False
         
         # Cache storage: hypothesis_id -> cache_entry
         self._cache: Dict[str, Dict[str, Any]] = {}
@@ -237,3 +238,62 @@ class HypothesisCache:
         logger.info(f"Cache reconfigured: max_size={self.max_size}, "
                    f"ttl_hours={self.ttl_seconds/3600}, "
                    f"similarity_threshold={self.similarity_threshold}")
+    
+    def enter_degradation_mode(self) -> None:
+        """Enter degradation mode to reduce memory usage."""
+        self._degradation_mode = True
+        
+        # Reduce cache size by 50%
+        target_size = max(10, self.max_size // 2)
+        while len(self._cache) > target_size:
+            self._evict_oldest()
+        
+        # Increase similarity threshold to reduce vector operations
+        self.similarity_threshold = min(0.95, self.similarity_threshold + 0.1)
+        
+        logger.warning(f"Cache entered degradation mode: size={len(self._cache)}, "
+                      f"threshold={self.similarity_threshold}")
+    
+    def exit_degradation_mode(self, original_max_size: int, original_threshold: float) -> None:
+        """Exit degradation mode and restore normal operation."""
+        self._degradation_mode = False
+        self.max_size = original_max_size
+        self.similarity_threshold = original_threshold
+        
+        logger.info(f"Cache exited degradation mode: max_size={self.max_size}, "
+                   f"threshold={self.similarity_threshold}")
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get comprehensive cache statistics including memory info."""
+        stats = self.get_stats()
+        stats.update({
+            'degradation_mode': self._degradation_mode,
+            'estimated_memory_mb': len(self._cache) * 0.01,  # Rough estimate
+            'vector_count': len(self._texts) if self._texts else 0
+        })
+        return stats
+    
+    def force_cleanup(self) -> Dict[str, Any]:
+        """Force cleanup of cache entries to free memory."""
+        initial_size = len(self._cache)
+        
+        # Remove 25% of entries
+        target_size = max(1, int(initial_size * 0.75))
+        while len(self._cache) > target_size:
+            self._evict_oldest()
+        
+        # Clean expired entries
+        self._clean_expired_entries()
+        
+        final_size = len(self._cache)
+        
+        return {
+            'initial_size': initial_size,
+            'final_size': final_size,
+            'entries_removed': initial_size - final_size,
+            'timestamp': time.time()
+        }
+
+
+# Global cache instance
+hypothesis_cache = HypothesisCache()

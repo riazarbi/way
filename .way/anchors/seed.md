@@ -150,3 +150,5 @@ Writing to your future self (in the second person) will make later reading clear
 **Execution patterns:** Trust your technical judgment when evaluating task rationale. Don't overthink - if you have the skills, tools, and understanding to implement something, proceed with confidence. Time spent on meta-analysis of your own capabilities often exceeds the time needed for actual implementation.
 
 **Task focus:** When a task file has clear acceptance criteria and process steps, those are your contract. Execute them systematically rather than reinterpreting the requirements. The person who wrote the task already did the thinking - your job is skilled execution within the constraints.
+
+**Pattern recognition:** After multiple implementation cycles, certain patterns emerge. Don't reinvent solved problems - look for existing implementations that can be adapted. The codebase often contains better solutions than what initial analysis suggests.

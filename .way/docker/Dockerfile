@@ -45,12 +45,12 @@ RUN groupadd --gid $USER_GID $USERNAME || true && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Create a script to fix permissions
-RUN echo '#!/bin/bash\n\
-if [ -d "/workspace" ]; then\n\
-    sudo chown -R $USER_UID:$USER_GID /workspace\n\
-fi\n\
-exec "$@"' > /usr/local/bin/fix-permissions.sh \
-    && chmod +x /usr/local/bin/fix-permissions.sh
+#RUN echo '#!/bin/bash\n\
+#if [ -d "/workspace" ]; then\n\
+#    sudo chown -R $USER_UID:$USER_GID /workspace\n\
+#fi\n\
+#exec "$@"' > /usr/local/bin/fix-permissions.sh \
+#    && chmod +x /usr/local/bin/fix-permissions.sh
 
 # Set default shell
 SHELL ["/bin/bash", "-c"]

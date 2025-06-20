@@ -32,6 +32,9 @@ RUN npm install -g npm@latest && \
 # Set working directory
 WORKDIR /workspace
 
+# Add .way/commands to system PATH
+ENV PATH="/workspace/.way/commands:$PATH"
+
 # Create a user that matches the host user
 ARG USERNAME=riaz
 ARG USER_UID=1001

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Check if both project repo and user story name are provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <project-repo> <user-story-name>"
+    echo "Example: $0 feedback-engine hypothesis-feedback-tool"
+    exit 1
+fi
+
+PROJECT_REPO="$1"
+USER_STORY="$2"
+
+echo "Starting complete workflow for user story: $USER_STORY in project: $PROJECT_REPO"
+echo "=========================================="
+
+# Step 1: Plan
+echo "Step 1: Planning..."
+echo "-------------------"
+if ! plan.sh "$PROJECT_REPO" "$USER_STORY"; then
+    echo "Planning step failed. Exiting workflow."
+    exit 1
+fi
+echo "Planning completed successfully."
+echo ""
+
+# Step 2: Do
+echo "Step 2: Executing..."
+echo "-------------------"
+if ! do.sh "$PROJECT_REPO" "$USER_STORY"; then
+    echo "Execution step failed. Exiting workflow."
+    exit 1
+fi
+echo "Execution completed successfully."
+echo ""
+
+# Step 3: Check
+echo "Step 3: Checking..."
+echo "-------------------"
+if ! check.sh "$PROJECT_REPO" "$USER_STORY"; then
+    echo "Check step failed. Exiting workflow."
+    exit 1
+fi
+echo "Check completed successfully."
+echo ""
+
+echo "=========================================="
+echo "Complete workflow finished successfully for user story: $USER_STORY" 

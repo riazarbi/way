@@ -86,7 +86,7 @@ fi
 # Check if research results exist
 if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-space.md" ]; then
     echo "Running search step..."
-    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way\"execute .way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    if ! run_claude_command "claude -p \"execute .way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Search step failed. Exiting."
         exit 1
     fi

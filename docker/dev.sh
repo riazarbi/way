@@ -21,6 +21,7 @@ podman build --format=docker \
 echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
+    --network=host \
     --user "$USER_ID:$GROUP_ID" \
     -e HOME=/workspace \
     -e USERNAME=$USERNAME \

@@ -1,32 +1,31 @@
 #!/bin/bash
 
-# Maximum lines of code allowed per commit
-MAX_LINES_PER_COMMIT=800
-# Number of commits to check for cumulative line count
-COMMITS_TO_CHECK=10
+# Maximum number of turns for a single Claude execution
+MAX_EXECUTE_TURNS=10
 
-# Check if user story name is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 <user-story-name>"
-    echo "Example: $0 hypothesis-feedback-tool"
+# Check if both project repo and user story name are provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <project-repo> <user-story-name>"
+    echo "Example: $0 feedback-engine hypothesis-feedback-tool"
     exit 1
 fi
 
-USER_STORY="$1"
+PROJECT_REPO="$1"
+USER_STORY="$2"
 
 # Check if delivery folder exists, create it if it doesn't
-if [ ! -d "docs/stories/$USER_STORY/delivery" ]; then
+if [ ! -d "$PROJECT_REPO/stories/$USER_STORY/delivery" ]; then
     echo "Delivery folder does not exist. Creating delivery structure..."
-    mkdir -p "docs/stories/$USER_STORY/delivery/todo"
-    mkdir -p "docs/stories/$USER_STORY/delivery/doing"
-    mkdir -p "docs/stories/$USER_STORY/delivery/done"
-    mkdir -p "docs/stories/$USER_STORY/delivery/check"
-    mkdir -p "docs/stories/$USER_STORY/delivery/blocked"
+    mkdir -p "$PROJECT_REPO/stories/$USER_STORY/delivery/todo"
+    mkdir -p "$PROJECT_REPO/stories/$USER_STORY/delivery/doing"
+    mkdir -p "$PROJECT_REPO/stories/$USER_STORY/delivery/done"
+    mkdir -p "$PROJECT_REPO/stories/$USER_STORY/delivery/check"
+    mkdir -p "$PROJECT_REPO/stories/$USER_STORY/delivery/blocked"
     
     # Copy plan contents to todo
-    if [ -d "docs/stories/$USER_STORY/plan" ]; then
+    if [ -d "$PROJECT_REPO/stories/$USER_STORY/plan" ]; then
         echo "Copying plan contents to delivery/todo..."
-        cp -r "docs/stories/$USER_STORY/plan"/* "docs/stories/$USER_STORY/delivery/todo/"
+        cp -r "$PROJECT_REPO/stories/$USER_STORY/plan"/* "$PROJECT_REPO/stories/$USER_STORY/delivery/todo/"
     else
         echo "Warning: Plan directory does not exist. Todo folder is empty."
         exit 1
@@ -41,13 +40,13 @@ RETRY_BUFFER=600
 
 # Function to check for STOP_PRODUCTION.md file
 has_stop_file() {
-    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    local delivery_dir="$PROJECT_REPO/stories/$USER_STORY/delivery"
     [[ -f "$delivery_dir/STOP_PRODUCTION.md" ]]
 }
 
 # Function to check if there are non-README files in the delivery folder
 has_non_readme_files() {
-    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    local delivery_dir="$PROJECT_REPO/stories/$USER_STORY/delivery"
     
     # Check if directory exists
     if [[ ! -d "$delivery_dir" ]]; then
@@ -63,7 +62,7 @@ has_non_readme_files() {
 
 # Function to check if there are any tasks left to work on
 has_tasks_to_work_on() {
-    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    local delivery_dir="$PROJECT_REPO/stories/$USER_STORY/delivery"
     
     # Check if directory exists
     if [[ ! -d "$delivery_dir" ]]; then
@@ -81,7 +80,7 @@ has_tasks_to_work_on() {
 
 # Function to check if both doing and check folders are empty
 are_doing_and_check_empty() {
-    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    local delivery_dir="$PROJECT_REPO/stories/$USER_STORY/delivery"
     
     # Check if directories exist
     if [[ ! -d "$delivery_dir/doing" ]] || [[ ! -d "$delivery_dir/check" ]]; then
@@ -148,7 +147,7 @@ run_claude_command() {
 while has_tasks_to_work_on; do
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/delivery folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in $PROJECT_REPO/stories/$USER_STORY/delivery folder. Exiting immediately."
         exit 1
     fi
     
@@ -157,7 +156,7 @@ while has_tasks_to_work_on; do
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
         echo "Triaging in noninteractive mode..."
-        if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY\""; then
+        if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
             RETRY_COUNT=$((RETRY_COUNT + 1))
             if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
                 echo "Maximum retry attempts reached. Please try again later."
@@ -171,12 +170,12 @@ while has_tasks_to_work_on; do
 
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
-        echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/delivery folder. Exiting immediately."
+        echo "STOP_PRODUCTION.md file detected in $PROJECT_REPO/stories/$USER_STORY/delivery folder. Exiting immediately."
         exit 1
     fi
 
     echo "Executing task in noninteractive mode..."    
-    if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --max-turns $MAX_EXECUTE_TURNS --add-dir $PROJECT_REPO --add-dir .way --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
             echo "Maximum retry attempts reached. Please try again later."
@@ -185,31 +184,9 @@ while has_tasks_to_work_on; do
         continue
     fi
 
-    # Check lines of code added in last commit
-    lines_added=$(git show --stat HEAD | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/' | head -1)
-    if [ ! -z "$lines_added" ] && [ "$lines_added" -eq "$lines_added" ] 2>/dev/null; then
-        echo "Lines of code added in last commit: $lines_added"
-        if [ $lines_added -gt $MAX_LINES_PER_COMMIT ]; then
-            echo "Error: Last commit added $lines_added lines, which exceeds the limit of $MAX_LINES_PER_COMMIT lines per commit."
-            exit 1
-        fi
-    else
-        echo "No lines added in last commit or unable to parse git output"
-    fi
-
-    # Check lines of code added in last N commits
-    total_lines_added=0
-    for i in $(seq 0 $((COMMITS_TO_CHECK - 1))); do
-        commit_lines=$(git show --stat HEAD~$i 2>/dev/null | grep -E "^ [0-9]+ files? changed" | sed 's/.* \([0-9]\+\) insertions.*/\1/' | head -1)
-        if [ ! -z "$commit_lines" ] && [ "$commit_lines" -eq "$commit_lines" ] 2>/dev/null; then
-            total_lines_added=$((total_lines_added + commit_lines))
-        fi
-    done
-    echo "Total lines of code added in last $COMMITS_TO_CHECK commits: $total_lines_added"
-
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping
     RETRY_COUNT=0  # Reset retry count on successful execution
 done
 
-echo "No more tasks to work on in docs/stories/$USER_STORY/delivery folder. Task management complete."
+echo "No more tasks to work on in $PROJECT_REPO/stories/$USER_STORY/delivery folder. Task management complete."

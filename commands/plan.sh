@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# Check if user story name is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 <user-story-name>"
-    echo "Example: $0 hypothesis-feedback-tool"
+# Check if both project repo and user story name are provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <project-repo> <user-story-name>"
+    echo "Example: $0 feedback-engine hypothesis-feedback-tool"
     exit 1
 fi
 
-USER_STORY="$1"
+PROJECT_REPO="$1"
+USER_STORY="$2"
 
 # Maximum number of retries
 MAX_RETRIES=3
@@ -65,79 +66,79 @@ run_claude_command() {
 
 # Check workflow steps and run if needed
 
-echo "Checking workflow steps for user story: $USER_STORY"
+echo "Checking workflow steps for user story: $USER_STORY in project: $PROJECT_REPO"
 
 # Check if user story exists, create it if it doesn't
-if [ ! -f "docs/stories/$USER_STORY/user-story.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/user-story.md" ]; then
     echo "User story does not exist. Creating user story..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/00_story.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/00_story.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "User story creation failed. Exiting."
         exit 1
     fi
     sleep 2
 fi
 
-if [ ! -f "docs/stories/$USER_STORY/user-story.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/user-story.md" ]; then
     echo "No user story generated. Exiting"
     exit 1
 fi
 
 # Check if research results exist
-if [ ! -f "docs/stories/$USER_STORY/solution-space.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-space.md" ]; then
     echo "Running search step..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/01_search.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way\"execute .way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Search step failed. Exiting."
         exit 1
     fi
     sleep 2
 fi
 
-if [ ! -f "docs/stories/$USER_STORY/solution-space.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-space.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if selected solution exists
-if [ ! -f "docs/stories/$USER_STORY/target-solution.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/target-solution.md" ]; then
     echo "Running select step..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/02_select.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/02_select.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Select step failed. Exiting."
         exit 1
     fi
     sleep 2
 fi
 
-if [ ! -f "docs/stories/$USER_STORY/target-solution.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/target-solution.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if solution specification exists
-if [ ! -f "docs/stories/$USER_STORY/solution-specification.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-specification.md" ]; then
     echo "Running define step..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/03_define.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/03_define.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Define step failed. Exiting."
         exit 1
     fi
     sleep 2
 fi
 
-if [ ! -f "docs/stories/$USER_STORY/solution-specification.md" ]; then
+if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-specification.md" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
 
 # Check if plan folder exists
-if [ ! -d "docs/stories/$USER_STORY/plan" ]; then
+if [ ! -d "$PROJECT_REPO/stories/$USER_STORY/plan" ]; then
     echo "Running plan step..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/04_plan.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/04_plan.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Plan step failed. Exiting."
         exit 1
     fi
     sleep 2
 fi
 
-if [ ! -d "docs/stories/$USER_STORY/plan" ]; then
+if [ ! -d "$PROJECT_REPO/stories/$USER_STORY/plan" ]; then
     echo "No output generated. Exiting"
     exit 1
 fi
@@ -145,7 +146,7 @@ fi
 echo "All workflow steps complete. Proceeding with decomposition..."
 
 # Path to the epics directory
-EPICS_DIR="docs/stories/$USER_STORY/plan"
+EPICS_DIR="$PROJECT_REPO/stories/$USER_STORY/plan"
 
 # Function to check if an epic has been decomposed
 is_decomposed() {
@@ -184,7 +185,7 @@ while true; do
 
     # Run the decomposition command
     echo "Running decomposition prompt..."
-    if ! run_claude_command "claude -p \"execute .way/prompts/05_decompose.md against user story folder $USER_STORY\""; then
+    if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/05_decompose.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         echo "Decomposition step failed. Exiting."
         exit 1
     fi

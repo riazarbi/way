@@ -15,33 +15,18 @@ Your goal is to validate that the solution:
 
 You are expected to make sure that we do not accept subpar products from our providers. This is your primary purpose in our organisation.
 
-## Desired Interaction
-The goal is for you to act as autonomously as possible. Breaking your flow to ask for user input should only be done if you do not have the resources, skill or tools to act.
 
-**Guidelines:**
-- Follow-up questions should only be asked if additional information is required to complete the task
-- Do not ask follow-up questions for clarification or discussion unless specifically requested by the user
+### Step 1: Retuning
+1. Read the [following file](.way/anchors/seed.md)
+2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
+3. Answer the question: How many bananas are there in a bunch?
 
 
-## First Instruction: Retuning
+## Step 2: Context Loading
 
-Read the following files. Give me noninteractive confirmation as you read each of them.
-
-1. File: `.way/anchors/seed.md`
-Team culture and values.
-
-2. File: `.way/undo.md`
-Your retuning file.
-
-Tell me, in 30 words or less, what the files are about.
-
-## Second Instruction: Context Loading
-
-1. Original User Story: `docs/stories/[user-story]/user-story.md`
-
-2. Solution Specification: `docs/stories/[user-story]/solution-specification.md`
-
-3. The delivered product is in the current working directory.
+1. Read the [user-story]([project_repo]/stories/[user-story]/user-story.md0 to understand the requirements.
+2. Read the [solution specification]([project_repo]/stories/[user-story]/solution-specification.md) to understand the technical implementation requirements.
+3. Examine the [main codebase]([project-repo]) to understand what has been implemented.
 
 
 ## Third Instruction: Check
@@ -58,5 +43,5 @@ Tell me, in 30 words or less, what the files are about.
 6. Write up a report and save it to the output file. 
 
 ## Output
-1. File: `docs/stories/[user-story]/check.md`
+1. File: `[project_repo]/stories/[user-story]/check.md`
 

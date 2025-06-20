@@ -45,8 +45,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the implementation plan README](docs/stories/[user-story]/plan/README.md)
-2. Familiarise yourself with [the stories to be decomposed](docs/stories/[user-story]/plan/[story]/README.md)
+1. Familiarise yourself with [the implementation plan README]([project-repo]/stories/[user-story]/plan/README.md)
+2. Familiarise yourself with [the stories to be decomposed]([project-repo]/stories/[user-story]/plan/[story]/README.md)
 3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
 4. Check if there are any files in the current working directory. They represent the current as-is
 
@@ -67,7 +67,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**Directory:** `docs/stories/[user-story]/plan/[story]/`
+**Directory:** `[project-repo]/stories/[user-story]/plan/[story]/`
 
 Create task files for the selected story with the following requirements:
 

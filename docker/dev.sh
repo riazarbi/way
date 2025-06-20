@@ -22,7 +22,6 @@ echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
     --user "$USER_ID:$GROUP_ID" \
-    -p 5000:5000 \
     -e HOME=/workspace \
     -e USERNAME=$USERNAME \
     -e USER_UID=$USER_ID \

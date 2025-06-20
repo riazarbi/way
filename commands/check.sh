@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# Check if user story name is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 <user-story-name>"
-    echo "Example: $0 hypothesis-feedback-tool"
+# Check if both project repo and user story name are provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <project-repo> <user-story-name>"
+    echo "Example: $0 feedback-engine hypothesis-feedback-tool"
     exit 1
 fi
 
-USER_STORY="$1"
+PROJECT_REPO="$1"
+USER_STORY="$2"
 
 # Maximum number of retries
 MAX_RETRIES=3
@@ -64,16 +65,26 @@ run_claude_command() {
 }
 
 # Check if delivery folder exists
-if [ ! -d "docs/stories/$USER_STORY/delivery" ]; then
-    echo "Error: Delivery folder does not exist for user story '$USER_STORY'"
+if [ ! -d "$PROJECT_REPO" ]; then
+    echo "Error: Project repo directory '$PROJECT_REPO' does not exist"
+    exit 1
+fi
+
+if [ ! -d "$PROJECT_REPO/stories/$USER_STORY" ]; then
+    echo "Error: User story folder '$USER_STORY' does not exist in project '$PROJECT_REPO'"
+    exit 1
+fi
+
+if [ ! -d "$PROJECT_REPO/stories/$USER_STORY/delivery" ]; then
+    echo "Error: Delivery folder does not exist for user story '$USER_STORY' in project '$PROJECT_REPO'"
     echo "Please run the deliver script first to set up the delivery structure."
     exit 1
 fi
 
-echo "Running check prompt for user story: $USER_STORY"
+echo "Running check prompt for user story: $USER_STORY in project: $PROJECT_REPO"
 
 # Run the check command
-if ! run_claude_command "claude -p \"execute .way/prompts/07_check.md against user story folder $USER_STORY\""; then
+if ! run_claude_command "claude -p  \"execute .way/prompts/07_check.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
         echo "Maximum retry attempts reached. Please try again later."

@@ -36,13 +36,11 @@ The goal is for you to identify what type of story the user is asking for, and t
 5. Read in the [Generic User Story Template](.way/templates/generic-story-template.md) and use it as a guide to create a well structured user story.
 
 ### Step 4: Converse
-1. Analyze the problem description and context
-2. Formulate specific, testable hypotheses about the problem cause
-3. Generate multiple candidate solutions
+1. Determine the project that the user story relates to
+2. Verify that the project folder exists in the working directory
+3. Familiarise yourself with the contents of the project folder
+4. Work with the user to create the user story
 
-**Requirements for hypothesis generation:**
-- Generate non-overlapping, complete, diverse hypotheses
-- Maintain traceability to input data
 
 ### Step 5: Record
 1. Save the user story to the directory `[project-repo]/stories/[user-story]/user-story.md`

@@ -156,7 +156,7 @@ while has_tasks_to_work_on; do
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
         echo "Triaging in noninteractive mode..."
-        if ! run_claude_command "claude -p --add-dir $PROJECT_REPO --add-dir .way \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+        if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
             RETRY_COUNT=$((RETRY_COUNT + 1))
             if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
                 echo "Maximum retry attempts reached. Please try again later."
@@ -175,7 +175,7 @@ while has_tasks_to_work_on; do
     fi
 
     echo "Executing task in noninteractive mode..."    
-    if ! run_claude_command "claude -p --max-turns $MAX_EXECUTE_TURNS --add-dir $PROJECT_REPO --add-dir .way --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    if ! run_claude_command "claude -p --max-turns $MAX_EXECUTE_TURNS --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
             echo "Maximum retry attempts reached. Please try again later."

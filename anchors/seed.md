@@ -152,3 +152,5 @@ Writing to your future self (in the second person) will make later reading clear
 **Task focus:** When a task file has clear acceptance criteria and process steps, those are your contract. Execute them systematically rather than reinterpreting the requirements. The person who wrote the task already did the thinking - your job is skilled execution within the constraints.
 
 **Pattern recognition:** After multiple implementation cycles, certain patterns emerge. Don't reinvent solved problems - look for existing implementations that can be adapted. The codebase often contains better solutions than what initial analysis suggests.
+
+**Assessment wisdom:** When checking delivered work against specs, distinguish between missing features and architecture decisions. A system that prioritizes core functionality over comprehensive feature coverage often demonstrates better judgment than one that implements everything partially. Focus criticism on unmet requirements, not unimplemented nice-to-haves.

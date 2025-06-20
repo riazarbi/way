@@ -61,6 +61,24 @@ has_non_readme_files() {
     [[ $file_count -gt 0 ]]
 }
 
+# Function to check if there are any tasks left to work on
+has_tasks_to_work_on() {
+    local delivery_dir="docs/stories/$USER_STORY/delivery"
+    
+    # Check if directory exists
+    if [[ ! -d "$delivery_dir" ]]; then
+        return 1  # Directory doesn't exist, so no tasks
+    fi
+    
+    # Count non-README files in todo, doing, and check folders
+    local todo_count=$(find "$delivery_dir/todo" -type f ! -iname "readme*" 2>/dev/null | wc -l)
+    local doing_count=$(find "$delivery_dir/doing" -type f ! -iname "readme*" 2>/dev/null | wc -l)
+    local check_count=$(find "$delivery_dir/check" -type f ! -iname "readme*" 2>/dev/null | wc -l)
+    
+    # Return 0 (true) if there are tasks in any of these folders, 1 (false) if all are empty
+    [[ $todo_count -gt 0 || $doing_count -gt 0 || $check_count -gt 0 ]]
+}
+
 # Function to check if both doing and check folders are empty
 are_doing_and_check_empty() {
     local delivery_dir="docs/stories/$USER_STORY/delivery"
@@ -127,7 +145,7 @@ run_claude_command() {
 }
 
 # Main loop
-while has_non_readme_files; do
+while has_tasks_to_work_on; do
     # Check for STOP_PRODUCTION.md file before proceeding
     if has_stop_file; then
         echo "STOP_PRODUCTION.md file detected in docs/stories/$USER_STORY/delivery folder. Exiting immediately."
@@ -194,4 +212,4 @@ while has_non_readme_files; do
     RETRY_COUNT=0  # Reset retry count on successful execution
 done
 
-echo "No more files in docs/stories/$USER_STORY/delivery folder. Task management complete."
+echo "No more tasks to work on in docs/stories/$USER_STORY/delivery folder. Task management complete."

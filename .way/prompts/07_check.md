@@ -58,5 +58,5 @@ Tell me, in 30 words or less, what the files are about.
 6. Write up a report and save it to the output file. 
 
 ## Output
-1. File: `docs/stories/[user-story]/validation_results.md`
+1. File: `docs/stories/[user-story]/check.md`
 

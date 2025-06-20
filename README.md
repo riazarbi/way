@@ -27,6 +27,8 @@ Way is a containerized development environment that provides AI-powered project 
 - **Git**: For cloning the repository
 - **Claude CLI**: Installed automatically in the container
 
+**If you do not use podman, modify docker/dev.sh for compatibility with your container runtime**
+
 ## How It Works
 
 The `dev` alias runs a containerized development environment that:

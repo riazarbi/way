@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     python3 \
     python3-pip \
+    python-is-python3 \
     ca-certificates \
     gnupg \
     && rm -rf /var/lib/apt/lists/*

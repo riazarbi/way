@@ -10,7 +10,8 @@ USERNAME=$(id -un)
 
 # Build the Docker image with user information
 echo "Building Docker image..."
-podman build -t dev-environment \
+podman build --format=docker \
+    -t dev-environment \
     --build-arg USERNAME=$USERNAME \
     --build-arg USER_UID=$USER_ID \
     --build-arg USER_GID=$GROUP_ID \

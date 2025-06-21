@@ -22,6 +22,7 @@ echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
     --network=host \
+    --privileged \
     --user "$USER_ID:$GROUP_ID" \
     -e HOME=/workspace \
     -e USERNAME=$USERNAME \
@@ -29,3 +30,4 @@ podman run -it --rm \
     -e USER_GID=$GROUP_ID \
     --userns=keep-id \
     dev-environment 
+    

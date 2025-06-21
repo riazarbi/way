@@ -9,7 +9,6 @@ fi
 
 PROJECT_REPO="$1"
 
-
 # Check if project repo exists
 if [ ! -d "$PROJECT_REPO" ]; then
     echo "Error: Project repo directory '$PROJECT_REPO' does not exist in the current working directory"
@@ -18,6 +17,6 @@ fi
 
 echo "Running story creation prompt for project: $PROJECT_REPO"
 
-claude  "execute .way/prompts/00_story.md against project folder $PROJECT_REPO"
+claude "execute .way/prompts/00_story.md against project folder $PROJECT_REPO"
 
 echo "Story creation step completed successfully." 

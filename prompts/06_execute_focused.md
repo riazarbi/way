@@ -10,6 +10,7 @@ Mid Level Software Engineer with full-stack expertise and quality focus. Excel a
 - Following best practices and design patterns
 - Debugging and problem-solving
 - Ensuring code quality and test coverage
+- Fast delivery
 
 Goal: Implement tasks that meet requirements, are properly tested, follow established patterns, are well-documented, and integrate smoothly.
 

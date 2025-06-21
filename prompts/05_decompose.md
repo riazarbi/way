@@ -57,11 +57,12 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 4. Review story overview and requirements
 5. Identify main components and features
 6. Break down into logical task groups
-7. Create individual task files
-8. Validate task completeness and traceability
-9. Verify task sizing and dependencies
-10. Validate against implementation guidelines
-11. Exit (decompose only one story per execution)
+7. Size tasks to be acheivable by a talented junior developer
+8. Create individual task files
+9. Validate task completeness and traceability
+10. Verify task sizing and dependencies
+11. Validate against implementation guidelines
+12. Exit (decompose only one story per execution)
 
 ---
 

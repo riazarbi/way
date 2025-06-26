@@ -27,7 +27,8 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # Update npm to latest version and install claude CLI globally
 RUN npm install -g npm@latest && \
-    npm install -g @anthropic-ai/claude-code
+    npm install -g @anthropic-ai/claude-code && \
+    npm install -g @google/gemini-cli
 
 # Set working directory
 WORKDIR /workspace

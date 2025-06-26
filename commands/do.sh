@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Maximum number of turns for a single Claude execution
-MAX_EXECUTE_TURNS=50
+MAX_EXECUTE_TURNS=100
 
 # Check if both project repo and user story name are provided
 if [ $# -lt 2 ]; then

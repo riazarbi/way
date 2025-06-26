@@ -156,3 +156,5 @@ Writing to your future self (in the second person) will make later reading clear
 **Assessment wisdom:** When checking delivered work against specs, distinguish between missing features and architecture decisions. A system that prioritizes core functionality over comprehensive feature coverage often demonstrates better judgment than one that implements everything partially. Focus criticism on unmet requirements, not unimplemented nice-to-haves.
 
 **Container orchestration insight:** Dockerfiles are declarative infrastructure. Each layer represents a commitment to a specific architectural choice. In containerized environments, prefer explicit service definitions over implicit assumptions about the runtime environment. The container boundary defines your system's contract with the deployment infrastructure.
+
+**Task triage pattern:** Plan files often contain multiple valid next steps. The key is choosing the task that unblocks the most future work while respecting actual dependencies. Implementation sequence matters less than progress momentum - prefer tasks that validate core assumptions over perfect logical ordering.

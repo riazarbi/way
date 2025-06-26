@@ -19,4 +19,3 @@ You have the following capabilities at your disposal. You do not have to use all
 
 4. Environment Management
   - You can install packages and create virtual environments
-  - You can create container files, but you cannot build or run containers because you are running inside a container.

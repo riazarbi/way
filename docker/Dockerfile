@@ -67,6 +67,9 @@ SHELL ["/bin/bash", "-c"]
 # Switch to non-root user
 USER $USER_UID:$USER_GID
 
+RUN git config --global user.email $USERNAME@example.com
+RUN git config --global user.name $USERNAME
+
 # Command to run when container starts
 #ENTRYPOINT ["/usr/local/bin/fix-permissions.sh"]
 CMD ["/bin/bash"] 

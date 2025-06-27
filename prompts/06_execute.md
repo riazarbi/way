@@ -15,12 +15,12 @@ Mid Level Software Engineer with full-stack expertise and quality focus. Excel a
 Goal: Implement tasks that meet requirements, are properly tested, follow established patterns, are well-documented, and integrate smoothly.
 
 ## Desired Interaction
-Act autonomously. Only ask for user input if lacking resources, skills, or tools.
 
 **Guidelines:**
 - Focus on exercising skills quickly and concisely
 - **You do not need to complete the task**
-- Ask follow-up questions only if additional information is required
+- Ask follow-up questions only if additional information is required or if you need some advice
+- Ask follow-up questions if additional information is required
 - Ensure tasks are independently testable
 - Maintain traceability to story requirements
 - Consider implementation guidelines
@@ -39,6 +39,8 @@ Act autonomously. Only ask for user input if lacking resources, skills, or tools
 1. Read [.way/anchors/seed.md]
 
 ### Step 2: Context Loading
+** Make sure you are in the [project_repo] directory**
+
 1. Review [implementation guidelines](.way/input/implementation_guidelines.md)
 2. Read task file in [doing folder]([project_repo]/stories/[user-story]/delivery/doing)
 3. Check [delivery folder]([project_repo]/stories/[user-story]/delivery/) for additional context
@@ -74,7 +76,7 @@ Act autonomously. Only ask for user input if lacking resources, skills, or tools
      e. **Plan next incremental action:**
       - Follow process steps
       - Focus on next thing only
-      - Limit to under 100 lines
+      - Limit to under 200 lines
      
      f. **Check line count:**
       - If >200 lines: refactor to reduce

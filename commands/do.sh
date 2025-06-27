@@ -156,7 +156,7 @@ while has_tasks_to_work_on; do
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
         echo "Triaging in noninteractive mode..."
-        if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+        if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
             RETRY_COUNT=$((RETRY_COUNT + 1))
             if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
                 echo "Maximum retry attempts reached. Please try again later."
@@ -174,15 +174,16 @@ while has_tasks_to_work_on; do
         exit 1
     fi
 
-    echo "Executing task in noninteractive mode..."    
-    if ! run_claude_command "claude -p --max-turns $MAX_EXECUTE_TURNS --dangerously-skip-permissions \"execute .way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
-        RETRY_COUNT=$((RETRY_COUNT + 1))
-        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-            echo "Maximum retry attempts reached. Please try again later."
-            exit 1
-        fi
-        continue
-    fi
+    echo "Executing task in interactive mode..."
+    claude --dangerously-skip-permissions "execute .way/prompts/06_execute.md for user story folder $USER_STORY in project folder $PROJECT_REPO"    
+    #if ! run_claude_command "claude --dangerously-skip-permissions \"execute .way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    #    RETRY_COUNT=$((RETRY_COUNT + 1))
+    #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+    #        echo "Maximum retry attempts reached. Please try again later."
+    #        exit 1
+    #    fi
+    #    continue
+    #fi
 
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping
@@ -190,3 +191,4 @@ while has_tasks_to_work_on; do
 done
 
 echo "No more tasks to work on in $PROJECT_REPO/stories/$USER_STORY/delivery folder. Task management complete."
+

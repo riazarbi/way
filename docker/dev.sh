@@ -19,6 +19,17 @@ else
     GOOGLE_CREDS_MOUNT=""
 fi
 
+# Check if .gemini folder exists in user's home directory
+GEMINI_PATH="$HOME/.gemini"
+if [ -d "$GEMINI_PATH" ]; then
+    echo "Found .gemini folder, will mount into container"
+    GEMINI_MOUNT="-v $GEMINI_PATH:/workspace/.gemini:rw"
+else
+    echo "Warning: .gemini folder not found at $GEMINI_PATH"
+    echo "Container will not have access to .gemini configuration"
+    GEMINI_MOUNT=""
+fi
+
 # Build the Docker image with user information
 echo "Building Docker image..."
 podman build --format=docker \
@@ -33,6 +44,7 @@ echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
     $GOOGLE_CREDS_MOUNT \
+    $GEMINI_MOUNT \
     --network=host \
     --privileged \
     --user "$USER_ID:$GROUP_ID" \

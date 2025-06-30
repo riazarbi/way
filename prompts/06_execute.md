@@ -41,10 +41,10 @@ Goal: Implement tasks that meet requirements, are properly tested, follow establ
 ### Step 2: Context Loading
 ** Make sure you are in the [project_repo] directory**
 
-1. Review [implementation guidelines](.way/input/implementation_guidelines.md)
+1. Review [implementation guidelines]([project-repo]/docs/development.md)
 2. Read task file in [doing folder]([project_repo]/stories/[user-story]/delivery/doing)
 3. Check [delivery folder]([project_repo]/stories/[user-story]/delivery/) for additional context
-4. Check current working directory files for project state
+4. Check [project directory files]([project-repo]) for project state
 
 ### Step 3: Execute
 

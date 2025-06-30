@@ -155,15 +155,16 @@ while has_tasks_to_work_on; do
     if are_doing_and_check_empty; then
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
-        echo "Triaging in noninteractive mode..."
-        if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
-            RETRY_COUNT=$((RETRY_COUNT + 1))
-            if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-                echo "Maximum retry attempts reached. Please try again later."
-                exit 1
-            fi
-            continue
-        fi
+        echo "Triaging ..."
+        claude --dangerously-skip-permissions "execute .way/prompts/06_triage.md against user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"
+        #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+        #    RETRY_COUNT=$((RETRY_COUNT + 1))
+        #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        #        echo "Maximum retry attempts reached. Please try again later."
+        #        exit 1
+        #    fi
+        #    continue
+        #fi
     else
         echo "Doing or check folders have tasks. Skipping triage and executing focused task..."
     fi
@@ -175,7 +176,7 @@ while has_tasks_to_work_on; do
     fi
 
     echo "Executing task in interactive mode..."
-    claude --dangerously-skip-permissions "execute .way/prompts/06_execute.md for user story folder $USER_STORY in project folder $PROJECT_REPO"    
+    claude --dangerously-skip-permissions "execute .way/prompts/06_execute.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
     #if ! run_claude_command "claude --dangerously-skip-permissions \"execute .way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    RETRY_COUNT=$((RETRY_COUNT + 1))
     #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then

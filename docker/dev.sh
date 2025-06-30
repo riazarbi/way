@@ -44,7 +44,6 @@ echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
     $GOOGLE_CREDS_MOUNT \
-    $GEMINI_MOUNT \
     --network=host \
     --privileged \
     --user "$USER_ID:$GROUP_ID" \

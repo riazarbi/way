@@ -50,8 +50,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ### Step 2: Context Loading
 1. Familiarise yourself with [the solution specification]([project-repo]/stories/[user-story]/solution-specification.md)
-2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
-3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
+2. Familiarise yourself with [your capabilities]([project-repo]/docs/capabilities.md)
+3. Familiarise yourself with [the implementation guidelines]([project-repo]/docs/development.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Plan

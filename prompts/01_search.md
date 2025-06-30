@@ -38,7 +38,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ### Step 2: Context Loading
 1. Read [the user story]([project-repo]/stories/[user-story]/user-story.md)
-2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
+2. Familiarise yourself with [your capabilities]([project-repo]/docs/capabilities.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Push Back

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Maximum number of turns for a single Claude execution
-MAX_EXECUTE_TURNS=50
+MAX_EXECUTE_TURNS=100
 
 # Check if both project repo and user story name are provided
 if [ $# -lt 2 ]; then
@@ -155,15 +155,16 @@ while has_tasks_to_work_on; do
     if are_doing_and_check_empty; then
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
-        echo "Triaging in noninteractive mode..."
-        if ! run_claude_command "claude -p \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
-            RETRY_COUNT=$((RETRY_COUNT + 1))
-            if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-                echo "Maximum retry attempts reached. Please try again later."
-                exit 1
-            fi
-            continue
-        fi
+        echo "Triaging ..."
+        claude --dangerously-skip-permissions "execute .way/prompts/06_triage.md against user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"
+        #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+        #    RETRY_COUNT=$((RETRY_COUNT + 1))
+        #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        #        echo "Maximum retry attempts reached. Please try again later."
+        #        exit 1
+        #    fi
+        #    continue
+        #fi
     else
         echo "Doing or check folders have tasks. Skipping triage and executing focused task..."
     fi
@@ -174,15 +175,16 @@ while has_tasks_to_work_on; do
         exit 1
     fi
 
-    echo "Executing task in noninteractive mode..."    
-    if ! run_claude_command "claude -p --max-turns $MAX_EXECUTE_TURNS --dangerously-skip-permissions \"execute .way/prompts/06_execute_focused.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
-        RETRY_COUNT=$((RETRY_COUNT + 1))
-        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-            echo "Maximum retry attempts reached. Please try again later."
-            exit 1
-        fi
-        continue
-    fi
+    echo "Executing task in interactive mode..."
+    claude --dangerously-skip-permissions "execute .way/prompts/06_execute.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
+    #if ! run_claude_command "claude --dangerously-skip-permissions \"execute .way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    #    RETRY_COUNT=$((RETRY_COUNT + 1))
+    #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+    #        echo "Maximum retry attempts reached. Please try again later."
+    #        exit 1
+    #    fi
+    #    continue
+    #fi
 
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping
@@ -190,3 +192,4 @@ while has_tasks_to_work_on; do
 done
 
 echo "No more tasks to work on in $PROJECT_REPO/stories/$USER_STORY/delivery folder. Task management complete."
+

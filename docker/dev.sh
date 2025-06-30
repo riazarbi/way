@@ -8,6 +8,28 @@ USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 USERNAME=$(id -un)
 
+# Check if Google Application Default Credentials exist
+GOOGLE_CREDS_PATH="$HOME/.config/gcloud/application_default_credentials.json"
+if [ -f "$GOOGLE_CREDS_PATH" ]; then
+    echo "Found Google Application Default Credentials, will mount into container"
+    GOOGLE_CREDS_MOUNT="-v $GOOGLE_CREDS_PATH:/home/$USERNAME/.config/gcloud/application_default_credentials.json:ro"
+else
+    echo "Warning: Google Application Default Credentials not found at $GOOGLE_CREDS_PATH"
+    echo "Container will not have access to Google Cloud credentials"
+    GOOGLE_CREDS_MOUNT=""
+fi
+
+# Check if .gemini folder exists in user's home directory
+GEMINI_PATH="$HOME/.gemini"
+if [ -d "$GEMINI_PATH" ]; then
+    echo "Found .gemini folder, will mount into container"
+    GEMINI_MOUNT="-v $GEMINI_PATH:/workspace/.gemini:rw"
+else
+    echo "Warning: .gemini folder not found at $GEMINI_PATH"
+    echo "Container will not have access to .gemini configuration"
+    GEMINI_MOUNT=""
+fi
+
 # Build the Docker image with user information
 echo "Building Docker image..."
 podman build --format=docker \
@@ -21,11 +43,15 @@ podman build --format=docker \
 echo "Starting development container..."
 podman run -it --rm \
     -v "$(pwd):/workspace:rw" \
+    $GOOGLE_CREDS_MOUNT \
     --network=host \
+    --privileged \
     --user "$USER_ID:$GROUP_ID" \
     -e HOME=/workspace \
     -e USERNAME=$USERNAME \
     -e USER_UID=$USER_ID \
     -e USER_GID=$GROUP_ID \
+    -e GOOGLE_APPLICATION_CREDENTIALS=/home/$USERNAME/.config/gcloud/application_default_credentials.json \
     --userns=keep-id \
     dev-environment 
+    

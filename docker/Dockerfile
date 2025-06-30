@@ -13,8 +13,10 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python-is-python3 \
+    pipenv \
     ca-certificates \
     gnupg \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Add NodeSource repository and install Node.js 20.x
@@ -27,7 +29,12 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # Update npm to latest version and install claude CLI globally
 RUN npm install -g npm@latest && \
-    npm install -g @anthropic-ai/claude-code
+    npm install -g @anthropic-ai/claude-code && \
+# Install gemini globally    
+    npm install -g @google/gemini-cli
+
+# Install aider
+RUN curl -LsSf https://aider.chat/install.sh | sh
 
 # Set working directory
 WORKDIR /workspace
@@ -61,6 +68,9 @@ SHELL ["/bin/bash", "-c"]
 
 # Switch to non-root user
 USER $USER_UID:$USER_GID
+
+RUN git config --global user.email $USERNAME@example.com
+RUN git config --global user.name $USERNAME
 
 # Command to run when container starts
 #ENTRYPOINT ["/usr/local/bin/fix-permissions.sh"]

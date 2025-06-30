@@ -38,11 +38,11 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ### Step 2: Context Loading
 1. Familiarise yourself with [the solution space]([project-repo]/stories/[user-story]/solution-space.md)
-2. Familiarise yourself with [your capabilities](.way/input/capabilities.md)
-3. Familiarise yourself with [the implementation guidelines](.way/input/implementation_guidelines.md)
-4. Familiarise yourself with [the constraints](.way/input/constraints.md)
-5. Familiarise yourself with [the evaluation criteria](.way/input/evaluation_criteria.md)
-6. Check if there are any files in the current working directory. They represent the current as-is
+2. Familiarise yourself with [the capabilities of your development team]([project-repo]/docs/capabilities.md)
+3. Familiarise yourself with [the development guidelines]([project-repo]/docs/development.md)
+4. Familiarise yourself with [the project constraints]([project-repo]/docs/constraints.md)
+5. Familiarise yourself with [the evaluation criteria]([project-repo]/docs/evaluation.md)
+6. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Select
 1. Review and validate solution space. **Do not consider any other possible solutions**

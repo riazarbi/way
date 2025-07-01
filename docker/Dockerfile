@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     pipenv \
     ca-certificates \
     gnupg \
+    ripgrep \
     jq \
     && rm -rf /var/lib/apt/lists/*
 

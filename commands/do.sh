@@ -186,6 +186,10 @@ while has_tasks_to_work_on; do
     #    continue
     #fi
 
+    echo "Validating task in interactive mode..."
+    claude --dangerously-skip-permissions "execute .way/prompts/06_validate.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
+
+
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping
     RETRY_COUNT=0  # Reset retry count on successful execution

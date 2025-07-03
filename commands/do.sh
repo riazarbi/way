@@ -101,15 +101,16 @@ while has_tasks_to_work_on; do
     echo "Executing task in interactive mode..."
     #claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_execute.md for user story folder docs/stories/$USER_STORY in project folder $PWD"
 
-    claude  "$(cat /workspace/.way/prompts/06_execute.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    echo "Sleeping for 1800 seconds..."
+    sleep 1800
+
+    claude -p "$(cat /workspace/.way/prompts/06_execute.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
         --add-dir /workspace/.way/anchors \
         --dangerously-skip-permissions  
 
-
-
     echo "Validating task in interactive mode..."
     #claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_validate.md for user story folder docs/stories/$USER_STORY in project folder $PWD"    
-    claude  "$(cat /workspace/.way/prompts/06_validate.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    claude -p "$(cat /workspace/.way/prompts/06_validate.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
         --add-dir /workspace/.way/anchors \
         --dangerously-skip-permissions  
 

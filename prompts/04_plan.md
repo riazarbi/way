@@ -44,14 +44,14 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the solution specification]([project-repo]/stories/[user-story]/solution-specification.md)
-2. Familiarise yourself with [your capabilities]([project-repo]/docs/capabilities.md)
-3. Familiarise yourself with [the implementation guidelines]([project-repo]/docs/development.md)
+1. Familiarise yourself with [the solution specification](@docs/stories/[user-story]/solution-specification.md)
+2. Familiarise yourself with [your capabilities](@docs/capabilities.md)
+3. Familiarise yourself with [the implementation guidelines](@docs/development.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Plan
@@ -75,7 +75,7 @@ It is **extremely important** that you synthesize the implementation guidelines 
 
 ## Output Format
 
-**Directory:** `[project-repo]/stories/[user-story]/plan/`
+**Directory:** `@docs/stories/[user-story]/plan/`
 
 Create a directory containing story-level documentation organized by the task executor based on the implementation needs. The task executor should:
 

@@ -36,8 +36,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `[project-repo]/stories/[user-story]/plan/STOP_PRODUCTION.md` and exit.
 
 
-## Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+### Step 1: Retuning
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 

@@ -32,17 +32,17 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-1. Familiarise yourself with the original [user story]([project-repo]/stories/[user-story]/user-story.md)
-2. Read the output from the [select phase]([project-repo]/stories/[user-story]/target-solution.md)
-3. Familiarise yourself with [your capabilities]([project-repo]/docs/capabilities.md)
-4. Familiarise yourself with [the development guidelines]([project-repo]/docs/development.md)
-5. Familiarise yourself with [the evaluation criteria]([project-repo]/docs/evaluation.md)
-6. Check if there are any files in the [current working directory]([project-repo]). They represent the current as-is.
+1. Familiarise yourself with the original [user story](@docs/stories/[user-story]/user-story.md)
+2. Read the output from the [select phase](@docs/stories/[user-story]/target-solution.md)
+3. Familiarise yourself with [your capabilities](@docs/docs/capabilities.md)
+4. Familiarise yourself with [the development guidelines](@docs/docs/development.md)
+5. Familiarise yourself with [the evaluation criteria](@docs/docs/evaluation.md)
+6. Check if there are any files in the [current working directory](@docs). They represent the current as-is.
 
 ### Step 3: Define
 1. Review selected solution details
@@ -60,7 +60,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**File:** `[project-repo]/stories/[user-story]/solution-specification.md`
+**File:** `@docs/stories/[user-story]/solution-specification.md`
 
 Create a Markdown file with the following structure:
 

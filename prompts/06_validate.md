@@ -1,4 +1,4 @@
-# Execute Phase Prompt
+# Validate Phase Prompt
 
 ## Purpose
 Complete **limited work** on implementation plan tasks, validate completion, ensure requirements are met while maintaining system awareness. Designed for multiple invocations until all tasks complete.
@@ -36,34 +36,39 @@ Goal: Implement tasks that meet requirements, are properly tested, follow establ
 ## Instructions
 
 ### Step 1: Retuning
-1. Read [.way/anchors/seed.md]
+1. Read the [following file](@/workspace/.way/anchors/seed.md)
+2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
+3. Answer the question: How many bananas are there in a bunch?
 
 ### Step 2: Context Loading
-** Make sure you are in the [project_repo] directory**
 
-1. Review [implementation guidelines]([project-repo]/docs/development.md)
-2. Read task file in [doing folder]([project_repo]/stories/[user-story]/delivery/doing)
-3. Check [delivery folder]([project_repo]/stories/[user-story]/delivery/) for additional context
-4. Check [project directory files]([project-repo]) for project state
+1. Review [implementation guidelines](@docs/development.md)
+2. List files in [check folder](@docs/stories/[user-story]/delivery/check)
+3. **If there is no file in the check folder, exit. Otherwise, proceed.**
+4. Check [delivery folder](@docs/stories/[user-story]/delivery/) for additional context
+5. Check current working directory for project state
 
 ### Step 3: Execute
 
 1. Review previous execution results if available
 
-2. **Check Phase:**
+2. **Verify you are in the correct environment**
+   - If the code expcts to be run in a virtual environment, ensure you have activated it.
+
+3. **Check Phase:**
    - If tasks exist in `check/` directory:
      - Validate each task against acceptance criteria
      - Pass: move to `done/`
      - Fail: document failure, move back to `doing/`
    - If no tasks in `check/`, exit
 
-3. Handle issues/deviations
+4. Handle issues/deviations
 
-4. Document learnings/observations
+5. Document learnings/observations
 
-5. Prepare feedback for next invocation
+6. Prepare feedback for next invocation
 
-6. **Commit code:**
+7. **Commit code:**
    - Message: what you did + lines of code added
    - Do not push
    

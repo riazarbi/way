@@ -84,8 +84,8 @@ fi
 echo "Running check prompt for user story: $USER_STORY in project: $PROJECT_REPO"
 
 # Run the check command
-claude  --dangerously-skip-permissions "execute .way/prompts/07_check.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-#if ! run_claude_command "claude -p  \"execute .way/prompts/07_check.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+claude  --dangerously-skip-permissions "execute /workspace/.way/prompts/07_check.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+#if ! run_claude_command "claude -p  \"execute /workspace/.way/prompts/07_check.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
 #    RETRY_COUNT=$((RETRY_COUNT + 1))
 #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
 #        echo "Maximum retry attempts reached. Please try again later."

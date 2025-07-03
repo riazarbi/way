@@ -156,8 +156,8 @@ while has_tasks_to_work_on; do
         echo "Both doing and check folders are empty. Invoking triage to select next task..."
         
         echo "Triaging ..."
-        claude --dangerously-skip-permissions "execute .way/prompts/06_triage.md against user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"
-        #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+        claude --dangerously-skip-permissions  --output-format stream-json --verbose -p  "execute /workspace/.way/prompts/06_triage.md against user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO" | jq --color-output .
+        #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute /workspace/.way/prompts/06_triage.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
         #    RETRY_COUNT=$((RETRY_COUNT + 1))
         #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
         #        echo "Maximum retry attempts reached. Please try again later."
@@ -176,8 +176,8 @@ while has_tasks_to_work_on; do
     fi
 
     echo "Executing task in interactive mode..."
-    claude --dangerously-skip-permissions "execute .way/prompts/06_execute.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
-    #if ! run_claude_command "claude --dangerously-skip-permissions \"execute .way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_execute.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
+    #if ! run_claude_command "claude --dangerously-skip-permissions \"execute /workspace/.way/prompts/06_execute.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    RETRY_COUNT=$((RETRY_COUNT + 1))
     #    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
     #        echo "Maximum retry attempts reached. Please try again later."
@@ -187,7 +187,7 @@ while has_tasks_to_work_on; do
     #fi
 
     echo "Validating task in interactive mode..."
-    claude --dangerously-skip-permissions "execute .way/prompts/06_validate.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_validate.md for user story folder $PROJECT_REPO/stories/$USER_STORY in project folder $PROJECT_REPO"    
 
 
     echo "Current task cycle complete. Checking for remaining files..."

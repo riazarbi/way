@@ -71,8 +71,8 @@ echo "Checking workflow steps for user story: $USER_STORY in project: $PROJECT_R
 # Check if user story exists, create it if it doesn't
 if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/user-story.md" ]; then
     echo "User story does not exist. Creating user story..."
-    claude --dangerously-skip-permissions "execute .way/prompts/00_story.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude --dangerously-skip-permissions -p \"execute .way/prompts/00_story.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/00_story.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude --dangerously-skip-permissions -p \"execute /workspace/.way/prompts/00_story.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "User story creation failed. Exiting."
     #    exit 1
     #fi
@@ -87,8 +87,8 @@ fi
 # Check if research results exist
 if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-space.md" ]; then
     echo "Running search step..."
-    claude --dangerously-skip-permissions "execute .way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude --dangerously-skip-permissions -p \"execute .way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude --dangerously-skip-permissions -p \"execute /workspace/.way/prompts/01_search.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "Search step failed. Exiting."
     #    exit 1
     #fi
@@ -103,8 +103,8 @@ fi
 # Check if selected solution exists
 if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/target-solution.md" ]; then
     echo "Running select step..."
-    claude --dangerously-skip-permissions "execute .way/prompts/02_select.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/02_select.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/02_select.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute /workspace/.way/prompts/02_select.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "Select step failed. Exiting."
     #    exit 1
     #fi
@@ -119,8 +119,8 @@ fi
 # Check if solution specification exists
 if [ ! -f "$PROJECT_REPO/stories/$USER_STORY/solution-specification.md" ]; then
     echo "Running define step..."
-    claude --dangerously-skip-permissions "execute .way/prompts/03_define.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/03_define.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/03_define.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute /workspace/.way/prompts/03_define.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "Define step failed. Exiting."
     #    exit 1
     #fi
@@ -135,8 +135,8 @@ fi
 # Check if plan folder exists
 if [ ! -d "$PROJECT_REPO/stories/$USER_STORY/plan" ]; then
     echo "Running plan step..."
-    claude --dangerously-skip-permissions "execute .way/prompts/04_plan.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/04_plan.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/04_plan.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute /workspace/.way/prompts/04_plan.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "Plan step failed. Exiting."
     #    exit 1
     #fi
@@ -190,8 +190,8 @@ while true; do
 
     # Run the decomposition command
     echo "Running decomposition prompt..."
-    claude --dangerously-skip-permissions "execute .way/prompts/05_decompose.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
-    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute .way/prompts/05_decompose.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
+    claude --dangerously-skip-permissions "execute /workspace/.way/prompts/05_decompose.md against user story folder $USER_STORY in project folder $PROJECT_REPO"
+    #if ! run_claude_command "claude -p --dangerously-skip-permissions \"execute /workspace/.way/prompts/05_decompose.md against user story folder $USER_STORY in project folder $PROJECT_REPO\""; then
     #    echo "Decomposition step failed. Exiting."
     #    exit 1
     #fi

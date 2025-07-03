@@ -17,6 +17,6 @@ fi
 
 echo "Running story creation prompt for project: $PROJECT_REPO"
 
-claude "execute .way/prompts/00_story.md against project folder $PROJECT_REPO"
+claude "execute /workspace/.way/prompts/00_story.md against project folder $PROJECT_REPO"
 
 echo "Story creation step completed successfully." 

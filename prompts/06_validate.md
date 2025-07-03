@@ -39,6 +39,17 @@ Goal: Implement tasks that meet requirements, are properly tested, follow establ
 1. Read the [following file](@/workspace/.way/anchors/seed.md)
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
+4. **Before proceeding, reflect on your biases:**
+   - Are you being too eager to pass tasks when they should fail validation?
+   - Are you being too comprehensive when simple validation would work better?
+   - Are you acknowledging uncertainty about what constitutes "good enough"?
+   - Are you considering multiple perspectives on what makes valid work?
+   - Are you focusing on what actually works rather than what looks good?
+5. **Apply judgment principles:**
+   - Question your default agreement - be willing to fail tasks that don't meet requirements
+   - Acknowledge uncertainty - make validation criteria explicit and explain decisions
+   - Consider what you're choosing not to validate - sometimes the most valuable insight comes from what you leave unvalidated
+   - Focus on working functionality rather than perfect implementation
 
 ### Step 2: Context Loading
 

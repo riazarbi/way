@@ -83,7 +83,11 @@ while has_tasks_to_work_on; do
         
         echo "Triaging ..."
         #claude --dangerously-skip-permissions  --output-format stream-json --verbose -p  "execute /workspace/.way/prompts/06_triage.md against user story folder docs/stories/$USER_STORY in project folder $PWD" | jq --color-output .
-    
+
+    echo "Sleeping for 720 seconds..."
+    sleep 720
+
+
         claude -p "$(cat /workspace/.way/prompts/06_triage.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
         --add-dir /workspace/.way/anchors \
         --allowedTools "WebSearch,Read,LS,Grep,Bash(rg:*),Bash(mkdir),Bash(mkdir -p),Bash(mv:*),Bash(mv),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)" 
@@ -100,9 +104,6 @@ while has_tasks_to_work_on; do
 
     echo "Executing task in interactive mode..."
     #claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_execute.md for user story folder docs/stories/$USER_STORY in project folder $PWD"
-
-    echo "Sleeping for 1800 seconds..."
-    sleep 1800
 
     claude -p "$(cat /workspace/.way/prompts/06_execute.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
         --add-dir /workspace/.way/anchors \

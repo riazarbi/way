@@ -53,9 +53,10 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
    - Focus on working functionality rather than perfect implementation
 
 ## Step 2: Context Loading
-1. Read the [user-story]([project_repo]/stories/[user-story]/user-story.md) to understand the requirements.
-2. Read the [solution specification]([project_repo]/stories/[user-story]/solution-specification.md) to understand the technical implementation requirements.
-3. Examine the [main codebase]([project-repo]) to understand what has been implemented.
+1. Read the [user-story](@docs/stories/[user-story]/user-story.md) to understand the requirements.
+2. Read the [solution specification](@docs/stories/[user-story]/solution-specification.md) to understand the technical implementation requirements.
+3. Examine the main codebase in the current working directory to understand what has been implemented.
+4. Look for tests, and examine whether they are useful and meaningful.
 
 ## Step 3: Assessment
 
@@ -181,5 +182,5 @@ Generate comprehensive validation report at the specified output location docume
 - **Test Results**: Coverage percentages and execution results 
 
 ## Output
-1. File: `[project_repo]/stories/[user-story]/check.md`
+1. File: `@docs/stories/[user-story]/check.md`
 

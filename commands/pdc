@@ -48,7 +48,7 @@ log_and_display ""
 # Step 3: Check
 log_and_display "Step 3: Checking..."
 log_and_display "-------------------"
-if ! check.sh "$USER_STORY" 2>&1 | tee -a "$LOG_FILE"; then
+if ! check.sh "$USER_STORY"; then
     log_and_display "Check step failed. Exiting workflow."
     exit 1
 fi

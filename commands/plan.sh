@@ -17,6 +17,7 @@ echo "Checking workflow steps for user story: $USER_STORY in project: $PWD"
 if [ ! -f "docs/stories/$USER_STORY/user-story.md" ]; then
     echo "User story does not exist. Creating user story..."
     claude "$(cat /workspace/.way/prompts/00_story.md)" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors --add-dir /workspace/.way/templates \
     --allowedTools "Read,LS,Grep,Bash(git checkout *),Bash(git commit *),Bash(rg *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"
 fi
@@ -30,6 +31,7 @@ fi
 if [ ! -f "docs/stories/$USER_STORY/solution-space.md" ]; then
     echo "Running search step..."
     claude -p "$(cat /workspace/.way/prompts/01_search.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors \
     --allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"
 
@@ -46,6 +48,7 @@ fi
 if [ ! -f "docs/stories/$USER_STORY/target-solution.md" ]; then
     echo "Running select step..."
     claude -p "$(cat /workspace/.way/prompts/02_select.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors \
     --allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Write,TodoWrite,TodoRead,Bash(git log:*)"
 fi
@@ -59,6 +62,7 @@ fi
 if [ ! -f "docs/stories/$USER_STORY/solution-specification.md" ]; then
     echo "Running define step..."
     claude -p "$(cat /workspace/.way/prompts/03_define.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors \
     --allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"
 
@@ -73,6 +77,7 @@ fi
 if [ ! -d "docs/stories/$USER_STORY/plan" ]; then
     echo "Running plan step..."
     claude -p "$(cat /workspace/.way/prompts/04_plan.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors \
     --allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Bash(mkdir *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"
     
@@ -126,6 +131,7 @@ while true; do
     # Run the decomposition command
     echo "Running decomposition prompt..."
     claude  -p "$(cat /workspace/.way/prompts/05_decompose.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
+    --model sonnet \
     --add-dir /workspace/.way/anchors \
     --allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Bash(mkdir *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"
     

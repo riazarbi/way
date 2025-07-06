@@ -1,33 +1,13 @@
 #!/bin/bash
 
-# Check if folder argument is provided
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 <folder>"
-    echo "Example: $0 my-project"
-    exit 1
-fi
-
-FOLDER="$1"
-
-# Check if the folder exists
-if [ ! -d "$FOLDER" ]; then
-    echo "Error: Folder '$FOLDER' does not exist."
-    exit 1
-fi
-
 # Store the absolute path to the .way directory before changing directories
-WAY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+WAY_DIR=/workspace/.way
 TEMPLATES_DIR="$WAY_DIR/templates"
 
 echo "Using templates from: $TEMPLATES_DIR"
 
-# Change to the target folder
-cd "$FOLDER" || {
-    echo "Error: Cannot change to directory '$FOLDER'"
-    exit 1
-}
-
 echo "Initializing project in: $(pwd)"
+sleep 5
 
 # 1. Commit all existing code
 echo "1. Committing all existing code..."

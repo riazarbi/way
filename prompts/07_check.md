@@ -36,15 +36,27 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 - If all tasks are blocked, prerequisites are unmet, or the project has gotten into an impossible situation, output a clear summary to the file `[project-repo]/stories/[user-story]/plan/STOP_PRODUCTION.md` and exit.
 
 
-## Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+### Step 1: Retuning
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
+4. **Before proceeding, reflect on your biases:**
+   - Are you being too eager to accept work when it should be rejected?
+   - Are you being too comprehensive when focused validation would work better?
+   - Are you acknowledging uncertainty about what constitutes acceptable quality?
+   - Are you considering multiple perspectives on what makes a good product?
+   - Are you focusing on what actually works rather than what looks good on paper?
+5. **Apply judgment principles:**
+   - Question your default agreement - be willing to reject work that doesn't meet requirements
+   - Acknowledge uncertainty - make validation criteria explicit and explain decisions
+   - Consider what you're choosing not to validate - sometimes the most valuable insight comes from what you leave unvalidated
+   - Focus on working functionality rather than perfect implementation
 
 ## Step 2: Context Loading
-1. Read the [user-story]([project_repo]/stories/[user-story]/user-story.md) to understand the requirements.
-2. Read the [solution specification]([project_repo]/stories/[user-story]/solution-specification.md) to understand the technical implementation requirements.
-3. Examine the [main codebase]([project-repo]) to understand what has been implemented.
+1. Read the [user-story](@docs/stories/[user-story]/user-story.md) to understand the requirements.
+2. Read the [solution specification](@docs/stories/[user-story]/solution-specification.md) to understand the technical implementation requirements.
+3. Examine the main codebase in the current working directory to understand what has been implemented.
+4. Look for tests, and examine whether they are useful and meaningful.
 
 ## Step 3: Assessment
 
@@ -170,5 +182,5 @@ Generate comprehensive validation report at the specified output location docume
 - **Test Results**: Coverage percentages and execution results 
 
 ## Output
-1. File: `[project_repo]/stories/[user-story]/check.md`
+1. File: `@docs/stories/[user-story]/check.md`
 

@@ -32,13 +32,24 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
+4. **Before proceeding, reflect on your biases:**
+   - Are you being too technical when the problem might be human or contextual?
+   - Are you being comprehensive when focused research would work better?
+   - Are you acknowledging uncertainty about which approaches will actually work?
+   - Are you considering multiple valid perspectives on the problem?
+   - Are you focusing on what works rather than what's theoretically optimal?
+5. **Apply judgment principles:**
+   - Question your default agreement - be willing to push back if the story is inappropriate
+   - Acknowledge uncertainty - present multiple approaches rather than one "best" solution
+   - Consider what you're choosing not to research - sometimes the most valuable insight comes from what you omit
+   - Focus on practical feasibility rather than theoretical elegance
 
 ### Step 2: Context Loading
-1. Read [the user story]([project-repo]/stories/[user-story]/user-story.md)
-2. Familiarise yourself with [your capabilities]([project-repo]/docs/capabilities.md)
+1. Read [the user story](@docs/stories/[user-story]/user-story.md)
+2. Familiarise yourself with [your capabilities](@docs/capabilities.md)
 4. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Push Back
@@ -53,7 +64,8 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ### Step 4: Search
 1. Analyze the user story content and the current product as is
 2. Formulate several candidate approaches to address the user story expectations
-3. Record the candidate approaches in the file `[project-repo]/stories/[user-story]/solution-space.md`
+  - You can make use of Web Search to help you with your formulations
+3. Record the candidate approaches in the file `@docs/stories/[user-story]/solution-space.md`
 
 **Requirements for candidate approaches:**
 - Generate non-overlapping, complete, diverse approaches
@@ -63,7 +75,7 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 
 ## Output Format
 
-**File:** `[project-repo]/stories/[user-story]/solution-space.md`
+**File:** `@docs/stories/[user-story]/solution-space.md`
 
 Create a Markdown file with the following structure:
 

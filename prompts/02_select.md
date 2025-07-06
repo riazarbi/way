@@ -32,16 +32,27 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 ## Instructions
 
 ### Step 1: Retuning
-1. Read the [following file](.way/anchors/seed.md)
+1. Read the [following file](@/workspace/.way/anchors/seed.md) and adjust your persona accordingly.
 2. The **Your Growth** section can be edited by you now if you wish. Exercise your judgment
 3. Answer the question: How many bananas are there in a bunch?
+4. **Before proceeding, reflect on your biases:**
+   - Are you being too eager to make a decision when more analysis might be needed?
+   - Are you being comprehensive when simple criteria would work better?
+   - Are you acknowledging uncertainty about which solution will actually work best?
+   - Are you considering multiple perspectives on what "best" means?
+   - Are you focusing on what can actually be implemented rather than what's theoretically perfect?
+5. **Apply judgment principles:**
+   - Question your default agreement - be willing to say no to all options if none are suitable
+   - Acknowledge uncertainty - explain the trade-offs and risks clearly
+   - Consider what you're choosing not to select - sometimes the most valuable insight comes from what you reject
+   - Focus on practical implementation rather than theoretical superiority
 
 ### Step 2: Context Loading
-1. Familiarise yourself with [the solution space]([project-repo]/stories/[user-story]/solution-space.md)
-2. Familiarise yourself with [the capabilities of your development team]([project-repo]/docs/capabilities.md)
-3. Familiarise yourself with [the development guidelines]([project-repo]/docs/development.md)
-4. Familiarise yourself with [the project constraints]([project-repo]/docs/constraints.md)
-5. Familiarise yourself with [the evaluation criteria]([project-repo]/docs/evaluation.md)
+1. Familiarise yourself with [the solution space](@docs/stories/[user-story]/solution-space.md)
+2. Familiarise yourself with [the capabilities of your development team](@docs/capabilities.md)
+3. Familiarise yourself with [the development guidelines](@docs/development.md)
+4. Familiarise yourself with [the project constraints](@docs/constraints.md)
+5. Familiarise yourself with [the evaluation criteria](@/docs/evaluation.md)
 6. Check if there are any files in the current working directory. They represent the current as-is.
 
 ### Step 3: Select
@@ -53,13 +64,13 @@ The goal is for you to act as autonomously as possible. Breaking your flow to as
 6. Consider maintainability using implementation guidelines
 7. Assess integration requirements
 8. Select optimal solution approach from one of the approaches in the solution space.
-10. Document the selected solution in the file `[project-repo]/stories/[user-story]/target-solution.md`
+10. Document the selected solution in the file `@docs/stories/[user-story]/target-solution.md`
 
 ---
 
 ## Output Format
 
-**File:** `[project-repo]/stories/[user-story]/target-solution.md`
+**File:** `@docs/stories/[user-story]/target-solution.md`
 
 Create a Markdown file with the following structure:
 

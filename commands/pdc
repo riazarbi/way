@@ -1,47 +1,60 @@
 #!/bin/bash
 
-# Check if both project repo and user story name are provided
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 <project-repo> <user-story-name>"
-    echo "Example: $0 feedback-engine hypothesis-feedback-tool"
+# Check if user story name is provided
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <user-story-name>"
+    echo "Example: $0 hypothesis-feedback-tool"
     exit 1
 fi
 
-PROJECT_REPO="$1"
-USER_STORY="$2"
+USER_STORY="$1"
 
-echo "Starting complete workflow for user story: $USER_STORY in project: $PROJECT_REPO"
-echo "=========================================="
+# Create logs directory if it doesn't exist
+mkdir -p "docs/stories/${USER_STORY}/logs"
+
+# Create log file with timestamp
+LOG_FILE="docs/stories/${USER_STORY}/logs/pdc_$(date +%Y%m%d_%H%M%S).log"
+
+# Function to log and display output
+log_and_display() {
+    echo "$1" | tee -a "$LOG_FILE"
+}
+
+# Log script start
+log_and_display "Starting complete workflow for user story: $USER_STORY"
+log_and_display "Log file: $LOG_FILE"
+log_and_display "=========================================="
 
 # Step 1: Plan
-echo "Step 1: Planning..."
-echo "-------------------"
-if ! plan.sh "$PROJECT_REPO" "$USER_STORY"; then
-    echo "Planning step failed. Exiting workflow."
+log_and_display "Step 1: Planning..."
+log_and_display "-------------------"
+if ! plan.sh "$USER_STORY" 2>&1 | tee -a "$LOG_FILE"; then
+    log_and_display "Planning step failed. Exiting workflow."
     exit 1
 fi
-echo "Planning completed successfully."
-echo ""
+log_and_display "Planning completed successfully."
+log_and_display ""
 
 # Step 2: Do
-echo "Step 2: Executing..."
-echo "-------------------"
-if ! do.sh "$PROJECT_REPO" "$USER_STORY"; then
-    echo "Execution step failed. Exiting workflow."
+log_and_display "Step 2: Executing..."
+log_and_display "-------------------"
+if ! do.sh "$USER_STORY" 2>&1 | tee -a "$LOG_FILE"; then
+    log_and_display "Execution step failed. Exiting workflow."
     exit 1
 fi
-echo "Execution completed successfully."
-echo ""
+log_and_display "Execution completed successfully."
+log_and_display ""
 
 # Step 3: Check
-echo "Step 3: Checking..."
-echo "-------------------"
-if ! check.sh "$PROJECT_REPO" "$USER_STORY"; then
-    echo "Check step failed. Exiting workflow."
+log_and_display "Step 3: Checking..."
+log_and_display "-------------------"
+if ! check.sh "$USER_STORY"; then
+    log_and_display "Check step failed. Exiting workflow."
     exit 1
 fi
-echo "Check completed successfully."
-echo ""
+log_and_display "Check completed successfully."
+log_and_display ""
 
-echo "=========================================="
-echo "Complete workflow finished successfully for user story: $USER_STORY" 
+log_and_display "=========================================="
+log_and_display "Complete workflow finished successfully for user story: $USER_STORY"
+log_and_display "Log file saved to: $LOG_FILE" 

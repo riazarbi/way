@@ -122,6 +122,6 @@ Act autonomously. Only ask for user input if lacking resources, skills, or tools
 5. Prepare feedback for next invocation
 
 6. **Commit code:**
-   - Message: task file name + what you did + lines of code added
+   - Message: "Complete [task-file]" + what you did + lines of code added
    - Do not push
    

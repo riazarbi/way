@@ -1,6 +1,6 @@
 # Way - AI-Powered Development Workflow Tool
 
-Way is a containerized development environment that provides AI-powered project planning and execution workflows using Claude AI. It helps you break down user stories, create implementation plans, and manage development tasks.
+Way is a sophisticated containerized development environment that orchestrates AI-powered project planning and execution workflows using Claude AI. It creates an AI-powered development team that can break down complex requirements, research solutions, implement code with quality controls, and validate work against acceptance criteria.
 
 ## Quick Setup
 
@@ -23,8 +23,8 @@ Way is a containerized development environment that provides AI-powered project 
 
 ## Prerequisites
 
-- **Podman**: The container runtime used by way
-- **Git**: For cloning the repository
+- **Podman**: The container runtime used by way (Docker can be used with modifications)
+- **Git**: For cloning the repository and version control
 - **Claude CLI**: Installed automatically in the container
 
 **If you do not use podman, modify docker/dev.sh for compatibility with your container runtime**
@@ -35,62 +35,119 @@ The `dev` alias runs a containerized development environment that:
 - Mounts your current project directory to `/workspace` in the container
 - Provides access to way commands in `/workspace/.way/commands/`
 - Uses your host user ID/GID for proper file permissions
-- Includes Python, Node.js, and development tools
+- Includes Python, Node.js, Claude CLI, Gemini CLI, and development tools
+- Maintains git configuration from your host system
+
+## Workflow Process
+
+```mermaid
+graph TD
+    A[Start: dev command] --> B[Containerized Environment]
+    B --> C{Choose Workflow}
+    
+    C -->|Plan| D[plan.sh <user-story>]
+    C -->|Execute| E[do.sh <user-story>]
+    C -->|Validate| F[check.sh <user-story>]
+    C -->|Complete Cycle| G[pdc <user-story>]
+    
+    D --> D1[Story Creation<br/>00_story.md]
+    D1 --> D2[Solution Search<br/>01_search.md]
+    D2 --> D3[Solution Selection<br/>02_select.md]
+    D3 --> D4[Solution Definition<br/>03_define.md]
+    D4 --> D5[Plan Creation<br/>04_plan.md]
+    D5 --> D6[Epic Decomposition<br/>05_decompose.md]
+    D6 --> D7[Plan Complete]
+    
+    E --> E1[Triage<br/>06_triage.md]
+    E1 --> E2[Execute Task<br/>06_execute.md]
+    E2 --> E3[Validate Task<br/>06_validate.md]
+    E3 --> E4{More Tasks?}
+    E4 -->|Yes| E1
+    E4 -->|No| E5[Execution Complete]
+    
+    F --> F1[Review Completed Work]
+    F1 --> F2[Generate Test Plans]
+    F2 --> F3[Create Validation Docs]
+    F3 --> F4[Validation Complete]
+    
+    G --> G1[Run plan.sh]
+    G1 --> G2[Run do.sh]
+    G2 --> G3[Run check.sh]
+    G3 --> G4[Complete Cycle]
+    
+    style A fill:#e1f5fe
+    style G4 fill:#c8e6c9
+    style E5 fill:#c8e6c9
+    style F4 fill:#c8e6c9
+    style D7 fill:#c8e6c9
+```
 
 ## Available Commands
 
 Once inside the container, you can use these commands from `/workspace/.way/commands/`:
 
-### `plan.sh <project-repo> <user-story-name>`
-Creates a complete project plan for a user story:
-- Generates user story documentation
-- Researches solution space
-- Selects target solution
-- Creates solution specification
-- Breaks down into epics and tasks
+### `plan.sh <user-story-name>`
+Creates a complete project plan for a user story through 6 phases:
+1. **Story Creation** - Uses `00_story.md` to create well-structured user stories
+2. **Solution Search** - Uses `01_search.md` to research and analyze potential approaches
+3. **Solution Selection** - Uses `02_select.md` to choose the optimal solution
+4. **Solution Definition** - Uses `03_define.md` to create detailed specifications
+5. **Plan Creation** - Uses `04_plan.md` to create implementation plans
+6. **Epic Decomposition** - Uses `05_decompose.md` to break down into manageable tasks
 
 **Example:**
 ```bash
-plan.sh feedback-engine hypothesis-feedback-tool
+plan.sh hypothesis-feedback-tool
 ```
 
-### `do.sh <project-repo> <user-story-name>`
-Executes development tasks from the plan:
-- Moves tasks from `todo/` to `doing/`
-- Executes tasks using Claude AI
-- Moves completed tasks to `done/`
-- Handles task failures and retries
+### `do.sh <user-story-name>`
+Executes development tasks from the plan with intelligent task management:
+- **Triage** - Uses `06_triage.md` to select the next appropriate task
+- **Execute** - Uses `06_execute.md` to implement tasks interactively (200-line limit per task)
+- **Validate** - Uses `06_validate.md` to validate work interactively
+- **Task Management** - Moves tasks between `todo/`, `doing/`, `done/`, `check/`, `blocked/`
+- **Rate Limit Handling** - Automatic retry logic for Claude AI rate limits
+- **Quality Controls** - Comprehensive validation including unit tests, integration tests, manual testing
 
 **Example:**
 ```bash
-do.sh feedback-engine hypothesis-feedback-tool
+do.sh hypothesis-feedback-tool
 ```
 
-### `check.sh <project-repo> <user-story-name>`
-Validates completed work and generates test plans:
-- Reviews completed tasks
+### `check.sh <user-story-name>`
+Validates completed work and generates comprehensive test plans:
+- Reviews completed tasks against acceptance criteria
 - Creates validation documentation
-- Generates test scenarios
+- Generates test scenarios and coverage reports
+- Ensures work meets quality standards
 
 **Example:**
 ```bash
-check.sh feedback-engine hypothesis-feedback-tool
+check.sh hypothesis-feedback-tool
 ```
 
-### `act.sh <project-repo> <user-story-name>`
+### `act.sh <user-story-name>`
 Executes focused tasks with specific prompts:
 - Runs individual tasks with custom prompts
 - Useful for targeted development work
+- Provides direct control over task execution
 
 **Example:**
 ```bash
-act.sh feedback-engine hypothesis-feedback-tool
+act.sh hypothesis-feedback-tool
 ```
 
-### `pdc`
+### `pdc <user-story-name>`
 Project Development Cycle - runs the complete workflow:
-- Combines plan, do, and check phases
+- Combines plan, do, and check phases in sequence
 - Automates the full development cycle
+- Provides comprehensive logging of all operations
+- Creates timestamped log files for tracking
+
+**Example:**
+```bash
+pdc hypothesis-feedback-tool
+```
 
 ## Project Structure
 
@@ -98,7 +155,7 @@ When you run way commands, they create this structure in your project:
 
 ```
 project-repo/
-└── stories/
+└── docs/stories/
     └── user-story-name/
         ├── user-story.md              # Story definition
         ├── solution-space.md          # Research results
@@ -109,29 +166,46 @@ project-repo/
         │   └── epic-name/            # Epic breakdowns
         │       ├── README.md         # Epic overview
         │       └── task-files.md     # Individual tasks
-        └── delivery/                 # Execution tracking
-            ├── todo/                 # Pending tasks
-            ├── doing/                # Active tasks
-            ├── done/                 # Completed tasks
-            └── check/                # Validation tasks
+        ├── delivery/                 # Execution tracking
+        │   ├── todo/                 # Pending tasks
+        │   ├── doing/                # Active tasks
+        │   ├── done/                 # Completed tasks
+        │   ├── check/                # Validation tasks
+        │   └── blocked/              # Blocked tasks
+        └── logs/                     # Execution logs
+            └── pdc_YYYYMMDD_HHMMSS.log
 ```
 
-## Workflow
+## Key Features
 
-1. **Plan**: Use `plan.sh` to create a complete project plan
-2. **Do**: Use `do.sh` to execute development tasks
-3. **Check**: Use `check.sh` to validate and test
-4. **Repeat**: Iterate through the cycle as needed
+### AI-Powered Decision Making
+- **Specialized Prompts**: Each phase uses carefully crafted prompts that define the AI's role and capabilities
+- **Bias Awareness**: Built-in bias management through the `seed.md` anchor file
+- **Judgment Development**: Encourages critical thinking and constructive disagreement
+- **Rate Limit Handling**: Automatic detection and retry logic for Claude AI rate limits
+
+### Quality Controls
+- **200-Line Limit**: Prevents over-engineering by limiting code additions per task
+- **Comprehensive Validation**: Unit tests, integration tests, manual testing, acceptance criteria verification
+- **Task Blocking**: Intelligent blocking mechanism when prerequisites aren't met
+- **STOP_PRODUCTION.md**: Emergency halt mechanism for critical issues
+
+### Structured Workflow
+- **Phase-Based Execution**: Clear separation between planning, execution, and validation
+- **Task State Management**: Systematic movement of tasks through different states
+- **Interactive Execution**: Human oversight during critical implementation phases
+- **Comprehensive Logging**: Detailed logs for debugging and process improvement
 
 ## Configuration
 
 The container includes:
-- Ubuntu 22.04 base
-- Python 3 with pip
+- Ubuntu 24.04 base
+- Python 3 with pip and virtual environments
 - Node.js 20.x with npm
-- Claude CLI for AI interactions
-- Git and development tools
+- Claude CLI and Gemini CLI for AI interactions
+- Development tools (git, vim, ripgrep, jq, aider, uv)
 - Proper user permissions matching your host
+- Git configuration from host system
 
 ## Troubleshooting
 
@@ -140,9 +214,10 @@ The container runs with your host user ID/GID, so file permissions should work c
 
 ### Claude AI Rate Limits
 The commands handle Claude AI rate limits automatically by:
-- Detecting rate limit errors
-- Waiting for the specified retry time
-- Automatically retrying failed requests
+- Detecting rate limit errors in command output
+- Extracting retry timestamps from error messages
+- Adding buffer time (10 minutes) to retry times
+- Automatically retrying failed requests up to 3 times
 
 ### Container Build Issues
 If the container build fails:
@@ -150,13 +225,20 @@ If the container build fails:
 2. Check your internet connection
 3. Try rebuilding: `podman build --no-cache -t dev-environment .way/docker/`
 
+### Task Execution Issues
+- Check for `STOP_PRODUCTION.md` file in delivery directory
+- Verify task files are properly formatted
+- Ensure prerequisites are met before execution
+- Review logs in `docs/stories/<user-story>/logs/`
+
 ## Development
 
 To modify way:
 1. Edit files in `.way/commands/` for new commands
 2. Update `.way/docker/Dockerfile` for container changes
 3. Modify `.way/prompts/` for AI prompt changes
-4. Test changes by rebuilding the container
+4. Update `.way/anchors/seed.md` for bias management
+5. Test changes by rebuilding the container
 
 ## License
 

@@ -42,7 +42,7 @@ echo "Running check prompt for user story: $USER_STORY"
 
 # Run the check command
 claude "$(cat /workspace/.way/prompts/07_check.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
-    --model sonnet \
+    --model opus \
     --add-dir /workspace/.way/anchors \
     --dangerously-skip-permissions
     #--allowedTools "WebSearch,Read,LS,Grep,Bash(rg *),Bash(mkdir *),Bash(grep *),Bash(pipenv *),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)"

@@ -1,5 +1,82 @@
 #!/bin/bash
 
+# Claude usage limit retry configuration
+MAX_RETRIES=3
+RETRY_BUFFER=600  # 10 minutes buffer
+
+# Function to check for Claude AI usage limit error and extract retry time
+get_retry_time() {
+    local output="$1"
+    
+    # Check if output contains rate limit message
+    if echo "$output" | grep -q "Claude AI usage limit reached"; then
+        # Extract timestamp using grep and cut
+        local timestamp=$(echo "$output" | grep -o "[0-9]*$")
+        if [ ! -z "$timestamp" ]; then
+            echo "$timestamp"
+            return
+        fi
+    fi
+    
+    echo ""
+}
+
+# Drop-in replacement for claude command with rate limit handling
+claude_with_retry() {
+    local cmd="$1"
+    local output
+    local retry_time
+    local attempt=0
+    
+    while [ $attempt -lt $MAX_RETRIES ]; do
+        echo "Running claude command (attempt $((attempt + 1))/$MAX_RETRIES)..."
+        
+        # Capture output and exit code
+        output=$(eval "$cmd" 2>&1)
+        local exit_code=$?
+        
+        # Display the output
+        echo "$output"
+        
+        # Check for rate limit
+        retry_time=$(get_retry_time "$output")
+        if [ ! -z "$retry_time" ]; then
+            current_time=$(date +%s)
+            # Add buffer to retry time
+            retry_time=$((retry_time + RETRY_BUFFER))
+            wait_time=$((retry_time - current_time))
+            
+            if [ $wait_time -gt 0 ]; then
+                echo "Claude AI usage limit reached. Waiting until $(date -d @$retry_time) (added 10 min buffer) before retrying..."
+                sleep $wait_time
+                attempt=$((attempt + 1))
+                continue
+            fi
+        fi
+        
+        # If we get here, either no rate limit or wait time has passed
+        if [ $exit_code -eq 0 ]; then
+            echo "Claude command completed successfully."
+            return 0
+        else
+            echo "Claude command failed with exit code $exit_code."
+            if [ $attempt -lt $((MAX_RETRIES - 1)) ]; then
+                attempt=$((attempt + 1))
+                echo "Retrying..."
+                continue
+            else
+                echo "Maximum retry attempts reached. Please try again later."
+                return $exit_code
+            fi
+        fi
+    done
+    
+    echo "Maximum retry attempts reached. Please try again later."
+    return 1
+}
+
+
+
 # Check if user story name is provided
 if [ $# -lt 1 ]; then
     echo "Usage: $0 <user-story-name>"
@@ -84,14 +161,11 @@ while has_tasks_to_work_on; do
         echo "Triaging ..."
         #claude --dangerously-skip-permissions  --output-format stream-json --verbose -p  "execute /workspace/.way/prompts/06_triage.md against user story folder docs/stories/$USER_STORY in project folder $PWD" | jq --color-output .
 
-    #echo "Sleeping for 720 seconds..."
-    #sleep 720
-
-
-        claude -p "$(cat /workspace/.way/prompts/06_triage.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
-        --model sonnet \
-        --add-dir /workspace/.way/anchors \
-        --allowedTools "WebSearch,Read,LS,Grep,Bash(rg:*),Bash(mkdir),Bash(mkdir -p),Bash(mv:*),Bash(mv),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)" 
+        # Use retry logic for triage
+        if ! claude_with_retry "claude -p \"\$(cat /workspace/.way/prompts/06_triage.md | sed 's/\[user-story\]/'$USER_STORY'/g')\" --model sonnet --add-dir /workspace/.way/anchors --allowedTools \"WebSearch,Read,LS,Grep,Bash(rg:*),Bash(mkdir),Bash(mkdir -p),Bash(mv:*),Bash(mv),Write,Edit,TodoWrite,TodoRead,Bash(git log:*)\""; then
+            echo "Triage step failed. Exiting."
+            exit 1
+        fi
     
     else
         echo "Doing or check folders have tasks. Skipping triage and executing focused task..."
@@ -106,17 +180,20 @@ while has_tasks_to_work_on; do
     echo "Executing task in interactive mode..."
     #claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_execute.md for user story folder docs/stories/$USER_STORY in project folder $PWD"
 
-    claude -p "$(cat /workspace/.way/prompts/06_execute.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
-        --model sonnet \
-        --add-dir /workspace/.way/anchors \
-        --dangerously-skip-permissions  
+    # Use retry logic for execute (interactive)
+    if ! claude_with_retry "claude -p \"\$(cat /workspace/.way/prompts/06_execute.md | sed 's/\[user-story\]/'$USER_STORY'/g')\" --model sonnet --add-dir /workspace/.way/anchors --dangerously-skip-permissions"; then
+        echo "Execute step failed. Exiting."
+        exit 1
+    fi
 
     echo "Validating task in interactive mode..."
     #claude --dangerously-skip-permissions "execute /workspace/.way/prompts/06_validate.md for user story folder docs/stories/$USER_STORY in project folder $PWD"    
-    claude -p "$(cat /workspace/.way/prompts/06_validate.md | sed 's/\[user-story\]/'$USER_STORY'/g')" \
-        --model sonnet \
-        --add-dir /workspace/.way/anchors \
-        --dangerously-skip-permissions  
+    
+    # Use retry logic for validate (interactive)
+    if ! claude_with_retry "claude -p \"\$(cat /workspace/.way/prompts/06_validate.md | sed 's/\[user-story\]/'$USER_STORY'/g')\" --model sonnet --add-dir /workspace/.way/anchors --dangerously-skip-permissions"; then
+        echo "Validate step failed. Exiting."
+        exit 1
+    fi  
 
     echo "Current task cycle complete. Checking for remaining files..."
     sleep 1  # Brief pause to avoid rapid looping

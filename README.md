@@ -41,7 +41,7 @@ The `dev` alias runs a containerized development environment that:
 ## Workflow Process
 
 ```mermaid
-graph TD
+graph LR
     A[pdc <user-story>] --> B[Plan Phase]
     B --> B1["• Story Creation (00_story.md)<br/>• Solution Search (01_search.md)<br/>• Solution Selection (02_select.md)<br/>• Solution Definition (03_define.md)<br/>• Plan Creation (04_plan.md)<br/>• Epic Decomposition (05_decompose.md)"]
     B1 --> C[Do Phase]

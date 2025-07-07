@@ -242,4 +242,10 @@ To modify way:
 
 ## License
 
-[Add your license information here] 
+This project is licensed under the GNU General Public License v3.0 (GPL v3). See the [LICENSE](LICENSE) file for details.
+
+The GPL v3 ensures that:
+- You can use, modify, and distribute this software
+- Any derivative works must also be distributed under GPL v3
+- Source code must be made available when distributing modified versions
+- This helps maintain the open source nature of the project and its derivatives 

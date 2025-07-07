@@ -42,13 +42,10 @@ The `dev` alias runs a containerized development environment that:
 
 ```mermaid
 graph LR
-    A[pdc <user-story>] --> B[Plan Phase]
-    B --> B1["• Story Creation (00_story.md)<br/>• Solution Search (01_search.md)<br/>• Solution Selection (02_select.md)<br/>• Solution Definition (03_define.md)<br/>• Plan Creation (04_plan.md)<br/>• Epic Decomposition (05_decompose.md)"]
-    B1 --> C[Do Phase]
-    C --> C1["• Triage (06_triage.md)<br/>• Execute Task (06_execute.md)<br/>• Validate Task (06_validate.md)<br/>• Loop: More Tasks? → Yes/No"]
-    C1 --> D[Check Phase]
-    D --> D1["• Review Completed Work<br/>• Generate Test Plans<br/>• Create Validation Docs<br/>• Validate Against Acceptance Criteria"]
-    D1 --> E[Complete Cycle]
+    A[pdc <user-story>] --> B["Plan Phase<br/>• Story Creation (00_story.md)<br/>• Solution Search (01_search.md)<br/>• Solution Selection (02_select.md)<br/>• Solution Definition (03_define.md)<br/>• Plan Creation (04_plan.md)<br/>• Epic Decomposition (05_decompose.md)"]
+    B --> C["Do Phase<br/>• Triage (06_triage.md)<br/>• Execute Task (06_execute.md)<br/>• Validate Task (06_validate.md)<br/>• Loop: More Tasks? → Yes/No"]
+    C --> D["Check Phase<br/>• Review Completed Work<br/>• Generate Test Plans<br/>• Create Validation Docs<br/>• Validate Against Acceptance Criteria"]
+    D --> E[Complete Cycle]
     
     %% Styling
     style A fill:#e1f5fe
@@ -56,9 +53,6 @@ graph LR
     style C fill:#e8f5e8
     style D fill:#f3e5f5
     style E fill:#c8e6c9
-    style B1 fill:#fff3e0
-    style C1 fill:#e8f5e8
-    style D1 fill:#f3e5f5
 ```
 
 ## Available Commands

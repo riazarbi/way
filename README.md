@@ -42,44 +42,55 @@ The `dev` alias runs a containerized development environment that:
 
 ```mermaid
 graph TD
-    A[Start: dev command] --> B[Containerized Environment]
-    B --> C{Choose Workflow}
+    A[pdc <user-story>] --> B[Plan Phase]
+    B --> C[Do Phase]
+    C --> D[Check Phase]
+    D --> E[Complete Cycle]
     
-    C -->|Plan| D[plan.sh <user-story>]
-    C -->|Execute| E[do.sh <user-story>]
-    C -->|Validate| F[check.sh <user-story>]
-    C -->|Complete Cycle| G[pdc <user-story>]
+    %% Plan Phase Details
+    B --> B1[Story Creation<br/>00_story.md]
+    B1 --> B2[Solution Search<br/>01_search.md]
+    B2 --> B3[Solution Selection<br/>02_select.md]
+    B3 --> B4[Solution Definition<br/>03_define.md]
+    B4 --> B5[Plan Creation<br/>04_plan.md]
+    B5 --> B6[Epic Decomposition<br/>05_decompose.md]
+    B6 --> C
     
-    D --> D1[Story Creation<br/>00_story.md]
-    D1 --> D2[Solution Search<br/>01_search.md]
-    D2 --> D3[Solution Selection<br/>02_select.md]
-    D3 --> D4[Solution Definition<br/>03_define.md]
-    D4 --> D5[Plan Creation<br/>04_plan.md]
-    D5 --> D6[Epic Decomposition<br/>05_decompose.md]
-    D6 --> D7[Plan Complete]
+    %% Do Phase Details
+    C --> C1[Triage<br/>06_triage.md]
+    C1 --> C2[Execute Task<br/>06_execute.md]
+    C2 --> C3[Validate Task<br/>06_validate.md]
+    C3 --> C4{More Tasks?}
+    C4 -->|Yes| C1
+    C4 -->|No| D
     
-    E --> E1[Triage<br/>06_triage.md]
-    E1 --> E2[Execute Task<br/>06_execute.md]
-    E2 --> E3[Validate Task<br/>06_validate.md]
-    E3 --> E4{More Tasks?}
-    E4 -->|Yes| E1
-    E4 -->|No| E5[Execution Complete]
+    %% Check Phase Details
+    D --> D1[Review Completed Work]
+    D1 --> D2[Generate Test Plans]
+    D2 --> D3[Create Validation Docs]
+    D3 --> D4[Validate Against Acceptance Criteria]
+    D4 --> E
     
-    F --> F1[Review Completed Work]
-    F1 --> F2[Generate Test Plans]
-    F2 --> F3[Create Validation Docs]
-    F3 --> F4[Validation Complete]
-    
-    G --> G1[Run plan.sh]
-    G1 --> G2[Run do.sh]
-    G2 --> G3[Run check.sh]
-    G3 --> G4[Complete Cycle]
-    
+    %% Styling
     style A fill:#e1f5fe
-    style G4 fill:#c8e6c9
-    style E5 fill:#c8e6c9
-    style F4 fill:#c8e6c9
-    style D7 fill:#c8e6c9
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#f3e5f5
+    style E fill:#c8e6c9
+    style B1 fill:#fff3e0
+    style B2 fill:#fff3e0
+    style B3 fill:#fff3e0
+    style B4 fill:#fff3e0
+    style B5 fill:#fff3e0
+    style B6 fill:#fff3e0
+    style C1 fill:#e8f5e8
+    style C2 fill:#e8f5e8
+    style C3 fill:#e8f5e8
+    style C4 fill:#e8f5e8
+    style D1 fill:#f3e5f5
+    style D2 fill:#f3e5f5
+    style D3 fill:#f3e5f5
+    style D4 fill:#f3e5f5
 ```
 
 ## Available Commands

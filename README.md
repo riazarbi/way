@@ -41,48 +41,26 @@ The `dev` alias runs a containerized development environment that:
 ## Workflow Process
 
 ```mermaid
-graph LR
+graph TD
     A[pdc <user-story>] --> B[Plan Phase]
-    B --> C[Do Phase]
-    C --> D[Check Phase]
-    D --> E[Complete Cycle]
-    
-    subgraph Plan ["Plan Phase Details"]
-        direction TB
-        B1[Story Creation<br/>00_story.md]
-        B2[Solution Search<br/>01_search.md]
-        B3[Solution Selection<br/>02_select.md]
-        B4[Solution Definition<br/>03_define.md]
-        B5[Plan Creation<br/>04_plan.md]
-        B6[Epic Decomposition<br/>05_decompose.md]
-        B1 --> B2 --> B3 --> B4 --> B5 --> B6
-    end
-    
-    subgraph Do ["Do Phase Details"]
-        direction TB
-        C1[Triage<br/>06_triage.md]
-        C2[Execute Task<br/>06_execute.md]
-        C3[Validate Task<br/>06_validate.md]
-        C4{More Tasks?}
-        C1 --> C2 --> C3 --> C4
-        C4 -->|Yes| C1
-    end
-    
-    subgraph Check ["Check Phase Details"]
-        direction TB
-        D1[Review Completed Work]
-        D2[Generate Test Plans]
-        D3[Create Validation Docs]
-        D4[Validate Against Acceptance Criteria]
-        D1 --> D2 --> D3 --> D4
-    end
-    
-    B -.-> B1
-    B6 -.-> C
-    C -.-> C1
-    C4 -.->|No| D
-    D -.-> D1
-    D4 -.-> E
+    B --> B1[Story Creation<br/>00_story.md]
+    B1 --> B2[Solution Search<br/>01_search.md]
+    B2 --> B3[Solution Selection<br/>02_select.md]
+    B3 --> B4[Solution Definition<br/>03_define.md]
+    B4 --> B5[Plan Creation<br/>04_plan.md]
+    B5 --> B6[Epic Decomposition<br/>05_decompose.md]
+    B6 --> C[Do Phase]
+    C --> C1[Triage<br/>06_triage.md]
+    C1 --> C2[Execute Task<br/>06_execute.md]
+    C2 --> C3[Validate Task<br/>06_validate.md]
+    C3 --> C4{More Tasks?}
+    C4 -->|Yes| C1
+    C4 -->|No| D[Check Phase]
+    D --> D1[Review Completed Work]
+    D1 --> D2[Generate Test Plans]
+    D2 --> D3[Create Validation Docs]
+    D3 --> D4[Validate Against Acceptance Criteria]
+    D4 --> E[Complete Cycle]
     
     %% Styling
     style A fill:#e1f5fe

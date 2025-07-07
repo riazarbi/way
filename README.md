@@ -43,24 +43,12 @@ The `dev` alias runs a containerized development environment that:
 ```mermaid
 graph TD
     A[pdc <user-story>] --> B[Plan Phase]
-    B --> B1[Story Creation<br/>00_story.md]
-    B1 --> B2[Solution Search<br/>01_search.md]
-    B2 --> B3[Solution Selection<br/>02_select.md]
-    B3 --> B4[Solution Definition<br/>03_define.md]
-    B4 --> B5[Plan Creation<br/>04_plan.md]
-    B5 --> B6[Epic Decomposition<br/>05_decompose.md]
-    B6 --> C[Do Phase]
-    C --> C1[Triage<br/>06_triage.md]
-    C1 --> C2[Execute Task<br/>06_execute.md]
-    C2 --> C3[Validate Task<br/>06_validate.md]
-    C3 --> C4{More Tasks?}
-    C4 -->|Yes| C1
-    C4 -->|No| D[Check Phase]
-    D --> D1[Review Completed Work]
-    D1 --> D2[Generate Test Plans]
-    D2 --> D3[Create Validation Docs]
-    D3 --> D4[Validate Against Acceptance Criteria]
-    D4 --> E[Complete Cycle]
+    B --> B1["• Story Creation (00_story.md)<br/>• Solution Search (01_search.md)<br/>• Solution Selection (02_select.md)<br/>• Solution Definition (03_define.md)<br/>• Plan Creation (04_plan.md)<br/>• Epic Decomposition (05_decompose.md)"]
+    B1 --> C[Do Phase]
+    C --> C1["• Triage (06_triage.md)<br/>• Execute Task (06_execute.md)<br/>• Validate Task (06_validate.md)<br/>• Loop: More Tasks? → Yes/No"]
+    C1 --> D[Check Phase]
+    D --> D1["• Review Completed Work<br/>• Generate Test Plans<br/>• Create Validation Docs<br/>• Validate Against Acceptance Criteria"]
+    D1 --> E[Complete Cycle]
     
     %% Styling
     style A fill:#e1f5fe
@@ -69,19 +57,8 @@ graph TD
     style D fill:#f3e5f5
     style E fill:#c8e6c9
     style B1 fill:#fff3e0
-    style B2 fill:#fff3e0
-    style B3 fill:#fff3e0
-    style B4 fill:#fff3e0
-    style B5 fill:#fff3e0
-    style B6 fill:#fff3e0
     style C1 fill:#e8f5e8
-    style C2 fill:#e8f5e8
-    style C3 fill:#e8f5e8
-    style C4 fill:#e8f5e8
     style D1 fill:#f3e5f5
-    style D2 fill:#f3e5f5
-    style D3 fill:#f3e5f5
-    style D4 fill:#f3e5f5
 ```
 
 ## Available Commands

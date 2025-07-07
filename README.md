@@ -46,6 +46,8 @@ graph LR
     B --> C["**__Do Phase__**<br/>• Triage (06_triage.md)<br/>• Execute Task (06_execute.md)<br/>• Validate Task (06_validate.md)<br/>• Loop: More Tasks? → Yes/No"]
     C --> D["**__Check Phase__**<br/>• Review Completed Work<br/>• Generate Test Plans<br/>• Create Validation Docs<br/>• Validate Against Acceptance Criteria"]
     D --> E[Complete Cycle]
+    E --> F[act.sh <user-story>]
+    F --> A
     
     %% Styling
     style A fill:#e1f5fe

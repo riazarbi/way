@@ -1,0 +1,440 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quality Scores Schema",
+  "description": "Schema for quality assessment scores of user stories and projects",
+  "type": "object",
+  "required": [
+    "project_name",
+    "evaluation_date",
+    "evaluator",
+    "overall_status",
+    "project_purpose_alignment",
+    "quality_dimensions",
+    "requirements_traceability",
+    "application_validation",
+    "quality_metrics",
+    "recommendations",
+    "evidence_summary"
+  ],
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Full name of the project being evaluated",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "evaluation_date": {
+      "type": "string",
+      "description": "Date when the quality evaluation was performed (YYYY-MM-DD format)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "evaluator": {
+      "type": "string",
+      "description": "Name and role of the person performing the evaluation",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "overall_status": {
+      "type": "string",
+      "description": "Overall acceptance status of the project",
+      "enum": ["ACCEPT", "REJECT", "CONDITIONAL_ACCEPT", "NEEDS_REVISION"]
+    },
+    "project_purpose_alignment": {
+      "type": "object",
+      "description": "Assessment of how well the project aligns with its stated purpose and goals",
+      "required": ["project_purpose_completeness", "vision_alignment", "core_principles_adherence", "problem_solution_fit", "success_criteria_achievement", "overall"],
+      "properties": {
+        "project_purpose_completeness": {
+          "type": "string",
+          "description": "How complete and well-defined the project purpose is",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        },
+        "vision_alignment": {
+          "type": "string",
+          "description": "How well the project aligns with the overall vision",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        },
+        "core_principles_adherence": {
+          "type": "string",
+          "description": "How well the project adheres to core development principles",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        },
+        "problem_solution_fit": {
+          "type": "string",
+          "description": "How well the solution addresses the identified problem",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        },
+        "success_criteria_achievement": {
+          "type": "string",
+          "description": "How well the project meets its defined success criteria",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        },
+        "overall": {
+          "type": "string",
+          "description": "Overall purpose alignment score",
+          "enum": ["EXCELLENT", "GOOD", "SUFFICIENT", "WEAK", "POOR"]
+        }
+      }
+    },
+    "quality_dimensions": {
+      "type": "object",
+      "description": "Detailed assessment of different quality dimensions",
+      "required": ["reliability", "extendibility", "testability", "portability", "reusability", "maintainability"],
+      "properties": {
+        "reliability": {
+          "type": "object",
+          "description": "Assessment of system reliability and stability",
+          "required": ["consistent_execution", "error_handling", "crash_prevention", "resource_management", "overall"],
+          "properties": {
+            "consistent_execution": {
+              "type": "string",
+              "description": "Consistency of execution across different scenarios",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "error_handling": {
+              "type": "string",
+              "description": "Quality of error handling and recovery mechanisms",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "crash_prevention": {
+              "type": "string",
+              "description": "Effectiveness of crash prevention measures",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "resource_management": {
+              "type": "string",
+              "description": "Quality of resource management and cleanup",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall reliability score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        },
+        "extendibility": {
+          "type": "object",
+          "description": "Assessment of how easily the system can be extended",
+          "required": ["modular_architecture", "coding_standards", "code_complexity", "documentation", "overall"],
+          "properties": {
+            "modular_architecture": {
+              "type": "string",
+              "description": "Quality of modular architecture design",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "coding_standards": {
+              "type": "string",
+              "description": "Adherence to coding standards and conventions",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "code_complexity": {
+              "type": "string",
+              "description": "Appropriateness of code complexity levels",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "documentation": {
+              "type": "string",
+              "description": "Quality and completeness of documentation",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall extendibility score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        },
+        "testability": {
+          "type": "object",
+          "description": "Assessment of how testable the system is",
+          "required": ["test_coverage", "unit_test_quality", "integration_tests", "test_execution", "overall"],
+          "properties": {
+            "test_coverage": {
+              "type": "string",
+              "description": "Completeness of test coverage",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "unit_test_quality": {
+              "type": "string",
+              "description": "Quality of unit tests",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "integration_tests": {
+              "type": "string",
+              "description": "Quality of integration tests",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "test_execution": {
+              "type": "string",
+              "description": "Reliability and speed of test execution",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall testability score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        },
+        "portability": {
+          "type": "object",
+          "description": "Assessment of system portability across environments",
+          "required": ["environment_independence", "dependency_management", "configuration_flexibility", "deployment_readiness", "overall"],
+          "properties": {
+            "environment_independence": {
+              "type": "string",
+              "description": "Independence from specific environments",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "dependency_management": {
+              "type": "string",
+              "description": "Quality of dependency management",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "configuration_flexibility": {
+              "type": "string",
+              "description": "Flexibility of configuration options",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "deployment_readiness": {
+              "type": "string",
+              "description": "Readiness for deployment across environments",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall portability score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        },
+        "reusability": {
+          "type": "object",
+          "description": "Assessment of component reusability",
+          "required": ["component_design", "api_design", "dependency_injection", "code_duplication", "overall"],
+          "properties": {
+            "component_design": {
+              "type": "string",
+              "description": "Quality of component design for reuse",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "api_design": {
+              "type": "string",
+              "description": "Quality of API design",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "dependency_injection": {
+              "type": "string",
+              "description": "Use of dependency injection patterns",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "code_duplication": {
+              "type": "string",
+              "description": "Level of code duplication",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall reusability score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        },
+        "maintainability": {
+          "type": "object",
+          "description": "Assessment of system maintainability",
+          "required": ["code_readability", "documentation_quality", "code_organization", "technical_debt", "overall"],
+          "properties": {
+            "code_readability": {
+              "type": "string",
+              "description": "Readability and clarity of code",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "documentation_quality": {
+              "type": "string",
+              "description": "Quality and completeness of documentation",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "code_organization": {
+              "type": "string",
+              "description": "Organization and structure of code",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "technical_debt": {
+              "type": "string",
+              "description": "Level of technical debt",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            },
+            "overall": {
+              "type": "string",
+              "description": "Overall maintainability score",
+              "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+            }
+          }
+        }
+      }
+    },
+    "requirements_traceability": {
+      "type": "object",
+      "description": "Assessment of requirements traceability",
+      "required": ["user_story_coverage", "specification_implementation", "user_value_delivery", "problem_solution_fit", "overall"],
+      "properties": {
+        "user_story_coverage": {
+          "type": "string",
+          "description": "Coverage of user stories by implementation",
+          "enum": ["MET", "NOT_MET", "PARTIALLY_MET"]
+        },
+        "specification_implementation": {
+          "type": "string",
+          "description": "Implementation of specifications",
+          "enum": ["MET", "NOT_MET", "PARTIALLY_MET"]
+        },
+        "user_value_delivery": {
+          "type": "string",
+          "description": "Delivery of user value",
+          "enum": ["MET", "NOT_MET", "PARTIALLY_MET"]
+        },
+        "problem_solution_fit": {
+          "type": "string",
+          "description": "Fit between problem and solution",
+          "enum": ["MET", "NOT_MET", "PARTIALLY_MET"]
+        },
+        "overall": {
+          "type": "string",
+          "description": "Overall requirements traceability score",
+          "enum": ["MET", "NOT_MET", "PARTIALLY_MET"]
+        }
+      }
+    },
+    "application_validation": {
+      "type": "object",
+      "description": "Assessment of application validation tests",
+      "required": ["startup_test", "functionality_test", "performance_test", "security_test", "overall"],
+      "properties": {
+        "startup_test": {
+          "type": "string",
+          "description": "Application startup test results",
+          "enum": ["PASS", "FAIL", "PARTIAL"]
+        },
+        "functionality_test": {
+          "type": "string",
+          "description": "Core functionality test results",
+          "enum": ["PASS", "FAIL", "PARTIAL"]
+        },
+        "performance_test": {
+          "type": "string",
+          "description": "Performance test results",
+          "enum": ["PASS", "FAIL", "PARTIAL"]
+        },
+        "security_test": {
+          "type": "string",
+          "description": "Security test results",
+          "enum": ["PASS", "FAIL", "PARTIAL"]
+        },
+        "overall": {
+          "type": "string",
+          "description": "Overall application validation score",
+          "enum": ["PASS", "FAIL", "PARTIAL"]
+        }
+      }
+    },
+    "quality_metrics": {
+      "type": "object",
+      "description": "Overall quality metrics",
+      "required": ["overall_quality", "critical_issues", "technical_debt", "maintenance_readiness"],
+      "properties": {
+        "overall_quality": {
+          "type": "string",
+          "description": "Overall quality assessment",
+          "enum": ["EXCELLENT", "GOOD", "ADEQUATE", "WEAK", "POOR"]
+        },
+        "critical_issues": {
+          "type": "string",
+          "description": "Level of critical issues found",
+          "enum": ["NONE", "MINOR", "MAJOR", "CRITICAL"]
+        },
+        "technical_debt": {
+          "type": "string",
+          "description": "Level of technical debt",
+          "enum": ["NONE", "MINOR", "MAJOR", "CRITICAL"]
+        },
+        "maintenance_readiness": {
+          "type": "string",
+          "description": "Readiness for maintenance",
+          "enum": ["READY", "NOT_READY", "CONDITIONAL"]
+        }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "description": "Recommendations for improvement",
+      "required": ["immediate_improvements", "technical_debt_items", "quality_enhancements"],
+      "properties": {
+        "immediate_improvements": {
+          "type": "array",
+          "description": "List of immediate improvements needed",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "technical_debt_items": {
+          "type": "array",
+          "description": "List of technical debt items to address",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "quality_enhancements": {
+          "type": "array",
+          "description": "List of quality enhancement recommendations",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "evidence_summary": {
+      "type": "object",
+      "description": "Summary of evidence supporting the quality assessment",
+      "required": ["code_citations", "performance_notes", "test_results", "critical_findings"],
+      "properties": {
+        "code_citations": {
+          "type": "array",
+          "description": "List of code files and line numbers cited as evidence",
+          "items": {
+            "type": "string",
+            "pattern": "^[^:]+:\\d+(-\\d+)?$"
+          }
+        },
+        "performance_notes": {
+          "type": "string",
+          "description": "Notes about performance characteristics",
+          "maxLength": 1000
+        },
+        "test_results": {
+          "type": "string",
+          "description": "Summary of test results",
+          "maxLength": 1000
+        },
+        "critical_findings": {
+          "type": "array",
+          "description": "List of critical findings from the assessment",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+} 

@@ -44,6 +44,9 @@ RUN mkdir -p /etc/sudoers.d && \
 # Install aider as the ubuntu user
 USER 1000:1000
 RUN curl -LsSf https://aider.chat/install.sh | sh
+# Install uv as the ubuntu user
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 
 # Set working directory (will be overridden at runtime)
 WORKDIR /workspace

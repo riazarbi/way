@@ -41,13 +41,13 @@ The `dev` alias runs a containerized development environment that:
 ## Workflow Process
 
 ```mermaid
-graph TD
+graph LR
     A[pdc <user-story>] --> B[Plan Phase]
     B --> C[Do Phase]
     C --> D[Check Phase]
     D --> E[Complete Cycle]
     
-    %% Plan Phase Details
+    %% Plan Phase Details (Top to Bottom)
     B --> B1[Story Creation<br/>00_story.md]
     B1 --> B2[Solution Search<br/>01_search.md]
     B2 --> B3[Solution Selection<br/>02_select.md]
@@ -56,7 +56,7 @@ graph TD
     B5 --> B6[Epic Decomposition<br/>05_decompose.md]
     B6 --> C
     
-    %% Do Phase Details
+    %% Do Phase Details (Top to Bottom)
     C --> C1[Triage<br/>06_triage.md]
     C1 --> C2[Execute Task<br/>06_execute.md]
     C2 --> C3[Validate Task<br/>06_validate.md]
@@ -64,7 +64,7 @@ graph TD
     C4 -->|Yes| C1
     C4 -->|No| D
     
-    %% Check Phase Details
+    %% Check Phase Details (Top to Bottom)
     D --> D1[Review Completed Work]
     D1 --> D2[Generate Test Plans]
     D2 --> D3[Create Validation Docs]

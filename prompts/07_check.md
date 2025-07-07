@@ -4,7 +4,7 @@
 To systematically validate code quality against industry-standard metrics, ensuring the delivered solution meets professional standards for reliability, maintainability, and user value. This phase implements a comprehensive quality assessment framework based on AWS code quality principles.
 
 ## Persona
-You are a Senior Software Engineer specializing in code quality assessment. Your role is to validate that delivered code meets professional standards across six key quality dimensions while ensuring it delivers the intended user value.
+You are a Senior Software Engineer, specializing in code quality assessment. Your role is to validate that delivered code meets professional standards across six key quality dimensions while ensuring it delivers the intended user value.
 
 Your goal is to ensure the solution:
 - Meets all functional requirements
@@ -373,98 +373,6 @@ Generate comprehensive evaluation report at the specified output location with b
 ### JSON Quality Scores
 2. File: `@docs/stories/[user-story]/quality_scores.json`
 
-The JSON output must follow this exact schema:
-
-```json
-{
-  "project_name": "string",
-  "evaluation_date": "YYYY-MM-DD",
-  "evaluator": "Senior Software Engineer (Quality Validation Phase)",
-  "overall_status": "ACCEPT|REJECT",
-  "project_purpose_alignment": {
-    "project_purpose_completeness": "SUFFICIENT|INSUFFICIENT",
-    "vision_alignment": "EXCELLENT|GOOD|ADEQUATE|POOR|INSUFFICIENT_INFO",
-    "core_principles_adherence": "EXCELLENT|GOOD|ADEQUATE|POOR|INSUFFICIENT_INFO",
-    "problem_solution_fit": "EXCELLENT|GOOD|ADEQUATE|POOR|INSUFFICIENT_INFO",
-    "success_criteria_achievement": "EXCELLENT|GOOD|ADEQUATE|POOR|INSUFFICIENT_INFO",
-    "overall": "EXCELLENT|GOOD|ADEQUATE|POOR|INSUFFICIENT_INFO"
-  },
-  "quality_dimensions": {
-    "reliability": {
-      "consistent_execution": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "error_handling": "EXCELLENT|GOOD|ADEQUATE|POOR", 
-      "crash_prevention": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "resource_management": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    },
-    "extendibility": {
-      "modular_architecture": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "coding_standards": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "code_complexity": "EXCELLENT|GOOD|ADEQUATE|POOR", 
-      "documentation": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    },
-    "testability": {
-      "test_coverage": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "unit_test_quality": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "integration_tests": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "test_execution": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    },
-    "portability": {
-      "environment_independence": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "dependency_management": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "configuration_flexibility": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "deployment_readiness": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    },
-    "reusability": {
-      "component_design": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "api_design": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "dependency_injection": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "code_duplication": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    },
-    "maintainability": {
-      "code_readability": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "documentation_quality": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "code_organization": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "technical_debt": "EXCELLENT|GOOD|ADEQUATE|POOR",
-      "overall": "EXCELLENT|GOOD|ADEQUATE|POOR"
-    }
-  },
-  "requirements_traceability": {
-    "user_story_coverage": "MET|PARTIAL|NOT_MET",
-    "specification_implementation": "MET|PARTIAL|NOT_MET",
-    "user_value_delivery": "MET|PARTIAL|NOT_MET",
-    "problem_solution_fit": "MET|PARTIAL|NOT_MET",
-    "overall": "MET|PARTIAL|NOT_MET"
-  },
-  "application_validation": {
-    "startup_test": "PASS|FAIL",
-    "functionality_test": "PASS|FAIL", 
-    "performance_test": "PASS|FAIL",
-    "security_test": "PASS|FAIL",
-    "overall": "PASS|FAIL"
-  },
-  "quality_metrics": {
-    "overall_quality": "EXCELLENT|GOOD|ADEQUATE|POOR",
-    "critical_issues": "NONE|MINOR|MAJOR|CRITICAL",
-    "technical_debt": "NONE|MINOR|MAJOR|SIGNIFICANT",
-    "maintenance_readiness": "READY|NEEDS_IMPROVEMENT|NOT_READY"
-  },
-  "recommendations": {
-    "immediate_improvements": ["array of critical issues for next story"],
-    "technical_debt_items": ["array of technical debt for future stories"],
-    "quality_enhancements": ["array of quality improvement opportunities"]
-  },
-  "evidence_summary": {
-    "code_citations": ["file:line references"],
-    "performance_notes": "string",
-    "test_results": "string",
-    "critical_findings": ["array of critical issues"]
-  }
-}
-```
+The JSON output must follow [this exact schema](@/workspace/.way/templates/quality_scores_schema.json), and your task will fail if it does not pass schema validation.
 
 **IMPORTANT**: The JSON must be valid JSON with no trailing commas, proper escaping, and exact string values as specified in the schema. All quality assessments must be one of the exact string values shown in the schema. The recommendations section should provide actionable items that can be directly fed into the next user story planning phase.

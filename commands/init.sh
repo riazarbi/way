@@ -26,13 +26,12 @@ else
     echo "  - No git repository found, skipping commit"
 fi
 
-# 2. Create a new init branch
-echo "2. Creating new init branch..."
+# 2. Create init branch if it doesn't exist
+echo "2. Checking for init branch..."
 if [ -d ".git" ]; then
-    # Check if we're already on an init branch
-    current_branch=$(git branch --show-current)
-    if [[ "$current_branch" == "init" ]]; then
-        echo "  - Already on init branch"
+    # Check if init branch exists
+    if git show-ref --verify --quiet refs/heads/init; then
+        echo "  - init branch exists, staying on current branch"
     else
         echo "  - Creating and switching to init branch..."
         git checkout -b init

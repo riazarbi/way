@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     ripgrep \
     jq \
     sudo \
+    cloc \
     && rm -rf /var/lib/apt/lists/*
 
 # Add NodeSource repository and install Node.js 20.x
@@ -34,7 +35,8 @@ RUN mkdir -p /etc/apt/keyrings && \
 RUN npm install -g npm@latest && \
     npm install -g @anthropic-ai/claude-code && \
 # Install gemini globally    
-    npm install -g @google/gemini-cli
+    npm install -g @google/gemini-cli && \
+    npm install -g jscpd
 
 # Give the ubuntu user sudo privileges (since host UID 1000 maps to ubuntu)
 RUN mkdir -p /etc/sudoers.d && \

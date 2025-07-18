@@ -52,11 +52,5 @@ The goal is for you to identify what type of story the user is asking for, and t
 3. Familiarise yourself with the contents of the project folder
 4. Work with the user to create the user story
 
-
 ### Step 5: Record
 1. Save the user story to the directory @docs/stories/[user-story]/user-story.md
-2. **IMPORTANT**: After saving the user story, create and switch to a git branch with the same name as the story folder:
-   - Check if you're in a git repository
-   - If the branch already exists, switch to it
-   - If the branch doesn't exist, create it and switch to it
-   - Use the exact story folder name as the branch name

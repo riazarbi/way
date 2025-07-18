@@ -1,0 +1,32 @@
+{
+  "code_source_directories": ["completions", "scripts"],
+  "test": {
+    "command": "echo 'No test command configured'",
+    "coverage_command": "echo 'No coverage command configured'",
+    "coverage_file": "",
+    "coverage_format": "lcov|cobertura|html|json"
+  },
+  "lint": {
+    "command": "echo 'No lint command configured'",
+    "ignore_patterns": ["node_modules/", "dist/", "build/", "target/", "docs/", "__pycache__/"]
+  },
+  "metrics": {
+    "test_count": {
+      "command": "echo '0'",
+      "description": "Number of test files or test cases"
+    },
+    "test_failure_rate": {
+      "command": "echo '0'",
+      "description": "Percentage of failing tests"
+    },
+    "lint_error_count": {
+      "command": "echo '0'",
+      "description": "Number of linting errors"
+    },
+    "lint_warning_count": {
+      "command": "echo '0'",
+      "description": "Number of linting warnings"
+    }
+  },
+  "description": "Quality configuration for code quality assessment"
+} 

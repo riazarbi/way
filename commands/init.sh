@@ -124,6 +124,46 @@ else
     echo "  - docs/stories folder already exists"
 fi
 
+# 8. Create quality config file if it doesn't exist or has invalid structure
+echo "8. Checking for quality configuration..."
+if [ ! -f ".quality-config.json" ]; then
+    echo "  - .quality-config.json not found, copying from templates..."
+    if [ -f "$TEMPLATES_DIR/quality-config.json" ]; then
+        cp "$TEMPLATES_DIR/quality-config.json" ".quality-config.json"
+        echo "  - .quality-config.json copied successfully"
+    else
+        echo "  - Warning: $TEMPLATES_DIR/quality-config.json not found"
+    fi
+else
+    # Check if the existing file has valid JSON structure
+    if command -v jq &> /dev/null; then
+        if jq empty .quality-config.json 2>/dev/null; then
+            # Check if it has the required structure
+            if jq -e '.test and .lint and .metrics' .quality-config.json >/dev/null 2>&1; then
+                echo "  - .quality-config.json exists and has valid structure"
+            else
+                echo "  - .quality-config.json exists but missing required structure, copying template..."
+                if [ -f "$TEMPLATES_DIR/quality-config.json" ]; then
+                    cp "$TEMPLATES_DIR/quality-config.json" ".quality-config.json"
+                    echo "  - .quality-config.json updated successfully"
+                else
+                    echo "  - Warning: $TEMPLATES_DIR/quality-config.json not found"
+                fi
+            fi
+        else
+            echo "  - .quality-config.json exists but has invalid JSON, copying template..."
+            if [ -f "$TEMPLATES_DIR/quality-config.json" ]; then
+                cp "$TEMPLATES_DIR/quality-config.json" ".quality-config.json"
+                echo "  - .quality-config.json updated successfully"
+            else
+                echo "  - Warning: $TEMPLATES_DIR/quality-config.json not found"
+            fi
+        fi
+    else
+        echo "  - .quality-config.json exists (jq not available for validation)"
+    fi
+fi
+
 echo "Project initialization complete!"
 echo "Summary:"
 echo "  - Repository: $(git remote get-url origin 2>/dev/null || echo 'No remote')"
@@ -132,4 +172,5 @@ echo "  - README.md: $(if [ -f "README.md" ]; then echo "Present"; else echo "Mi
 echo "  - Project Purpose Section: $(if [ "$PURPOSE_SECTION_FOUND" = true ]; then echo "Present"; else echo "Missing"; fi)"
 echo "  - CONTRIBUTING.md: $(if [ -f "CONTRIBUTING.md" ]; then echo "Present"; else echo "Missing"; fi)"
 echo "  - docs folder: $(if [ -d "docs" ]; then echo "Present"; else echo "Missing"; fi)"
-echo "  - docs/stories folder: $(if [ -d "docs/stories" ]; then echo "Present"; else echo "Missing"; fi)" 
+echo "  - docs/stories folder: $(if [ -d "docs/stories" ]; then echo "Present"; else echo "Missing"; fi)"
+echo "  - .quality-config.json: $(if [ -f ".quality-config.json" ]; then echo "Present"; else echo "Missing"; fi)" 
